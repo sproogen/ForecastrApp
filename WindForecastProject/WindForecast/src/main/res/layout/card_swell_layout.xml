@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/time1"
+        android:id="@+id/valueText"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:gravity="center_horizontal"/>
+
+    <View
+        android:id="@+id/lineTop"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@id/valueText"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:id="@+id/gustImage"
+        android:layout_below="@id/lineTop"
+        android:src="@drawable/swell_icon_0"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:adjustViewBounds="true" />
+
+    <TextSwitcher
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textStyle="bold"
+        android:id="@+id/gustSpeed"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignTop="@id/gustImage"
+        android:layout_alignBottom="@id/gustImage"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/direction"
+        android:text="0"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignTop="@id/gustImage"
+        android:layout_alignBottom="@id/gustImage"
+        android:visibility="invisible"/>
+
+    <View
+        android:id="@+id/lineMiddle"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@id/gustImage"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:id="@+id/windImage"
+        android:layout_below="@id/lineMiddle"
+        android:src="@drawable/wind_icon_null"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:adjustViewBounds="true" />
+
+    <TextSwitcher
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textStyle="bold"
+        android:id="@+id/windSpeed"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignTop="@id/windImage"
+        android:layout_alignBottom="@id/windImage"
+        android:adjustViewBounds="true" />
+
+    <View
+        android:id="@+id/lineBottom"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_below="@id/windImage"/>
+
+</RelativeLayout>

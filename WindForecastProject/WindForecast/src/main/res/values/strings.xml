@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Wind Forcast</string>
+    <string name="api_key">491c3156-6d59-4e84-8df7-437029417ff7</string>
+
+    <string name="what_else">What else?</string>
+    <string name="todo">TODO</string>
+
+    <string name="time1">3:00</string>
+    <string name="time2">6:00</string>
+    <string name="time3">9:00</string>
+    <string name="time4">12:00</string>
+    <string name="time5">15:00</string>
+    <string name="time6">18:00</string>
+    <string name="time7">21:00</string>
+
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <!-- title -->
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="16dp"
+        android:padding="5dp"
+        android:paddingLeft="20dp"
+        android:layout_alignParentBottom="true"
+        android:text="Favourites"
+        android:singleLine="true"
+        android:textColor="#6b6e73"
+        android:textStyle="bold" />
+
+    <!--  divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#6b6e73" />
+
+</RelativeLayout>

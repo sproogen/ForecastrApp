@@ -1,0 +1,15 @@
+<resources>
+
+    <color name="md__transparent">#00000000</color>
+
+    <color name="md__defaultBackground">#FF555555</color>
+
+    <color name="drawer_background">#3d4045</color>
+    <color name="drawer_highlight">#212227</color>
+    <color name="drawer_search">#303135</color>
+    <color name="drawer_selected">#212227</color>
+
+    <color name="light_grey">#DDDDDD</color>
+
+    <drawable name="semitransparent_blue">#7733B5E5</drawable>
+</resources>

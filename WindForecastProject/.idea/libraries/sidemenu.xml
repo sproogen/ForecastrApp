@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sidemenu">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WindForecast/libs/sidemenu.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

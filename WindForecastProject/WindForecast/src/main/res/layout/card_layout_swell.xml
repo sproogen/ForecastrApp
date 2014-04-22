@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+
+        <!--suppress AndroidLintContentDescription -->
+        <com.afollestad.silk.views.image.SilkImageView android:id="@android:id/icon"
+                                                       style="@style/card_thumbnail_large"/>
+
+        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
+
+            <TextView android:id="@android:id/title" style="@style/card_title_large"/>
+
+            <!--suppress AndroidLintContentDescription -->
+            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/contentFrame"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/titleFrame"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:id="@+id/column0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text=""
+                    android:id="@+id/valueText"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center_horizontal"/>
+
+                <View
+                    android:id="@+id/lineTop"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey"
+                    android:layout_below="@id/valueText"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:id="@+id/gustImage"
+                    android:layout_below="@id/lineTop"
+                    android:src="@drawable/wind_icon_null"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:adjustViewBounds="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Height (m)"
+                    android:id="@+id/gustSpeed"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_alignTop="@id/gustImage"
+                    android:layout_alignBottom="@id/gustImage"
+                    android:adjustViewBounds="true" />
+                <View
+                    android:id="@+id/lineMiddle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey"
+                    android:layout_below="@id/gustImage"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:id="@+id/windImage"
+                    android:layout_below="@id/lineMiddle"
+                    android:src="@drawable/wind_icon_null"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:adjustViewBounds="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Period (s)"
+                    android:id="@+id/windSpeed"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_alignTop="@id/windImage"
+                    android:layout_alignBottom="@id/windImage"
+                    android:adjustViewBounds="true" />
+
+                <View
+                    android:id="@+id/lineBottom"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_grey"
+                    android:layout_below="@id/windImage"/>
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/column1"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column2"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column3"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column4"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column5"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column6"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/column7"
+                layout="@layout/card_swell_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+
+    <ImageView style="@style/card_shadow"/>
+
+</LinearLayout>

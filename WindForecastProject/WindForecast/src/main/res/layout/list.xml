@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <include
+        android:id="@+id/search"
+        layout="@layout/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <!--<TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="14dp"
+        android:padding="5dp"
+        android:paddingLeft="20dp"
+        android:text="Favourites"
+        android:singleLine="true"
+        android:textColor="#6b6e73"
+        android:textStyle="bold"
+        android:layout_below="@+id/search"/>-->
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dip"
+        android:layout_below="@+id/search"/>
+
+</RelativeLayout>

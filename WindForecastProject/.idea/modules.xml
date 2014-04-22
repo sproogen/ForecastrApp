@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../Android Projects.iml" filepath="$PROJECT_DIR$/../../Android Projects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SlidingMenu/SlidingMenu.iml" filepath="$PROJECT_DIR$/SlidingMenu/SlidingMenu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WindForecast/WindForecast.iml" filepath="$PROJECT_DIR$/WindForecast/WindForecast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WindForecastProject.iml" filepath="$PROJECT_DIR$/WindForecastProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SlidingMenu/library/library.iml" filepath="$PROJECT_DIR$/SlidingMenu/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/menudrawer/menudrawer.iml" filepath="$PROJECT_DIR$/menudrawer/menudrawer.iml" />
+    </modules>
+  </component>
+</project>
+
