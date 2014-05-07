@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="library-1.0-20131216.004931-1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WindForecast/build/exploded-aar/com.afollestad.silk/library/1.0-SNAPSHOT/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/WindForecast/build/exploded-aar/com.afollestad.silk/library/1.0-SNAPSHOT/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

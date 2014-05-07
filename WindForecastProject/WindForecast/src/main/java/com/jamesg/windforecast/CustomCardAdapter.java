@@ -223,12 +223,13 @@ public class CustomCardAdapter extends CardAdapter {
 
         if(mapFragment==null){
             mapFragment = SupportMapFragment.newInstance();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }else{
+            //removeMap();
         }
-
-        fragmentManager.beginTransaction()
-                .add(R.id.map, mapFragment, "mapFragment")
-                .addToBackStack(null)
-                .commit();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
