@@ -67,6 +67,7 @@ public class CustomCardAdapter extends CardAdapter {
 
         // Register three custom card layouts...
         // You must register them so that list items that use these layouts can be recycled by the system correctly.
+        registerLayout(R.layout.card_layout_header);
         registerLayout(R.layout.card_layout_overview);
         registerLayout(R.layout.card_layout_weather);
         registerLayout(R.layout.card_layout_swell);
@@ -102,7 +103,7 @@ public class CustomCardAdapter extends CardAdapter {
 
     @Override
     public View onViewCreated(int index, View recycled, CardBase item) {
-        if (item.isHeader()) {
+        if (((CustomCard)item).getType().equals("header")) {
             return setupHeader(item, recycled);
         }else if(((CustomCard)item).getType().equals("wind")){
             return setupWindCard(index,recycled,item);

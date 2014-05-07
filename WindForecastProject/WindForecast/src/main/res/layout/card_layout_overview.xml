@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--suppress AndroidLintUselessParent -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/card_outer">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/card_outer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <!--suppress AndroidLintContentDescription -->
         <com.afollestad.silk.views.image.SilkImageView android:id="@android:id/icon"
                                                        style="@style/card_thumbnail_large"/>
 
-        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
+        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <TextView android:id="@android:id/title" style="@style/card_title_large"/>
+            <TextView android:id="@android:id/title" style="@style/card_title_large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <!--suppress AndroidLintContentDescription -->
-            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"/>
+            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -164,6 +174,8 @@
 
     <!--suppress AndroidLintContentDescription -->
 
-    <ImageView style="@style/card_shadow"/>
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

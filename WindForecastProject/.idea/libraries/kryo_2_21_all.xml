@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="kryo-2.21-all">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WindForecast/build/exploded-aar/com.afollestad.silk/library/1.0-SNAPSHOT/libs/kryo-2.21-all.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

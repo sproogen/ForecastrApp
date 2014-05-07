@@ -66,7 +66,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
         }
 
         if(openSpot.equals("")){
-            cardsAdapter.add(new CardHeader("Favourite Spots"));
+            cardsAdapter.add(new CustomCard("Favourite Spots","header").setLayout(R.layout.card_layout_header));
             ArrayList<CustomCard> appSpots = new ArrayList<CustomCard>();
             for (Spot s : MainActivity.data.getAllSpots(1)){
                 appSpots.add((CustomCard)new CustomCard(s.getName(),"wind").setLayout(R.layout.card_layout_overview));
@@ -74,7 +74,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
             cardsAdapter.add(appSpots);
         }else{
             Spot s = MainActivity.data.getSpot(openSpot);
-            cardsAdapter.add(new CardHeader(s.getName()));
+            cardsAdapter.add(new CustomCard(s.getName(),"header").setLayout(R.layout.card_layout_header));
             cardsAdapter.add(new CustomCard("Wind","wind").setLayout(R.layout.card_layout_overview));
             if(s.hasSwell()){
                 cardsAdapter.add(new CustomCard("Swell","swell").setLayout(R.layout.card_layout_swell));
