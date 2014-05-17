@@ -17,23 +17,17 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
-        <activity
-            android:name="com.jamesg.windforecast.SplashScreen"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
- 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        android:theme="@style/WeatherTheme" >
         <activity
             android:name="com.jamesg.windforecast.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Windfinder">
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <meta-data
             android:name="com.google.android.gms.version"

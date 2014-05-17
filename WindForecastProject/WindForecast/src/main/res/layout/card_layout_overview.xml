@@ -18,8 +18,7 @@
 
             <TextView android:id="@android:id/title" style="@style/card_title_large"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#4ca435"/>
+                android:layout_height="wrap_content" />
 
             <!--suppress AndroidLintContentDescription -->
             <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"

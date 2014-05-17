@@ -10,7 +10,6 @@
     <color name="drawer_selected">#212227</color>
 
     <color name="light_grey">#DDDDDD</color>
-    <color name="green">#4ca435</color>
 
-    <drawable name="semitransparent_blue">#504ca435</drawable>
+    <drawable name="semitransparent_blue">#7733B5E5</drawable>
 </resources>

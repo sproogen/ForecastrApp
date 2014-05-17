@@ -23,7 +23,6 @@
 
     <style name="card_title_large" parent="@style/card_title">
         <item name="android:textSize">@dimen/card_title_large</item>
-        <item name="android:textColor">#4ca435</item>
     </style>
 
     <style name="card_content_large" parent="@style/card_content">

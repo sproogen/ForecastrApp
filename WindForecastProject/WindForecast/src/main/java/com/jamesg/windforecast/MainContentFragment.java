@@ -192,17 +192,13 @@ public class MainContentFragment extends Fragment {
         favouriteSpotsFragment.removeSpot(name);
     }
 
-    public void addSpot(String name){
-        favouriteSpotsFragment.addSpot(name);
-    }
-
-    public void loadSpot(String name, int type){ //0 == Favourite , 1 == Search
-        FavouriteSpotsFragment spot = new FavouriteSpotsFragment(overviewDisplay, name, type);
+    public void loadSpot(String name, int listClick){
+        FavouriteSpotsFragment spot = new FavouriteSpotsFragment(overviewDisplay, name);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-        if(type == 0){
+        //if(listClick == 0){
             transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        }
+        //}
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -212,11 +208,8 @@ public class MainContentFragment extends Fragment {
         // Commit the transaction
         transaction.commit();
         getActivity().getSupportFragmentManager().executePendingTransactions();
-        if(type == 1){
-            if(getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).toggle();
-            }
-            /*Handler handler = new Handler();
+        /*if(listClick == 1){
+            Handler handler = new Handler();
             handler.postDelayed(new Runnable(){
                 @Override
                 public void run(){
@@ -224,8 +217,8 @@ public class MainContentFragment extends Fragment {
                         ((MainActivity) getActivity()).toggle();
                     }
                 }
-            }, 200);*/
-        }
+            }, 200);
+        }*/
         openSpot = name;
     }
 

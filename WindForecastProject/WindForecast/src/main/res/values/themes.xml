@@ -1,20 +1,8 @@
 <resources>
 
     <style name="WeatherTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
-    </style>
-
-    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#4ca435</item>
-        <item name="background">#4ca435</item>
-
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
-    </style>
-
-    <style name="MyActionBarTitleText"
-        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="homeAsUpIndicator">@drawable/new_indicator</item>
+        <item name="android:homeAsUpIndicator">@drawable/new_indicator</item>
     </style>
 
 </resources>

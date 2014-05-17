@@ -23,7 +23,6 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
     private CardListView cardsList;
     private int overviewDisplay = 0;
     private String openSpot = "";
-    private int searchSpot = 0;
 
     public FavouriteSpotsFragment() {
     }
@@ -37,12 +36,6 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
         this.openSpot = name;
     }
 
-    public FavouriteSpotsFragment(int overviewDisplay, String name, int search) {
-        this.overviewDisplay = overviewDisplay;
-        this.openSpot = name;
-        this.searchSpot = search;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +47,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
 
         // Initializes a CardAdapter with a blue accent color and basic popup menu for each card
         cardsAdapter = new CustomCardAdapter(getActivity(),overviewDisplay, openSpot, getActivity().getSupportFragmentManager());
-        cardsAdapter.setAccentColorRes(R.color.green);
+        cardsAdapter.setAccentColorRes(android.R.color.holo_blue_light);
         //cardsAdapter.setPopupMenu(R.menu.card_popup, this); // the popup menu callback is this activity
 
         cardsList = (CardListView) rootView.findViewById(R.id.cardsList);
@@ -63,10 +56,8 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
             cardsList.setOnCardClickListener(new CardListView.CardClickListener() {
                 @Override
                 public void onCardClick(int index, CardBase card, View view) {
-                    if (!((CustomCard)card).getType().equals("header")) {
-                        if(getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).loadSpot(card.getTitle(),0);
-                        }
+                    if(getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).loadSpot(card.getTitle(),0);
                     }
                 }
             });
@@ -74,21 +65,15 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
             cardsList.setClickable(false);
         }
 
-        if(openSpot.equals("")) {
-            getActivity().setTitle("Favourite Spots");
-            cardsAdapter.add(new CustomCard("Favourite Spots", "header").setLayout(R.layout.card_layout_header));
+        if(openSpot.equals("")){
+            cardsAdapter.add(new CustomCard("Favourite Spots","header").setLayout(R.layout.card_layout_header));
             ArrayList<CustomCard> appSpots = new ArrayList<CustomCard>();
-            for (Spot s : MainActivity.data.getAllSpots(1)) {
-                appSpots.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
+            for (Spot s : MainActivity.data.getAllSpots(1)){
+                appSpots.add((CustomCard)new CustomCard(s.getName(),"wind").setLayout(R.layout.card_layout_overview));
             }
             cardsAdapter.add(appSpots);
-        }else if(searchSpot == 1){
-            Spot s = MainActivity.data.getSpot(openSpot);
-            getActivity().setTitle(s.getName());
-            cardsAdapter.add(new CustomCard(s.getName(),"headerAdd").setLayout(R.layout.card_layout_header));
         }else{
             Spot s = MainActivity.data.getSpot(openSpot);
-            getActivity().setTitle(s.getName());
             cardsAdapter.add(new CustomCard(s.getName(),"header").setLayout(R.layout.card_layout_header));
             cardsAdapter.add(new CustomCard("Wind","wind").setLayout(R.layout.card_layout_overview));
             if(s.hasSwell()){
@@ -111,12 +96,6 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
         super.onPause();
         Log.d("WINDFINDER APP", "Remove Map");
         cardsAdapter.removeMap();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     public void updateOverviewDisplay(int overviewDisplay){
@@ -144,11 +123,6 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
                 return;
             }
         }
-    }
-
-    public void addSpot(String name){
-        Spot s = MainActivity.data.getSpot(name);
-        cardsAdapter.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
     }
 
     @Override

@@ -7,7 +7,7 @@
         android:id="@+id/topBar"
         android:layout_height="45dp"
         android:layout_width="fill_parent"
-        android:background="#ffffff">
+        android:background="#e5e5e5">
 
         <LinearLayout
             android:id="@+id/topBarButtons"
@@ -75,21 +75,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lineUnderlineOverlay2"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/topBarButtons"
-            android:clickable="false">
-            <View
-                android:id="@+id/lineThinUnderline"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#a0a0a0"
-                android:alpha="0.5" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/lineUnderlineOverlay"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -101,7 +86,7 @@
                 android:id="@+id/lineUnderline"
                 android:layout_width="0dp"
                 android:layout_height="5dp"
-                android:background="#4ca435"
+                android:background="#0099CC"
                 android:layout_weight="1"/>
         </LinearLayout>
 

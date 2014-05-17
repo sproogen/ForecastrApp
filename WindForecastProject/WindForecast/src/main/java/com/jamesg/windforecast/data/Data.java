@@ -42,7 +42,6 @@ public class Data extends SQLiteOpenHelper {
     private static final String KEY_UPDATE_TIME = "updateTime";
 
     private ArrayList<Spot> all_spots = new ArrayList<Spot>();
-    private Spot search_temp_spot = null;
 
     //String metoffice_base_url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
     String base_url = "http://jwgmedia.co.uk/windAppAPI/getForcastData.php";
@@ -99,25 +98,10 @@ public class Data extends SQLiteOpenHelper {
         Log.d("WINDFINDER APP", "DATA ADD Spot - "+spot.getName());
     }
 
-    public void searchSpot(Spot spot){
-        Log.d("WINDFINDER APP", "DATA Search Spot - "+spot.getName());
-        search_temp_spot = spot;
-    }
-
-    public boolean isFavourite(String name){
-        for(Spot s : all_spots){
-            if(s.getName().equals(name))return true;
-        }
-        return false;
-    }
-
     // Getting single spot
     public Spot getSpot(String name) {
         for(Spot s : all_spots){
             if(s.getName().equals(name))return s;
-        }
-        if(search_temp_spot != null) {
-            if (search_temp_spot.getName().equals(name)) return search_temp_spot;
         }
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
