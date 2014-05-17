@@ -11,7 +11,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 public class BaseActivity extends SlidingFragmentActivity {
 
     private int mTitleRes;
-    protected DrawerListFragment drawerListFragment;
+    protected DrawerFragment drawerFragment;
 
     public BaseActivity(int titleRes) {
         mTitleRes = titleRes;
@@ -27,11 +27,11 @@ public class BaseActivity extends SlidingFragmentActivity {
         setBehindContentView(R.layout.menu_frame);
         if (savedInstanceState == null) {
             FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-            drawerListFragment = new DrawerListFragment();
-            t.replace(R.id.menu_frame, drawerListFragment);
+            drawerFragment = new DrawerFragment();
+            t.replace(R.id.menu_frame, drawerFragment);
             t.commit();
         } else {
-            drawerListFragment = (DrawerListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
+            drawerFragment = (DrawerFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
         }
 
         // customize the SlidingMenu
@@ -43,7 +43,7 @@ public class BaseActivity extends SlidingFragmentActivity {
         sm.setBehindScrollScale((float) 0);
         sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
@@ -64,10 +64,10 @@ public class BaseActivity extends SlidingFragmentActivity {
 
     public void refreshDraw(){
         /*FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-        drawerListFragment = new DrawerListFragment();
+        drawerListFragment = new DrawerFragment();
         t.replace(R.id.menu_frame, drawerListFragment);
         t.commit();*/
-        drawerListFragment.refreshSpots();
+        drawerFragment.refreshSpots();
     }
 }
 

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jamesg.windforecast.data.Data;
 import com.jamesg.windforecast.data.Spot;
@@ -35,6 +36,10 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle("Favourite Spots");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
+
         if(data == null){
             data = new Data(this);
         }
@@ -54,9 +59,25 @@ public class MainActivity extends BaseActivity {
 
         setSlidingActionBarEnabled(true);
 
+        SlidingMenu menu = getSlidingMenu();
+        menu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
+            @Override
+            public void onClosed() {
+                drawerFragment.clearSearch();
+                //getActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        });
+
+        menu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
+            @Override
+            public void onOpened() {
+               // getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
+
         //deleteDatabase("spotsTable");
 
-        if(data.getSpot("Aberavon") == null){
+        /*if(data.getSpot("Aberavon") == null){
             data.addSpot(new Spot("Aberavon",322661));
         }
         if(data.getSpot("Portland Harbour") == null){
@@ -67,7 +88,7 @@ public class MainActivity extends BaseActivity {
         }
         if(data.getSpot("Westbury") == null){
             data.addSpot(new Spot("Westbury",354152));
-        }
+        }*/
 
         checkForUpdates(false);
     }
@@ -81,9 +102,18 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void addSpot(String name){
+        Spot newSpot = data.getSpot(name);
+        data.addSpot(newSpot);
+        mainContentFragment.addSpot(name);
+        checkForUpdates(false);
+        Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        checkForUpdates(false);
     }
 
     public void checkForUpdates(boolean force){
@@ -149,14 +179,21 @@ public class MainActivity extends BaseActivity {
 
     public void loadSpot(String name, int listClick){
         openSpot = name;
-        mainContentFragment.loadSpot(name,listClick);
-        drawerListFragment.setSpot(name);
+        mainContentFragment.loadSpot(name,0);
+        drawerFragment.setSpot(name);
+    }
+
+    public void loadSearchSpot(String name, int id){
+        data.searchSpot(new Spot(name, id));
+        openSpot = name;
+        mainContentFragment.loadSpot(name, 1);
+        //drawerFragment.setSpot(name);
     }
 
     public void closeSpot(){
         openSpot = "";
         mainContentFragment.closeSpot();
-        drawerListFragment.closeSpot();
+        drawerFragment.closeSpot();
     }
 
     @Override

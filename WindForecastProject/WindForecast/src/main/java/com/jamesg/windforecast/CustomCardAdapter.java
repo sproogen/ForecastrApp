@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
@@ -104,7 +105,9 @@ public class CustomCardAdapter extends CardAdapter {
     @Override
     public View onViewCreated(int index, View recycled, CardBase item) {
         if (((CustomCard)item).getType().equals("header")) {
-            return setupHeader(item, recycled);
+            return setupHeader(item, recycled, 0);
+        }else if (((CustomCard)item).getType().equals("headerAdd")) {
+            return setupHeader(item, recycled, 1);
         }else if(((CustomCard)item).getType().equals("wind")){
             return setupWindCard(index,recycled,item);
         }else if(((CustomCard)item).getType().equals("weather")){
@@ -125,7 +128,7 @@ public class CustomCardAdapter extends CardAdapter {
         return card;
     }
 
-    public View setupHeader(CardBase header, View recycled) {
+    public View setupHeader(CardBase header, View recycled, int add) {
         TextView title = (TextView) recycled.findViewById(android.R.id.title);
         if (title == null)
             throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/title.");
@@ -133,61 +136,46 @@ public class CustomCardAdapter extends CardAdapter {
         if (subtitle == null)
             throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/content.");
         title.setText(header.getTitle());
+        final String titleTxt = header.getTitle();
         if (header.getContent() != null && !header.getContent().trim().isEmpty()) {
             //subtitle.setVisibility(View.VISIBLE);
             subtitle.setText(header.getContent());
         } //else subtitle.setVisibility(View.GONE);
-        TextView button = (TextView) recycled.findViewById(android.R.id.button1);
+        final TextView button = (TextView) recycled.findViewById(android.R.id.button1);
         if (button == null)
             throw new RuntimeException("The header layout must contain a TextView with the ID @android:id/button1.");
-        if (header.getActionCallback() != null) {
+        if (add == 1 && !MainActivity.data.isFavourite(titleTxt)) {
             button.setVisibility(View.VISIBLE);
             button.setBackgroundColor(mAccentColor);
-            String titleTxt = header.getActionTitle();
-            if (header.getActionTitle() == null || header.getActionTitle().trim().isEmpty())
-                titleTxt = getContext().getString(R.string.see_more);
-            button.setText(titleTxt);
-        } else button.setVisibility(View.GONE);
+            String buttonTxt = "Add to Favourites";
+            button.setText(buttonTxt);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(context instanceof MainActivity) {
+                        ((MainActivity) context).addSpot(titleTxt);
+                        button.setVisibility(View.GONE);
+                    }
+                }
+            });
+        } else button.setVisibility(View.INVISIBLE);
 
         if(overviewDisplay == 0){
-            if(subtitle.getVisibility() == View.GONE){
-                MyScaler scale = new MyScaler(1.0f, 1.0f, 0.0f, 1.0f, subtitle);
-                scale.setDuration(400);
-                scale.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        subtitle.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {}
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
-                });
-                subtitle.startAnimation(scale);
+            if(subtitle.getVisibility() == View.INVISIBLE){
+                AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f );
+                fadeIn.setDuration(400);
+                subtitle.startAnimation(fadeIn);
+                subtitle.setVisibility(View.VISIBLE);
             }
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("dd/MMM");
             subtitle.setText(df.format(c.getTime()));
         }else if(overviewDisplay == 1){
-            if(subtitle.getVisibility() == View.GONE){
+            if(subtitle.getVisibility() == View.INVISIBLE){
+                AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f );
+                fadeIn.setDuration(400);
+                subtitle.startAnimation(fadeIn);
                 subtitle.setVisibility(View.VISIBLE);
-                MyScaler scale = new MyScaler(1.0f, 1.0f, 0.0f, 1.0f, subtitle);
-                scale.setDuration(400);
-                scale.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        subtitle.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {}
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
-                });
-                subtitle.startAnimation(scale);
             }
             Calendar c = Calendar.getInstance();
             c.add(c.DAY_OF_MONTH, 1);
@@ -195,21 +183,22 @@ public class CustomCardAdapter extends CardAdapter {
             subtitle.setText(df.format(c.getTime()));
         }else{
             if(subtitle.getVisibility() == View.VISIBLE){
-                MyScaler scale = new MyScaler(1.0f, 1.0f, 1.0f, 0.0f, subtitle);
-                scale.setDuration(400);
-                scale.setAnimationListener(new Animation.AnimationListener() {
+                AlphaAnimation fadeOut = new AlphaAnimation(1.0f , 0.0f );
+                fadeOut.setDuration(400);
+                fadeOut.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {}
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        subtitle.setVisibility(View.GONE);
+                        subtitle.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {}
                 });
-                subtitle.startAnimation(scale);
+                subtitle.startAnimation(fadeOut);
+
             }
         }
         return recycled;
@@ -229,7 +218,11 @@ public class CustomCardAdapter extends CardAdapter {
                     .addToBackStack(null)
                     .commit();
         }else{
-            //removeMap();
+            removeMap();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
         }
 
         final Handler handler = new Handler();
@@ -244,19 +237,25 @@ public class CustomCardAdapter extends CardAdapter {
                         mapSpot = thisSpot.getId();
                         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                        LatLng spotLatLng = new LatLng(Double.parseDouble(thisSpot.getLatitude()), Double.parseDouble(thisSpot.getLongitude()));
-                        googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(spotLatLng)
-                                .title(thisSpot.getName())
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        float cameraZoom = 4;
+                        LatLng spotLatLng = new LatLng(51.4487547, -2.5740142);
+
+                        try {
+                            spotLatLng = new LatLng(Double.parseDouble(thisSpot.getLatitude()), Double.parseDouble(thisSpot.getLongitude()));
+                            googleMap.clear();
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(spotLatLng)
+                                    .title(thisSpot.getName())
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            cameraZoom = 9;
+                        }catch(Exception e){
+                            //DO NOTHING
+                        }
 
                         googleMap.getUiSettings().setCompassEnabled(false);
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
                         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
                         googleMap.getUiSettings().setAllGesturesEnabled(false);
-
-                        float cameraZoom = 10;
 
                         googleMap.setMapType(mapType);
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(spotLatLng, cameraZoom));
@@ -984,36 +983,6 @@ public class CustomCardAdapter extends CardAdapter {
             }
         }
         return card;
-    }
-
-    public class MyScaler extends ScaleAnimation {
-
-        private View mView;
-
-        private LinearLayout.LayoutParams mLayoutParams;
-
-        private int mMarginBottomFromY, mMarginBottomToY;
-
-        public MyScaler(float fromX, float toX, float fromY, float toY, View view) {
-            super(fromX, toX, fromY, toY);
-            mView = view;
-            mLayoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
-            int height = mView.getHeight();
-            mMarginBottomFromY = (int) (height * fromY) - height;
-            mMarginBottomToY = (int) (height * toY) - height;
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-            if (interpolatedTime < 1.0f) {
-                int newMarginBottom = mMarginBottomFromY
-                        + (int) ((mMarginBottomToY - mMarginBottomFromY) * interpolatedTime);
-                mLayoutParams.setMargins(mLayoutParams.leftMargin, mLayoutParams.topMargin,
-                        mLayoutParams.rightMargin, newMarginBottom);
-                mView.getParent().requestLayout();
-            }
-        }
     }
 
     public void updateOverviewDisplay(int overviewDisplay){
