@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout style="@style/card_header_inner" android:orientation="horizontal"
+    <LinearLayout style="@style/card_header_inner" android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="bottom">
@@ -28,6 +28,6 @@
 
     <TextView android:id="@android:id/button1" style="@style/header_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

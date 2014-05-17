@@ -24,10 +24,18 @@
         android:layout_below="@+id/search"/>-->
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:dividerHeight="0dip"
         android:layout_below="@+id/search"/>
+
+    <ListView
+        android:id="@+id/searchList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search"
+        android:dividerHeight="0dip"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -148,6 +148,7 @@ public class Spot {
     public Long getUpdateTime(){ return updateTime; }
 
     public void parseRawData(){
+        Log.e("WINDFINDER APP", "Parsing Raw Data - "+this.name);
         today = new ArrayList<TimestampData>();
         tomorrow = new ArrayList<TimestampData>();
         sevenDay = new ArrayList<TimestampData>();
