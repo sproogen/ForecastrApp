@@ -73,13 +73,18 @@ public class DrawerFragment extends Fragment {
                 Spot item = adapter.getItem(position);
                 if (position == 0) {
                     if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).closeSpot();
+                        ((MainActivity) getActivity()).closeSpot(false);
+                        ((MainActivity) getActivity()).toggle();
                     }
                 } else if (item.getType() == 2) {
-                    if (item.getLabel().equals("Update")) {
+                    if (item.getLabel().equals("Check for updates")) {
                         if (getActivity() instanceof MainActivity) {
                             ((MainActivity) getActivity()).checkForUpdates(true);
-                            ((MainActivity) getActivity()).closeSpot();
+                            ((MainActivity) getActivity()).toggle();
+                        }
+                    }else if(item.getLabel().equals("About")) {
+                        if (getActivity() instanceof MainActivity) {
+                            ((MainActivity) getActivity()).about();
                             ((MainActivity) getActivity()).toggle();
                         }
                     }
@@ -341,7 +346,7 @@ public class DrawerFragment extends Fragment {
         }
 
         public int getCount(){
-            return super.getCount()+6;
+            return super.getCount()+5;
         }
 
         public Spot getItem(int position){
@@ -349,12 +354,12 @@ public class DrawerFragment extends Fragment {
                 return new Spot("All Spots","menu");
             }else if(position == 1){
                 return new Spot("Favourites","header");
-            }else if(position == getCount()-4){
-                return new Spot("Settings","header");
             }else if(position == getCount()-3){
-                return new Spot("App Settings","menu");
+                return new Spot("Settings","header");
+            /*}else if(position == getCount()-3){
+                return new Spot("App Settings","menu");*/
             }else if(position == getCount()-2){
-                return new Spot("Update","menu");
+                return new Spot("Check for updates","menu");
             }else if(position == getCount()-1){
                 return new Spot("About","menu");
             }else{
@@ -409,9 +414,7 @@ public class DrawerFragment extends Fragment {
             }else if(selected == position){
                 return false;
             }else if(getItem(position).getType() == 2){
-                if(getItem(position).getLabel().equals("About")){
-                    return false;
-                }else if(getItem(position).getLabel().equals("App Settings")){
+                if(getItem(position).getLabel().equals("App Settings")){
                     return false;
                 }
             }

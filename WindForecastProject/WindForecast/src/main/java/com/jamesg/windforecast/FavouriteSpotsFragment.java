@@ -2,25 +2,21 @@ package com.jamesg.windforecast;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-import com.afollestad.cardsui.Card;
-import com.afollestad.cardsui.CardBase;
-import com.afollestad.cardsui.CardHeader;
-import com.afollestad.cardsui.CardListView;
 import com.jamesg.windforecast.data.Spot;
 
 import java.util.ArrayList;
 
-public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuListener<Card> {
+public class FavouriteSpotsFragment extends Fragment {
 
     private CustomCardAdapter cardsAdapter;
-    private CardListView cardsList;
+    private ListView cardsList;
     private int overviewDisplay = 0;
     private String openSpot = "";
     private int searchSpot = 0;
@@ -57,10 +53,10 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
         cardsAdapter.setAccentColorRes(R.color.green);
         //cardsAdapter.setPopupMenu(R.menu.card_popup, this); // the popup menu callback is this activity
 
-        cardsList = (CardListView) rootView.findViewById(R.id.cardsList);
+        cardsList = (ListView) rootView.findViewById(R.id.listview);
         cardsList.setAdapter(cardsAdapter);
         if(openSpot.equals("")){
-            cardsList.setOnCardClickListener(new CardListView.CardClickListener() {
+            /*cardsList.setOnCardClickListener(new CardListView.CardClickListener() {
                 @Override
                 public void onCardClick(int index, CardBase card, View view) {
                     if (!((CustomCard)card).getType().equals("header")) {
@@ -69,7 +65,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
                         }
                     }
                 }
-            });
+            });*/
         }else{
             cardsList.setClickable(false);
         }
@@ -81,7 +77,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
             for (Spot s : MainActivity.data.getAllSpots(1)) {
                 appSpots.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
             }
-            cardsAdapter.add(appSpots);
+            cardsAdapter.addAll(appSpots);
         }else if(searchSpot == 1){
             Spot s = MainActivity.data.getSpot(openSpot);
             getActivity().setTitle(s.getName());
@@ -127,9 +123,9 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
     public void updateSpot(String name){
         MainActivity.data.parseSpotData(name);
         for(int i=0;i<cardsAdapter.getCount();i++){
-            if(((Card)cardsAdapter.getItem(i)).getTitle().equals(name)){
+            if(((CustomCard)cardsAdapter.getItem(i)).getTitle().equals(name)){
                 CustomCard customCard = (CustomCard)cardsAdapter.getItem(i);
-                cardsAdapter.update(customCard);
+                //cardsAdapter.update(customCard);
                 return;
             }
         }
@@ -138,7 +134,7 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
     public void removeSpot(String name){
         Spot s = MainActivity.data.getSpot(name);
         for(int i=0;i<cardsAdapter.getCount();i++){
-            if(((Card)cardsAdapter.getItem(i)).getTitle().equals(name)){
+            if(((CustomCard)cardsAdapter.getItem(i)).getTitle().equals(name)){
                 CustomCard customCard = (CustomCard)cardsAdapter.getItem(i);
                 cardsAdapter.remove(customCard);
                 return;
@@ -149,11 +145,6 @@ public class FavouriteSpotsFragment extends Fragment implements Card.CardMenuLis
     public void addSpot(String name){
         Spot s = MainActivity.data.getSpot(name);
         cardsAdapter.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
-    }
-
-    @Override
-    public void onMenuItemClick(Card card, MenuItem item) {
-        //cardsAdapter.update(card);
     }
 
     @Override

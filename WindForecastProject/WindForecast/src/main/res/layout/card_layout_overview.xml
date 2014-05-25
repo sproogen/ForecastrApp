@@ -8,10 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--suppress AndroidLintContentDescription -->
-        <com.afollestad.silk.views.image.SilkImageView android:id="@android:id/icon"
-                                                       style="@style/card_thumbnail_large"/>
-
         <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -24,7 +20,8 @@
             <!--suppress AndroidLintContentDescription -->
             <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

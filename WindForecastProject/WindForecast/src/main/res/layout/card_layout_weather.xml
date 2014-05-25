@@ -4,16 +4,13 @@
 
     <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
 
-        <!--suppress AndroidLintContentDescription -->
-        <com.afollestad.silk.views.image.SilkImageView android:id="@android:id/icon"
-            style="@style/card_thumbnail_large"/>
 
         <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
 
             <TextView android:id="@android:id/title" style="@style/card_title_large"/>
 
             <!--suppress AndroidLintContentDescription -->
-            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor"/>
+            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor" android:visibility="gone"/>
 
         </RelativeLayout>
 

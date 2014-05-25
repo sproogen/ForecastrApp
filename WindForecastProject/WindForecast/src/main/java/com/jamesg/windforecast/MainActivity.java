@@ -3,6 +3,7 @@ package com.jamesg.windforecast;
 import android.os.Message;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,12 +18,15 @@ import java.util.Calendar;
 public class MainActivity extends BaseActivity {
 
     private MainContentFragment mainContentFragment;
+    private AboutFragment aboutFragment;
 
     public static Data data;
 
     private SlidingMenu menu;
 
     private String openSpot = "";
+
+    private boolean aboutOpen = false;
 
     private int overviewDisplay = 0; // 0 = today
                                      // 1 = tomorrow
@@ -98,7 +102,7 @@ public class MainActivity extends BaseActivity {
         mainContentFragment.removeSpot(spot.getName());
         this.refreshDraw();
         if(spot.getName().equals(openSpot)){
-            closeSpot();
+            closeSpot(false);
         }
     }
 
@@ -178,30 +182,64 @@ public class MainActivity extends BaseActivity {
     }
 
     public void loadSpot(String name, int listClick){
+        closeAbout(false);
         openSpot = name;
-        mainContentFragment.loadSpot(name,0);
+        mainContentFragment.loadSpot(name,listClick, 0);
         drawerFragment.setSpot(name);
     }
 
     public void loadSearchSpot(String name, int id){
+        closeAbout(false);
         data.searchSpot(new Spot(name, id));
         openSpot = name;
-        mainContentFragment.loadSpot(name, 1);
+        mainContentFragment.loadSpot(name,1 , 1);
         //drawerFragment.setSpot(name);
     }
 
-    public void closeSpot(){
+    public void closeSpot(boolean animate){
+        closeAbout(false);
         openSpot = "";
-        mainContentFragment.closeSpot();
+        mainContentFragment.closeSpot(animate);
         drawerFragment.closeSpot();
+    }
+
+    public void about(){
+        aboutOpen = true;
+        aboutFragment = new AboutFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.exit, R.anim.no_anim_in, R.anim.pop_exit);
+
+        //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
+
+        transaction.replace(R.id.content_frame, aboutFragment).commit();
+        getSupportFragmentManager().executePendingTransactions();
+
+    }
+
+    public void closeAbout(boolean animate){
+        if(aboutOpen) {
+            aboutOpen = false;
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            if(animate){
+                transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
+                drawerFragment.closeSpot();
+            }
+
+            transaction.replace(R.id.content_frame, mainContentFragment, "mainContentFragment").commit();
+            getSupportFragmentManager().executePendingTransactions();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if(openSpot.equals("")){
+        if(aboutOpen) {
+            closeAbout(true);
+        }else if(openSpot.equals("")) {
             super.onBackPressed();
         }else{
-            closeSpot();
+            closeSpot(true);
         }
     }
 }

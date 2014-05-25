@@ -27,7 +27,5 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.+'
 
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.afollestad.silk:library:1.0-SNAPSHOT'
-    compile 'com.afollestad.cardsui:library:1.0-SNAPSHOT'
     compile project(':SlidingMenu:library')
 }

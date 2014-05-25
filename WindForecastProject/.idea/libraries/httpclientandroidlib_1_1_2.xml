@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="httpclientandroidlib-1.1.2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/WindForecast/build/exploded-aar/com.afollestad.silk/library/1.0-SNAPSHOT/libs/httpclientandroidlib-1.1.2.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

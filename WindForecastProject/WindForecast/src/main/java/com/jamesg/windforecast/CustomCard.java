@@ -1,53 +1,84 @@
 package com.jamesg.windforecast;
 
-import android.content.Context;
-
-import com.afollestad.cardsui.Card;
-
 /**
  * Created by James on 17/12/13.
  */
-public class CustomCard extends Card {
+public class CustomCard {
 
     private String type;
+    private String title;
+    private String subtitle;
+    private boolean isHeader;
+    private boolean isClickable = true;
+    private Object mTag;
+    private int mLayout;
 
     protected CustomCard() {
     }
 
     protected CustomCard(String title, String subtitle, boolean isHeader) {
-        super(title,subtitle,isHeader);
+        this.title = title;
+        this.subtitle = subtitle;
+        this.isHeader = isHeader;
     }
 
     public CustomCard(String title) {
-        super(title);
+        this.title = title;
     }
 
     public CustomCard(String title, String type) {
-        super(title);
+        this.title = title;
         this.type = type;
-    }
-
-    public CustomCard(Context context, int titleRes) {
-        this(context.getString(titleRes));
-    }
-
-    public CustomCard(Context context, String title, int contentRes) {
-        this(title, context.getString(contentRes));
-    }
-
-    public CustomCard(Context context, int titleRes, String content) {
-        this(context.getString(titleRes), content);
-    }
-
-    public CustomCard(Context context, int titleRes, int contentRes) {
-        this(context.getString(titleRes), context.getString(contentRes));
     }
 
     public String getType() {
         return type;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
+
+    public boolean isHeader() {
+        return isHeader;
+    }
+
+    public boolean isClickable() {
+        return isClickable;
+    }
+
+    public CustomCard setClickable(boolean clickable) {
+        isClickable = clickable;
+        return this;
+    }
+
+    public Object getTag() {
+        return mTag;
+    }
+
+    /**
+     * Sets a tag of any type that can be used to keep track of cards.
+     */
+    public CustomCard setTag(Object tag) {
+        mTag = tag;
+        return this;
+    }
+
+    public int getLayout() {
+        return mLayout;
+    }
+
+    public CustomCard setLayout(int layoutRes) {
+        mLayout = layoutRes;
+        return this;
+    }
+
 }

@@ -4,30 +4,26 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 import android.os.Handler;
 
-import com.afollestad.cardsui.CardAdapter;
-import com.afollestad.cardsui.CardBase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,7 +35,7 @@ import android.support.v4.app.FragmentManager;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class CustomCardAdapter extends CardAdapter {
+public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
     private Context context;
 
@@ -53,10 +49,12 @@ public class CustomCardAdapter extends CardAdapter {
     private int mapType = GoogleMap.MAP_TYPE_NORMAL;
     private FragmentManager fragmentManager;
 
+    private int mAccentColor;
+
     private TextSwitcher mSwitcher;
 
     public CustomCardAdapter(Context context, int overviewDisplay, String openSpot, FragmentManager fragmentManager) {
-        super(context);
+        super(context, 0);
         this.context = context;
         this.overviewDisplay = overviewDisplay;
         this.openSpot = openSpot;
@@ -68,67 +66,38 @@ public class CustomCardAdapter extends CardAdapter {
 
         // Register three custom card layouts...
         // You must register them so that list items that use these layouts can be recycled by the system correctly.
-        registerLayout(R.layout.card_layout_header);
-        registerLayout(R.layout.card_layout_overview);
-        registerLayout(R.layout.card_layout_weather);
-        registerLayout(R.layout.card_layout_swell);
-        registerLayout(R.layout.card_layout_map);
+        //registerLayout(R.layout.card_layout_header);
+        //registerLayout(R.layout.card_layout_overview);
+        //registerLayout(R.layout.card_layout_weather);
+        //registerLayout(R.layout.card_layout_swell);
+        //registerLayout(R.layout.card_layout_map);
     }
 
-    @Override
-    protected boolean onProcessThumbnail(ImageView icon, CardBase card) {
-        // Optional. If a custom layout has a view with the ID @android:id/icon, this is called.
-        // RETURN TRUE: the card thumbnail view is visible.
-        // RETURN FALSE: the card thumbnail view is gone (appears to not be there at all).
-        return super.onProcessThumbnail(icon, card);
+    public void setAccentColorRes(int color){
+        this.mAccentColor = color;
     }
 
-    @Override
-    protected boolean onProcessTitle(TextView title, CardBase card, int accentColor) {
-        // Optional. If a custom layout has a view with the ID @android:id/title, this is called.
-        return super.onProcessTitle(title, card, accentColor);
-    }
-
-    @Override
-    protected boolean onProcessContent(TextView content, CardBase card) {
-        // Optional. If a custom layout has a view with the ID @android:id/content, this is called.
-        return super.onProcessContent(content, card);
-    }
-
-    @Override
-    protected boolean onProcessMenu(View view, CardBase card) {
-        // Optional. If a custom layout has a view with the ID @android:id/button1, this is called.
-        // Do not call the super function if you want to override the default behavior. The super function attaches a popup menu.
-        return super.onProcessMenu(view, card);
-    }
-
-    @Override
-    public View onViewCreated(int index, View recycled, CardBase item) {
-        if (((CustomCard)item).getType().equals("header")) {
+    public View getView(int position, View recycled, ViewGroup parent) {
+        CustomCard item = getItem(position);
+        if ((item).getType().equals("header")) {
             return setupHeader(item, recycled, 0);
-        }else if (((CustomCard)item).getType().equals("headerAdd")) {
+        }else if ((item).getType().equals("headerAdd")) {
             return setupHeader(item, recycled, 1);
-        }else if(((CustomCard)item).getType().equals("wind")){
-            return setupWindCard(index,recycled,item);
-        }else if(((CustomCard)item).getType().equals("weather")){
-            return setupWeatherCard(index,recycled,item);
-        }else if(((CustomCard)item).getType().equals("swell")){
-            return setupSwellCard(index,recycled,item);
-        }else if(((CustomCard)item).getType().equals("map")){
-            return setupMapCard(index,recycled,item);
-        }else{
-            return setupBlankCard(index, recycled, item);
+        }else if((item).getType().equals("wind")){
+            return setupWindCard(position, recycled, item);
+        }else if((item).getType().equals("weather")){
+            return setupWeatherCard(position,recycled,item);
+        }else if((item).getType().equals("swell")){
+            return setupSwellCard(position,recycled,item);
+        }else if((item).getType().equals("map")){
+            return setupMapCard(position, recycled, item);
         }
+        return null;
     }
 
-    public View setupBlankCard(int index, View recycled, CardBase item) {
+    public View setupHeader(CustomCard header, View recycled, int add) {
+        recycled = LayoutInflater.from(getContext()).inflate(header.getLayout(), null);
 
-        View card = super.onViewCreated(index, recycled, item);
-
-        return card;
-    }
-
-    public View setupHeader(CardBase header, View recycled, int add) {
         TextView title = (TextView) recycled.findViewById(android.R.id.title);
         if (title == null)
             throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/title.");
@@ -137,10 +106,6 @@ public class CustomCardAdapter extends CardAdapter {
             throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/content.");
         title.setText(header.getTitle());
         final String titleTxt = header.getTitle();
-        if (header.getContent() != null && !header.getContent().trim().isEmpty()) {
-            //subtitle.setVisibility(View.VISIBLE);
-            subtitle.setText(header.getContent());
-        } //else subtitle.setVisibility(View.GONE);
         final TextView button = (TextView) recycled.findViewById(android.R.id.button1);
         if (button == null)
             throw new RuntimeException("The header layout must contain a TextView with the ID @android:id/button1.");
@@ -204,9 +169,9 @@ public class CustomCardAdapter extends CardAdapter {
         return recycled;
     }
 
-    public View setupMapCard(int index, View recycled, CardBase item) {
+    public View setupMapCard(int index, View recycled, CustomCard item) {
 
-        View card = super.onViewCreated(index, recycled, item);
+        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
 
         SupportMapFragment mapFragment = ((SupportMapFragment)
                 fragmentManager.findFragmentByTag("mapFragment"));
@@ -283,14 +248,19 @@ public class CustomCardAdapter extends CardAdapter {
         }
     }
 
-    public View setupWeatherCard(int index, View recycled, CardBase item) {
+    public View setupWeatherCard(int index, View recycled, CustomCard item) {
 
         boolean animate = true;
 
-        TextView titleTextView = (TextView)recycled.findViewById(android.R.id.title);
-        final String oldtitle = titleTextView.getText().toString();
+        String oldtitle = "";
+        if(recycled != null) {
+            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
+            oldtitle = titleTextView.getText().toString();
+        }else{
+            animate = false;
+        }
 
-        View card = super.onViewCreated(index, recycled, item);
+        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
 
         if(openSpot.equals("")){
             thisSpot = MainActivity.data.getSpot(item.getTitle());
@@ -441,14 +411,21 @@ public class CustomCardAdapter extends CardAdapter {
         return card;
     }
 
-    public View setupWindCard(int index, View recycled, CardBase item) {
+    public View setupWindCard(int index, View recycled, CustomCard item) {
 
         boolean animate = true;
+        String oldtitle = "";
 
-        TextView titleTextView = (TextView)recycled.findViewById(android.R.id.title);
-        final String oldtitle = titleTextView.getText().toString();
+        if(recycled != null) {
+            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
+            oldtitle = titleTextView.getText().toString();
+        }else{
+            animate = false;
+        }
 
-        View card = super.onViewCreated(index, recycled, item);
+        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
+        TextView titleTextView = (TextView) card.findViewById(android.R.id.title);
+        titleTextView.setText(item.getTitle());
 
         if(openSpot.equals("")){
             thisSpot = MainActivity.data.getSpot(item.getTitle());
@@ -711,14 +688,19 @@ public class CustomCardAdapter extends CardAdapter {
         return card;
     }
 
-    public View setupSwellCard(int index, View recycled, CardBase item) {
+    public View setupSwellCard(int index, View recycled, CustomCard item) {
 
         boolean animate = true;
 
-        TextView titleTextView = (TextView)recycled.findViewById(android.R.id.title);
-        final String oldtitle = titleTextView.getText().toString();
+        String oldtitle = "";
+        if(recycled != null) {
+            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
+            oldtitle = titleTextView.getText().toString();
+        }else{
+            animate = false;
+        }
 
-        View card = super.onViewCreated(index, recycled, item);
+        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
 
         if(openSpot.equals("")){
             thisSpot = MainActivity.data.getSpot(item.getTitle());

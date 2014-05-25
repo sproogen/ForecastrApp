@@ -2,8 +2,6 @@ package com.jamesg.windforecast;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -14,10 +12,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
-
-import com.afollestad.cardsui.Card;
-import com.afollestad.cardsui.CardListView;
-import com.jamesg.windforecast.data.Spot;
 
 public class MainContentFragment extends Fragment {
 
@@ -183,9 +177,12 @@ public class MainContentFragment extends Fragment {
         currentFragment.updateOverviewDisplay(overviewDisplay);
     }
 
-    public void closeSpot(){
-        getActivity().getSupportFragmentManager().popBackStack(null, 1);
+    public void closeSpot(boolean animate){
         openSpot = "";
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if(animate)transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
+        transaction.replace(R.id.spots_frame, favouriteSpotsFragment,"favouriteSpotsFragment").commit();
+
     }
 
     public void removeSpot(String name){
@@ -196,23 +193,22 @@ public class MainContentFragment extends Fragment {
         favouriteSpotsFragment.addSpot(name);
     }
 
-    public void loadSpot(String name, int type){ //0 == Favourite , 1 == Search
+    public void loadSpot(String name,int animate, int type){ //0 == Favourite , 1 == Search
         FavouriteSpotsFragment spot = new FavouriteSpotsFragment(overviewDisplay, name, type);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-        if(type == 0){
-            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        if(animate == 0){
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         }
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack
         transaction.replace(R.id.spots_frame, spot);
-        transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
         getActivity().getSupportFragmentManager().executePendingTransactions();
-        if(type == 1){
+        if(animate == 1){
             if(getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).toggle();
             }
