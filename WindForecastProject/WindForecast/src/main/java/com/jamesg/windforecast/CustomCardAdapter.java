@@ -37,6 +37,11 @@ import java.util.Calendar;
 
 public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_WIND = 1;
+    private static final int TYPE_NORMAL = 1;
+    private static final int TYPE_MAX_COUNT = 3;
+
     private Context context;
 
     private int overviewDisplay = 0;
@@ -52,6 +57,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
     private int mAccentColor;
 
     private TextSwitcher mSwitcher;
+    private LayoutInflater mInflater;
 
     public CustomCardAdapter(Context context, int overviewDisplay, String openSpot, FragmentManager fragmentManager) {
         super(context, 0);
@@ -64,26 +70,45 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
             thisSpot = MainActivity.data.getSpot(openSpot);
         }
 
-        // Register three custom card layouts...
-        // You must register them so that list items that use these layouts can be recycled by the system correctly.
-        //registerLayout(R.layout.card_layout_header);
-        //registerLayout(R.layout.card_layout_overview);
-        //registerLayout(R.layout.card_layout_weather);
-        //registerLayout(R.layout.card_layout_swell);
-        //registerLayout(R.layout.card_layout_map);
+        mInflater = LayoutInflater.from(context);
     }
 
     public void setAccentColorRes(int color){
         this.mAccentColor = color;
     }
 
-    public View getView(int position, View recycled, ViewGroup parent) {
+    @Override
+    public int getItemViewType(int position) {
         CustomCard item = getItem(position);
         if ((item).getType().equals("header")) {
-            return setupHeader(item, recycled, 0);
+            return TYPE_HEADER;
         }else if ((item).getType().equals("headerAdd")) {
-            return setupHeader(item, recycled, 1);
+            return TYPE_HEADER;
         }else if((item).getType().equals("wind")){
+            return TYPE_WIND;
+        }else{
+            return TYPE_NORMAL;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_MAX_COUNT;
+    }
+
+    public View getView(int position, View recycled, ViewGroup parent) {
+        int type = getItemViewType(position);
+        CustomCard item = getItem(position);
+        switch (type) {
+            case TYPE_HEADER:
+                if ((item).getType().equals("header")) {
+                    recycled = setupHeader(item, recycled, 0);
+                }else{
+                    recycled = setupHeader(item, recycled, 1);
+                }
+                break;
+        }
+        if((item).getType().equals("wind")){
             return setupWindCard(position, recycled, item);
         }else if((item).getType().equals("weather")){
             return setupWeatherCard(position,recycled,item);
@@ -92,347 +117,112 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         }else if((item).getType().equals("map")){
             return setupMapCard(position, recycled, item);
         }
-        return null;
+        return recycled;
     }
 
     public View setupHeader(CustomCard header, View recycled, int add) {
-        recycled = LayoutInflater.from(getContext()).inflate(header.getLayout(), null);
+        HeaderViewHolder holder = null;
+        if(recycled == null) {
+            holder = new HeaderViewHolder();
+            recycled = mInflater.inflate(R.layout.card_layout_header, null);
+            holder.title = (TextView) recycled.findViewById(android.R.id.title);
+            holder.subtitle = (TextView) recycled.findViewById(android.R.id.content);
+            holder.button = (TextView) recycled.findViewById(android.R.id.button1);
+            recycled.setTag(holder);
+        }else{
+            holder = (HeaderViewHolder)recycled.getTag();
+        }
 
-        TextView title = (TextView) recycled.findViewById(android.R.id.title);
-        if (title == null)
-            throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/title.");
-        final TextView subtitle = (TextView) recycled.findViewById(android.R.id.content);
-        if (subtitle == null)
-            throw new RuntimeException("Your header layout must contain a TextView with the ID @android:id/content.");
-        title.setText(header.getTitle());
+
+        holder.title.setText(header.getTitle());
         final String titleTxt = header.getTitle();
-        final TextView button = (TextView) recycled.findViewById(android.R.id.button1);
-        if (button == null)
-            throw new RuntimeException("The header layout must contain a TextView with the ID @android:id/button1.");
+        final TextView buttonFinal = holder.button;
+
         if (add == 1 && !MainActivity.data.isFavourite(titleTxt)) {
-            button.setVisibility(View.VISIBLE);
-            button.setBackgroundColor(mAccentColor);
+            holder.button.setVisibility(View.VISIBLE);
+            holder.button.setBackgroundColor(mAccentColor);
             String buttonTxt = "Add to Favourites";
-            button.setText(buttonTxt);
-            button.setOnClickListener(new View.OnClickListener() {
+            holder.button.setText(buttonTxt);
+            holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(context instanceof MainActivity) {
                         ((MainActivity) context).addSpot(titleTxt);
-                        button.setVisibility(View.GONE);
+                        buttonFinal.setVisibility(View.GONE);
                     }
                 }
             });
-        } else button.setVisibility(View.INVISIBLE);
+        } else holder.button.setVisibility(View.INVISIBLE);
 
         if(overviewDisplay == 0){
-            if(subtitle.getVisibility() == View.INVISIBLE){
+            if(holder.subtitle.getVisibility() == View.INVISIBLE){
                 AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f );
                 fadeIn.setDuration(400);
-                subtitle.startAnimation(fadeIn);
-                subtitle.setVisibility(View.VISIBLE);
+                holder.subtitle.startAnimation(fadeIn);
+                holder.subtitle.setVisibility(View.VISIBLE);
             }
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("dd/MMM");
-            subtitle.setText(df.format(c.getTime()));
+            holder.subtitle.setText(df.format(c.getTime()));
         }else if(overviewDisplay == 1){
-            if(subtitle.getVisibility() == View.INVISIBLE){
+            if(holder.subtitle.getVisibility() == View.INVISIBLE){
                 AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f );
                 fadeIn.setDuration(400);
-                subtitle.startAnimation(fadeIn);
-                subtitle.setVisibility(View.VISIBLE);
+                holder.subtitle.startAnimation(fadeIn);
+                holder.subtitle.setVisibility(View.VISIBLE);
             }
             Calendar c = Calendar.getInstance();
             c.add(c.DAY_OF_MONTH, 1);
             SimpleDateFormat df = new SimpleDateFormat("dd/MMM");
-            subtitle.setText(df.format(c.getTime()));
+            holder.subtitle.setText(df.format(c.getTime()));
         }else{
-            if(subtitle.getVisibility() == View.VISIBLE){
+            if(holder.subtitle.getVisibility() == View.VISIBLE){
                 AlphaAnimation fadeOut = new AlphaAnimation(1.0f , 0.0f );
                 fadeOut.setDuration(400);
+                final TextView subtitleFinal = holder.subtitle;
                 fadeOut.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {}
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        subtitle.setVisibility(View.INVISIBLE);
+                        subtitleFinal.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onAnimationRepeat(Animation animation) {}
                 });
-                subtitle.startAnimation(fadeOut);
+                holder.subtitle.startAnimation(fadeOut);
 
             }
         }
         return recycled;
     }
 
-    public View setupMapCard(int index, View recycled, CustomCard item) {
-
-        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
-
-        SupportMapFragment mapFragment = ((SupportMapFragment)
-                fragmentManager.findFragmentByTag("mapFragment"));
-
-        if(mapFragment==null){
-            mapFragment = SupportMapFragment.newInstance();
-            fragmentManager.beginTransaction()
-                    .add(R.id.map, mapFragment, "mapFragment")
-                    .addToBackStack(null)
-                    .commit();
-        }else{
-            removeMap();
-            fragmentManager.beginTransaction()
-                    .add(R.id.map, mapFragment, "mapFragment")
-                    .addToBackStack(null)
-                    .commit();
-        }
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable(){
-
-            @Override
-            public void run() {
-                googleMap = ((SupportMapFragment)
-                        fragmentManager.findFragmentByTag("mapFragment")).getMap();
-                if(googleMap != null) {
-                    if(mapSpot == -1){
-                        mapSpot = thisSpot.getId();
-                        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-                        float cameraZoom = 4;
-                        LatLng spotLatLng = new LatLng(51.4487547, -2.5740142);
-
-                        try {
-                            spotLatLng = new LatLng(Double.parseDouble(thisSpot.getLatitude()), Double.parseDouble(thisSpot.getLongitude()));
-                            googleMap.clear();
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(spotLatLng)
-                                    .title(thisSpot.getName())
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                            cameraZoom = 9;
-                        }catch(Exception e){
-                            //DO NOTHING
-                        }
-
-                        googleMap.getUiSettings().setCompassEnabled(false);
-                        googleMap.getUiSettings().setZoomControlsEnabled(true);
-                        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        googleMap.getUiSettings().setAllGesturesEnabled(false);
-
-                        googleMap.setMapType(mapType);
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(spotLatLng, cameraZoom));
-                    }
-                }else {
-                    handler.postDelayed(this, 500);
-                }
-            }
-        },500);
-
-        return card;
-    }
-
-    public void removeMap(){
-        try{
-            SupportMapFragment mapFragment = ((SupportMapFragment)
-                    fragmentManager.findFragmentByTag("mapFragment"));
-            if(mapFragment != null){
-                FragmentTransaction ft = fragmentManager.beginTransaction();
-                ft.remove(mapFragment);
-                ft.commit();
-            }
-        }catch(Exception e){
-            //DO NOTHING
-        }
-    }
-
-    public View setupWeatherCard(int index, View recycled, CustomCard item) {
-
-        boolean animate = true;
-
-        String oldtitle = "";
-        if(recycled != null) {
-            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
-            oldtitle = titleTextView.getText().toString();
-        }else{
-            animate = false;
-        }
-
-        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
-
-        if(openSpot.equals("")){
-            thisSpot = MainActivity.data.getSpot(item.getTitle());
-        }
-        //thisSpot.parseRawData();
-
-        if(!oldtitle.equals(item.getTitle())) animate = false;
-
-        Calendar c = null;
-        SimpleDateFormat df = new SimpleDateFormat("EEE");
-        if(overviewDisplay == 2) c = Calendar.getInstance();
-
-        int timeSteps = 7;
-        if(overviewDisplay == 2){
-            timeSteps = thisSpot.getSevenDayDayCount();
-        }
-        for(int i=0; i < 7; i++){
-
-            boolean weatherChange = true;
-            boolean tempChange = true;
-
-            int timeStamp = (i+1)*3;
-
-            TimestampData intervalData = null;
-            if(overviewDisplay == 0){
-                intervalData = thisSpot.getTodayTimestamp(timeStamp);
-            }else if(overviewDisplay == 1){
-                intervalData = thisSpot.getTomorrowTimestamp(timeStamp);
-            }else {
-                if(i < timeSteps)intervalData = thisSpot.getSevenDayDay(i);
-                else intervalData = null;
-            }
-
-            //Log.d("WINDFINDER APP", "Column" + i);
-            int colID = context.getResources().getIdentifier("column"+(i+1), "id", context.getPackageName());
-            View column = card.findViewById(colID);
-
-            TextView time = (TextView) column.findViewById(R.id.valueText);
-
-            if(overviewDisplay == 0 || overviewDisplay == 1){
-                int timeID = context.getResources().getIdentifier("time"+(i+1), "string", context.getPackageName());
-                time.setText(timeID);
-            }else{
-                time.setText(df.format(c.getTime()));
-                c.add(c.DAY_OF_MONTH, 1);
-            }
-
-            int weatherVal = -1; String weatherString = "";
-            int tempVal = -1; String tempString = "";
-
-            if(intervalData != null){
-                weatherVal = intervalData.weather;
-                weatherString = Integer.toString(weatherVal);
-                tempVal = intervalData.temp;
-                tempString = Integer.toString(tempVal);
-            }
-
-            TextView weatherType = (TextView) column.findViewById(R.id.weatherType);
-            TextSwitcher temp = (TextSwitcher) column.findViewById(R.id.temp);
-            TextView tv = (TextView) temp.getCurrentView();
-            if(tv == null){
-                temp.setFactory(new ViewFactory() {
-
-                    public View makeView() {
-                        TextView myText = new TextView(context);
-                        myText.setGravity(Gravity.CENTER);
-
-                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
-                                Gravity.CENTER);
-                        myText.setLayoutParams(params);
-
-                        myText.setTextSize(18);
-                        myText.setTextColor(Color.BLACK);
-                     return myText;
-                    }
-                });
-            }
-
-            if(animate){
-                temp.setInAnimation(AnimationUtils.loadAnimation(context,
-                        R.anim.fade_in));
-                temp.setOutAnimation(context, R.anim.fade_out);
-            }else{
-                temp.setInAnimation(AnimationUtils.loadAnimation(context,
-                        R.anim.no_anim_in));
-                temp.setOutAnimation(context, R.anim.no_anim_out);
-            }
-
-            String oldWeatherString = weatherType.getText().toString();
-            if(oldWeatherString == "") oldWeatherString = "0";
-
-            final int oldWeatherVal = Integer.parseInt(oldWeatherString);
-
-            weatherType.setText(weatherString);
-            if(!tempString.equals("")) tempString = tempString + "\u00B0";
-            temp.setText(tempString);
-
-            final ImageView weatherImage = (ImageView)column.findViewById(R.id.weatherImage);
-
-            int weatherToDrawable = R.drawable.wind_icon_null;
-
-            if(weatherVal == 0){ weatherToDrawable = R.drawable.weather_0; if(oldWeatherVal == 0) weatherChange = false;}
-            else if(weatherVal == 1){weatherToDrawable =  R.drawable.weather_1;if(oldWeatherVal == 1) weatherChange = false;}
-            else if(weatherVal == 2){weatherToDrawable =  R.drawable.weather_2;if(oldWeatherVal == 2) weatherChange = false;}
-            else if(weatherVal == 3){weatherToDrawable =  R.drawable.weather_3;if(oldWeatherVal == 3) weatherChange = false;}
-            else if(weatherVal == 5){weatherToDrawable =  R.drawable.weather_5;if(oldWeatherVal == 5) weatherChange = false;}
-            else if(weatherVal == 6){weatherToDrawable =  R.drawable.weather_6;if(oldWeatherVal == 6) weatherChange = false;}
-            else if(weatherVal == 7){weatherToDrawable =  R.drawable.weather_7;if(oldWeatherVal == 7) weatherChange = false;}
-            else if(weatherVal == 8){weatherToDrawable =  R.drawable.weather_8;if(oldWeatherVal == 8) weatherChange = false;}
-            else if(weatherVal == 9){weatherToDrawable =  R.drawable.weather_9;if(oldWeatherVal == 9) weatherChange = false;}
-            else if(weatherVal == 10){weatherToDrawable =  R.drawable.weather_10;if(oldWeatherVal == 10) weatherChange = false;}
-            else if(weatherVal == 11){weatherToDrawable =  R.drawable.weather_11;if(oldWeatherVal == 11) weatherChange = false;}
-            else if(weatherVal == 12){weatherToDrawable =  R.drawable.weather_12;if(oldWeatherVal == 12) weatherChange = false;}
-            else if(weatherVal == 13){weatherToDrawable =  R.drawable.weather_13;if(oldWeatherVal == 13) weatherChange = false;}
-            else if(weatherVal == 14){weatherToDrawable =  R.drawable.weather_14;if(oldWeatherVal == 14) weatherChange = false;}
-            else if(weatherVal == 15){weatherToDrawable =  R.drawable.weather_15;if(oldWeatherVal == 15) weatherChange = false;}
-            else if(weatherVal == 16){weatherToDrawable =  R.drawable.weather_16;if(oldWeatherVal == 16) weatherChange = false;}
-            else if(weatherVal == 17){weatherToDrawable =  R.drawable.weather_17;if(oldWeatherVal == 17) weatherChange = false;}
-            else if(weatherVal == 18){weatherToDrawable =  R.drawable.weather_18;if(oldWeatherVal == 18) weatherChange = false;}
-            else if(weatherVal == 19){weatherToDrawable =  R.drawable.weather_19;if(oldWeatherVal == 19) weatherChange = false;}
-            else if(weatherVal == 20){weatherToDrawable =  R.drawable.weather_20;if(oldWeatherVal == 20) weatherChange = false;}
-            else if(weatherVal == 21){weatherToDrawable =  R.drawable.weather_21;if(oldWeatherVal == 21) weatherChange = false;}
-            else if(weatherVal == 22){weatherToDrawable =  R.drawable.weather_22;if(oldWeatherVal == 22) weatherChange = false;}
-            else if(weatherVal == 23){weatherToDrawable =  R.drawable.weather_23;if(oldWeatherVal == 23) weatherChange = false;}
-            else if(weatherVal == 24){weatherToDrawable =  R.drawable.weather_24;if(oldWeatherVal == 24) weatherChange = false;}
-            else if(weatherVal == 25){weatherToDrawable =  R.drawable.weather_25;if(oldWeatherVal == 25) weatherChange = false;}
-            else if(weatherVal == 26){weatherToDrawable =  R.drawable.weather_26;if(oldWeatherVal == 26) weatherChange = false;}
-            else if(weatherVal == 27){weatherToDrawable =  R.drawable.weather_27;if(oldWeatherVal == 27) weatherChange = false;}
-            else if(weatherVal == 28){weatherToDrawable =  R.drawable.weather_28;if(oldWeatherVal == 28) weatherChange = false;}
-            else if(weatherVal == 29){weatherToDrawable =  R.drawable.weather_29;if(oldWeatherVal == 29) weatherChange = false;}
-            else if(weatherVal == 30){weatherToDrawable =  R.drawable.weather_30;if(oldWeatherVal == 30) weatherChange = false;}
-
-            if(weatherChange){
-                final TransitionDrawable windTransitionDrawable =
-                        new TransitionDrawable(new Drawable[] {
-                                weatherImage.getDrawable(),
-                                context.getResources().getDrawable(weatherToDrawable)
-                        });
-                weatherImage.setImageDrawable(windTransitionDrawable);
-                windTransitionDrawable.setCrossFadeEnabled(true);
-                if(animate) windTransitionDrawable.startTransition(400);
-                else windTransitionDrawable.startTransition(0);
-            }else{
-                weatherImage.setImageDrawable(context.getResources().getDrawable(weatherToDrawable));
-            }
-        }
-        return card;
-    }
-
     public View setupWindCard(int index, View recycled, CustomCard item) {
-
+        WindViewHolder holder = null;
         boolean animate = true;
         String oldtitle = "";
 
-        if(recycled != null) {
-            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
-            oldtitle = titleTextView.getText().toString();
+        if(recycled == null) {
+            holder = new WindViewHolder();
+            recycled = mInflater.inflate(R.layout.card_layout_overview, null);
+            holder.titleTextView = (TextView) recycled.findViewById(android.R.id.title);
+            recycled.setTag(holder);
         }else{
-            animate = false;
+            holder = (WindViewHolder)recycled.getTag();
+            oldtitle = holder.titleTextView.getText().toString();
         }
 
-        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
-        TextView titleTextView = (TextView) card.findViewById(android.R.id.title);
-        titleTextView.setText(item.getTitle());
+        holder.titleTextView.setText(item.getTitle());
 
+        Spot spot;
         if(openSpot.equals("")){
-            thisSpot = MainActivity.data.getSpot(item.getTitle());
-        }
+            spot = item.getSpot();
+        }else{
+            spot = thisSpot;
 
-        //Log.d("WINDFINDER APP",thisSpot.getName() + " Sun Rise - "+ thisSpot.getSunRise());
-        //Log.d("WINDFINDER APP",thisSpot.getName() + " Sun Set - "+ thisSpot.getSunSet());
+        }
 
         if(!oldtitle.equals(item.getTitle())) animate = false;
 
@@ -442,7 +232,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
         int timeSteps = 7;
         if(overviewDisplay == 2){
-            timeSteps = thisSpot.getSevenDayDayCount();
+            timeSteps = spot.getSevenDayDayCount();
         }
         for(int i=0; i < 7; i++){
 
@@ -453,17 +243,17 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
             TimestampData intervalData = null;
             if(overviewDisplay == 0){
-                intervalData = thisSpot.getTodayTimestamp(timeStamp);
+                intervalData = spot.getTodayTimestamp(timeStamp);
             }else if(overviewDisplay == 1){
-                intervalData = thisSpot.getTomorrowTimestamp(timeStamp);
+                intervalData = spot.getTomorrowTimestamp(timeStamp);
             }else {
-                if(i < timeSteps)intervalData = thisSpot.getSevenDayDay(i);
+                if(i < timeSteps)intervalData = spot.getSevenDayDay(i);
                 else intervalData = null;
             }
 
             //Log.d("WINDFINDER APP", "Column" + i);
             int colID = context.getResources().getIdentifier("column"+(i+1), "id", context.getPackageName());
-            View column = card.findViewById(colID);
+            View column = recycled.findViewById(colID);
 
             TextView time = (TextView) column.findViewById(R.id.valueText);
 
@@ -627,8 +417,6 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
                 gustImage.setImageDrawable(context.getResources().getDrawable(gustToDrawable));
             }
 
-
-
             TextView currentDirection = (TextView)column.findViewById(R.id.direction);
 
             int currentDirectionVal = Integer.parseInt(currentDirection.getText().toString());
@@ -685,6 +473,248 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
                 windImage.startAnimation(rotateAnim);
             }
         }
+        return recycled;
+    }
+
+    public View setupMapCard(int index, View recycled, CustomCard item) {
+
+        View card = mInflater.inflate(R.layout.card_layout_map, null);
+
+        SupportMapFragment mapFragment = ((SupportMapFragment)
+                fragmentManager.findFragmentByTag("mapFragment"));
+
+        if(mapFragment==null){
+            mapFragment = SupportMapFragment.newInstance();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }else{
+            removeMap();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
+
+            @Override
+            public void run() {
+                googleMap = ((SupportMapFragment)
+                        fragmentManager.findFragmentByTag("mapFragment")).getMap();
+                if(googleMap != null) {
+                    if(mapSpot == -1){
+                        mapSpot = thisSpot.getId();
+                        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+                        float cameraZoom = 4;
+                        LatLng spotLatLng = new LatLng(51.4487547, -2.5740142);
+
+                        try {
+                            spotLatLng = new LatLng(Double.parseDouble(thisSpot.getLatitude()), Double.parseDouble(thisSpot.getLongitude()));
+                            googleMap.clear();
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(spotLatLng)
+                                    .title(thisSpot.getName())
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            cameraZoom = 9;
+                        }catch(Exception e){
+                            //DO NOTHING
+                        }
+
+                        googleMap.getUiSettings().setCompassEnabled(false);
+                        googleMap.getUiSettings().setZoomControlsEnabled(true);
+                        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                        googleMap.getUiSettings().setAllGesturesEnabled(false);
+
+                        googleMap.setMapType(mapType);
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(spotLatLng, cameraZoom));
+                    }
+                }else {
+                    handler.postDelayed(this, 500);
+                }
+            }
+        },500);
+
+        return card;
+    }
+
+    public void removeMap(){
+        try{
+            SupportMapFragment mapFragment = ((SupportMapFragment)
+                    fragmentManager.findFragmentByTag("mapFragment"));
+            if(mapFragment != null){
+                FragmentTransaction ft = fragmentManager.beginTransaction();
+                ft.remove(mapFragment);
+                ft.commit();
+            }
+        }catch(Exception e){
+            //DO NOTHING
+        }
+    }
+
+    public View setupWeatherCard(int index, View recycled, CustomCard item) {
+
+        boolean animate = true;
+
+        String oldtitle = "";
+        if(recycled != null) {
+            TextView titleTextView = (TextView) recycled.findViewById(android.R.id.title);
+            oldtitle = titleTextView.getText().toString();
+        }else{
+            animate = false;
+        }
+
+        View card = mInflater.inflate(R.layout.card_layout_weather, null);
+
+        if(openSpot.equals("")){
+            thisSpot = MainActivity.data.getSpot(item.getTitle());
+        }
+        //thisSpot.parseRawData();
+
+        if(!oldtitle.equals(item.getTitle())) animate = false;
+
+        Calendar c = null;
+        SimpleDateFormat df = new SimpleDateFormat("EEE");
+        if(overviewDisplay == 2) c = Calendar.getInstance();
+
+        int timeSteps = 7;
+        if(overviewDisplay == 2){
+            timeSteps = thisSpot.getSevenDayDayCount();
+        }
+        for(int i=0; i < 7; i++){
+
+            boolean weatherChange = true;
+            boolean tempChange = true;
+
+            int timeStamp = (i+1)*3;
+
+            TimestampData intervalData = null;
+            if(overviewDisplay == 0){
+                intervalData = thisSpot.getTodayTimestamp(timeStamp);
+            }else if(overviewDisplay == 1){
+                intervalData = thisSpot.getTomorrowTimestamp(timeStamp);
+            }else {
+                if(i < timeSteps)intervalData = thisSpot.getSevenDayDay(i);
+                else intervalData = null;
+            }
+
+            //Log.d("WINDFINDER APP", "Column" + i);
+            int colID = context.getResources().getIdentifier("column"+(i+1), "id", context.getPackageName());
+            View column = card.findViewById(colID);
+
+            TextView time = (TextView) column.findViewById(R.id.valueText);
+
+            if(overviewDisplay == 0 || overviewDisplay == 1){
+                int timeID = context.getResources().getIdentifier("time"+(i+1), "string", context.getPackageName());
+                time.setText(timeID);
+            }else{
+                time.setText(df.format(c.getTime()));
+                c.add(c.DAY_OF_MONTH, 1);
+            }
+
+            int weatherVal = -1; String weatherString = "";
+            int tempVal = -1; String tempString = "";
+
+            if(intervalData != null){
+                weatherVal = intervalData.weather;
+                weatherString = Integer.toString(weatherVal);
+                tempVal = intervalData.temp;
+                tempString = Integer.toString(tempVal);
+            }
+
+            TextView weatherType = (TextView) column.findViewById(R.id.weatherType);
+            TextSwitcher temp = (TextSwitcher) column.findViewById(R.id.temp);
+            TextView tv = (TextView) temp.getCurrentView();
+            if(tv == null){
+                temp.setFactory(new ViewFactory() {
+
+                    public View makeView() {
+                        TextView myText = new TextView(context);
+                        myText.setGravity(Gravity.CENTER);
+
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT,
+                                Gravity.CENTER);
+                        myText.setLayoutParams(params);
+
+                        myText.setTextSize(18);
+                        myText.setTextColor(Color.BLACK);
+                     return myText;
+                    }
+                });
+            }
+
+            if(animate){
+                temp.setInAnimation(AnimationUtils.loadAnimation(context,
+                        R.anim.fade_in));
+                temp.setOutAnimation(context, R.anim.fade_out);
+            }else{
+                temp.setInAnimation(AnimationUtils.loadAnimation(context,
+                        R.anim.no_anim_in));
+                temp.setOutAnimation(context, R.anim.no_anim_out);
+            }
+
+            String oldWeatherString = weatherType.getText().toString();
+            if(oldWeatherString == "") oldWeatherString = "0";
+
+            final int oldWeatherVal = Integer.parseInt(oldWeatherString);
+
+            weatherType.setText(weatherString);
+            if(!tempString.equals("")) tempString = tempString + "\u00B0";
+            temp.setText(tempString);
+
+            final ImageView weatherImage = (ImageView)column.findViewById(R.id.weatherImage);
+
+            int weatherToDrawable = R.drawable.wind_icon_null;
+
+            if(weatherVal == 0){ weatherToDrawable = R.drawable.weather_0; if(oldWeatherVal == 0) weatherChange = false;}
+            else if(weatherVal == 1){weatherToDrawable =  R.drawable.weather_1;if(oldWeatherVal == 1) weatherChange = false;}
+            else if(weatherVal == 2){weatherToDrawable =  R.drawable.weather_2;if(oldWeatherVal == 2) weatherChange = false;}
+            else if(weatherVal == 3){weatherToDrawable =  R.drawable.weather_3;if(oldWeatherVal == 3) weatherChange = false;}
+            else if(weatherVal == 5){weatherToDrawable =  R.drawable.weather_5;if(oldWeatherVal == 5) weatherChange = false;}
+            else if(weatherVal == 6){weatherToDrawable =  R.drawable.weather_6;if(oldWeatherVal == 6) weatherChange = false;}
+            else if(weatherVal == 7){weatherToDrawable =  R.drawable.weather_7;if(oldWeatherVal == 7) weatherChange = false;}
+            else if(weatherVal == 8){weatherToDrawable =  R.drawable.weather_8;if(oldWeatherVal == 8) weatherChange = false;}
+            else if(weatherVal == 9){weatherToDrawable =  R.drawable.weather_9;if(oldWeatherVal == 9) weatherChange = false;}
+            else if(weatherVal == 10){weatherToDrawable =  R.drawable.weather_10;if(oldWeatherVal == 10) weatherChange = false;}
+            else if(weatherVal == 11){weatherToDrawable =  R.drawable.weather_11;if(oldWeatherVal == 11) weatherChange = false;}
+            else if(weatherVal == 12){weatherToDrawable =  R.drawable.weather_12;if(oldWeatherVal == 12) weatherChange = false;}
+            else if(weatherVal == 13){weatherToDrawable =  R.drawable.weather_13;if(oldWeatherVal == 13) weatherChange = false;}
+            else if(weatherVal == 14){weatherToDrawable =  R.drawable.weather_14;if(oldWeatherVal == 14) weatherChange = false;}
+            else if(weatherVal == 15){weatherToDrawable =  R.drawable.weather_15;if(oldWeatherVal == 15) weatherChange = false;}
+            else if(weatherVal == 16){weatherToDrawable =  R.drawable.weather_16;if(oldWeatherVal == 16) weatherChange = false;}
+            else if(weatherVal == 17){weatherToDrawable =  R.drawable.weather_17;if(oldWeatherVal == 17) weatherChange = false;}
+            else if(weatherVal == 18){weatherToDrawable =  R.drawable.weather_18;if(oldWeatherVal == 18) weatherChange = false;}
+            else if(weatherVal == 19){weatherToDrawable =  R.drawable.weather_19;if(oldWeatherVal == 19) weatherChange = false;}
+            else if(weatherVal == 20){weatherToDrawable =  R.drawable.weather_20;if(oldWeatherVal == 20) weatherChange = false;}
+            else if(weatherVal == 21){weatherToDrawable =  R.drawable.weather_21;if(oldWeatherVal == 21) weatherChange = false;}
+            else if(weatherVal == 22){weatherToDrawable =  R.drawable.weather_22;if(oldWeatherVal == 22) weatherChange = false;}
+            else if(weatherVal == 23){weatherToDrawable =  R.drawable.weather_23;if(oldWeatherVal == 23) weatherChange = false;}
+            else if(weatherVal == 24){weatherToDrawable =  R.drawable.weather_24;if(oldWeatherVal == 24) weatherChange = false;}
+            else if(weatherVal == 25){weatherToDrawable =  R.drawable.weather_25;if(oldWeatherVal == 25) weatherChange = false;}
+            else if(weatherVal == 26){weatherToDrawable =  R.drawable.weather_26;if(oldWeatherVal == 26) weatherChange = false;}
+            else if(weatherVal == 27){weatherToDrawable =  R.drawable.weather_27;if(oldWeatherVal == 27) weatherChange = false;}
+            else if(weatherVal == 28){weatherToDrawable =  R.drawable.weather_28;if(oldWeatherVal == 28) weatherChange = false;}
+            else if(weatherVal == 29){weatherToDrawable =  R.drawable.weather_29;if(oldWeatherVal == 29) weatherChange = false;}
+            else if(weatherVal == 30){weatherToDrawable =  R.drawable.weather_30;if(oldWeatherVal == 30) weatherChange = false;}
+
+            if(weatherChange){
+                final TransitionDrawable windTransitionDrawable =
+                        new TransitionDrawable(new Drawable[] {
+                                weatherImage.getDrawable(),
+                                context.getResources().getDrawable(weatherToDrawable)
+                        });
+                weatherImage.setImageDrawable(windTransitionDrawable);
+                windTransitionDrawable.setCrossFadeEnabled(true);
+                if(animate) windTransitionDrawable.startTransition(400);
+                else windTransitionDrawable.startTransition(0);
+            }else{
+                weatherImage.setImageDrawable(context.getResources().getDrawable(weatherToDrawable));
+            }
+        }
         return card;
     }
 
@@ -700,7 +730,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
             animate = false;
         }
 
-        View card = LayoutInflater.from(getContext()).inflate(item.getLayout(), null);
+        View card = mInflater.inflate(R.layout.card_layout_swell, null);
 
         if(openSpot.equals("")){
             thisSpot = MainActivity.data.getSpot(item.getTitle());
@@ -970,5 +1000,15 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
     public void updateOverviewDisplay(int overviewDisplay){
         this.overviewDisplay = overviewDisplay;
         notifyDataSetChanged();
+    }
+
+    public static class HeaderViewHolder {
+        public TextView title;
+        public TextView subtitle;
+        public TextView button;
+    }
+
+    public static class WindViewHolder {
+        public TextView titleTextView;
     }
 }

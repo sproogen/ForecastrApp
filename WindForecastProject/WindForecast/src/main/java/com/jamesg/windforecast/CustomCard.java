@@ -1,5 +1,7 @@
 package com.jamesg.windforecast;
 
+import com.jamesg.windforecast.data.Spot;
+
 /**
  * Created by James on 17/12/13.
  */
@@ -11,7 +13,8 @@ public class CustomCard {
     private boolean isHeader;
     private boolean isClickable = true;
     private Object mTag;
-    private int mLayout;
+
+    private Spot spot;
 
     protected CustomCard() {
     }
@@ -72,13 +75,11 @@ public class CustomCard {
         return this;
     }
 
-    public int getLayout() {
-        return mLayout;
+    public void setSpot(Spot spot) {
+        this.spot = spot;
     }
 
-    public CustomCard setLayout(int layoutRes) {
-        mLayout = layoutRes;
-        return this;
+    public Spot getSpot() {
+        return this.spot;
     }
-
 }

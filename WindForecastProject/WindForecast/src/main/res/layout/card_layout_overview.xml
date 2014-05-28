@@ -28,10 +28,9 @@
         <LinearLayout
             android:id="@+id/contentFrame"
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/titleFrame"
-            android:baselineAligned="false">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/titleFrame">
 
             <RelativeLayout
                 android:id="@+id/column0"
@@ -58,7 +57,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/row_height"
                     android:scaleType="centerInside"
                     android:id="@+id/gustImage"
                     android:layout_below="@id/lineTop"
@@ -87,7 +86,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/row_height"
                     android:scaleType="centerInside"
                     android:id="@+id/windImage"
                     android:layout_below="@id/lineMiddle"

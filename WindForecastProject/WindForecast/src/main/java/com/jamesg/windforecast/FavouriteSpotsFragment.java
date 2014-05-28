@@ -54,6 +54,7 @@ public class FavouriteSpotsFragment extends Fragment {
         //cardsAdapter.setPopupMenu(R.menu.card_popup, this); // the popup menu callback is this activity
 
         cardsList = (ListView) rootView.findViewById(R.id.listview);
+        cardsList.setDivider(null);
         cardsList.setAdapter(cardsAdapter);
         if(openSpot.equals("")){
             /*cardsList.setOnCardClickListener(new CardListView.CardClickListener() {
@@ -72,26 +73,28 @@ public class FavouriteSpotsFragment extends Fragment {
 
         if(openSpot.equals("")) {
             getActivity().setTitle("Favourite Spots");
-            cardsAdapter.add(new CustomCard("Favourite Spots", "header").setLayout(R.layout.card_layout_header));
+            cardsAdapter.add(new CustomCard("Favourite Spots", "header"));
             ArrayList<CustomCard> appSpots = new ArrayList<CustomCard>();
             for (Spot s : MainActivity.data.getAllSpots(1)) {
-                appSpots.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
+                CustomCard c = new CustomCard(s.getName(), "wind");
+                c.setSpot(s);
+                appSpots.add(c);
             }
             cardsAdapter.addAll(appSpots);
         }else if(searchSpot == 1){
             Spot s = MainActivity.data.getSpot(openSpot);
             getActivity().setTitle(s.getName());
-            cardsAdapter.add(new CustomCard(s.getName(),"headerAdd").setLayout(R.layout.card_layout_header));
+            cardsAdapter.add(new CustomCard(s.getName(),"headerAdd"));
         }else{
             Spot s = MainActivity.data.getSpot(openSpot);
             getActivity().setTitle(s.getName());
-            cardsAdapter.add(new CustomCard(s.getName(),"header").setLayout(R.layout.card_layout_header));
-            cardsAdapter.add(new CustomCard("Wind","wind").setLayout(R.layout.card_layout_overview));
+            cardsAdapter.add(new CustomCard(s.getName(),"header"));
+            cardsAdapter.add(new CustomCard("Wind","wind"));
             if(s.hasSwell()){
-                cardsAdapter.add(new CustomCard("Swell","swell").setLayout(R.layout.card_layout_swell));
+                cardsAdapter.add(new CustomCard("Swell","swell"));
             }
-            cardsAdapter.add(new CustomCard("Weather","weather").setLayout(R.layout.card_layout_weather));
-            cardsAdapter.add(new CustomCard("Map","map").setLayout(R.layout.card_layout_map));
+            cardsAdapter.add(new CustomCard("Weather","weather"));
+            cardsAdapter.add(new CustomCard("Map","map"));
         }
 
         return rootView;
@@ -144,7 +147,7 @@ public class FavouriteSpotsFragment extends Fragment {
 
     public void addSpot(String name){
         Spot s = MainActivity.data.getSpot(name);
-        cardsAdapter.add((CustomCard) new CustomCard(s.getName(), "wind").setLayout(R.layout.card_layout_overview));
+        cardsAdapter.add((CustomCard) new CustomCard(s.getName(), "wind"));
     }
 
     @Override
