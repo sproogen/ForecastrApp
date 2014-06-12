@@ -1,5 +1,6 @@
 package com.jamesg.windforecast;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -7,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jamesg.windforecast.data.Spot;
 
@@ -56,17 +59,19 @@ public class FavouriteSpotsFragment extends Fragment {
         cardsList = (ListView) rootView.findViewById(R.id.listview);
         cardsList.setDivider(null);
         cardsList.setAdapter(cardsAdapter);
+        cardsList.setSelector(android.R.color.transparent);
         if(openSpot.equals("")){
-            /*cardsList.setOnCardClickListener(new CardListView.CardClickListener() {
+            cardsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onCardClick(int index, CardBase card, View view) {
-                    if (!((CustomCard)card).getType().equals("header")) {
-                        if(getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).loadSpot(card.getTitle(),0);
+                public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+                    CustomCard card = cardsAdapter.getItem(i);
+                    if (!card.getType().equals("header")) {
+                        if (getActivity() instanceof MainActivity) {
+                            ((MainActivity) getActivity()).loadSpot(card.getTitle(), 0);
                         }
                     }
                 }
-            });*/
+            });
         }else{
             cardsList.setClickable(false);
         }

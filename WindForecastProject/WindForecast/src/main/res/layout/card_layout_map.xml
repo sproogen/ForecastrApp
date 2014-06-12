@@ -24,6 +24,8 @@
 
     <!--suppress AndroidLintContentDescription -->
 
-    <ImageView style="@style/card_shadow"/>
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

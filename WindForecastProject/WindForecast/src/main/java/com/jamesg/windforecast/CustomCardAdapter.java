@@ -117,6 +117,8 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         }else if((item).getType().equals("map")){
             return setupMapCard(position, recycled, item);
         }
+
+
         return recycled;
     }
 
