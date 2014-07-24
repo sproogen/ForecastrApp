@@ -283,7 +283,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
             String oldWindString;
             String oldGustString;
 
-            TextSwitcher wind = (TextSwitcher) column.findViewById(R.id.windSpeed);
+            TextSwitcher wind = (TextSwitcher) column.findViewById(R.id.windSpeedSwitcher);
             TextView windTextView = (TextView) wind.getCurrentView();
             if(windTextView == null){
                 wind.setFactory(new ViewFactory() {
@@ -316,7 +316,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
                 wind.setOutAnimation(context, R.anim.no_anim_out);
             }
 
-            TextSwitcher gust = (TextSwitcher) column.findViewById(R.id.gustSpeed);
+            TextSwitcher gust = (TextSwitcher) column.findViewById(R.id.gustSpeedSwitcher);
             TextView gustTextView = (TextView) gust.getCurrentView();
             if(gustTextView == null){
                 gust.setFactory(new ViewFactory() {
@@ -799,7 +799,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
             String oldWindString;
             String oldGustString;
 
-            TextSwitcher wind = (TextSwitcher) column.findViewById(R.id.windSpeed);
+            TextSwitcher wind = (TextSwitcher) column.findViewById(R.id.windSpeedSwitcher);
             TextView windTextView = (TextView) wind.getCurrentView();
             if(windTextView == null){
                 wind.setFactory(new ViewFactory() {
@@ -832,7 +832,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
                 wind.setOutAnimation(context, R.anim.no_anim_out);
             }
 
-            TextSwitcher gust = (TextSwitcher) column.findViewById(R.id.gustSpeed);
+            TextSwitcher gust = (TextSwitcher) column.findViewById(R.id.gustSpeedSwitcher);
             TextView gustTextView = (TextView) gust.getCurrentView();
             if(gustTextView == null){
                 gust.setFactory(new ViewFactory() {

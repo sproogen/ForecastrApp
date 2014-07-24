@@ -131,8 +131,8 @@ public class FavouriteSpotsFragment extends Fragment {
     public void updateSpot(String name){
         MainActivity.data.parseSpotData(name);
         for(int i=0;i<cardsAdapter.getCount();i++){
-            if(((CustomCard)cardsAdapter.getItem(i)).getTitle().equals(name)){
-                CustomCard customCard = (CustomCard)cardsAdapter.getItem(i);
+            if((cardsAdapter.getItem(i)).getTitle().equals(name)){
+                //CustomCard customCard = cardsAdapter.getItem(i);
                 //cardsAdapter.update(customCard);
                 return;
             }
@@ -142,8 +142,8 @@ public class FavouriteSpotsFragment extends Fragment {
     public void removeSpot(String name){
         Spot s = MainActivity.data.getSpot(name);
         for(int i=0;i<cardsAdapter.getCount();i++){
-            if(((CustomCard)cardsAdapter.getItem(i)).getTitle().equals(name)){
-                CustomCard customCard = (CustomCard)cardsAdapter.getItem(i);
+            if((cardsAdapter.getItem(i)).getTitle().equals(name)){
+                CustomCard customCard = cardsAdapter.getItem(i);
                 cardsAdapter.remove(customCard);
                 return;
             }
@@ -152,7 +152,7 @@ public class FavouriteSpotsFragment extends Fragment {
 
     public void addSpot(String name){
         Spot s = MainActivity.data.getSpot(name);
-        cardsAdapter.add((CustomCard) new CustomCard(s.getName(), "wind"));
+        cardsAdapter.add(new CustomCard(s.getName(), "wind"));
     }
 
     @Override
