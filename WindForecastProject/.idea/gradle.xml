@@ -8,10 +8,10 @@
         <option name="gradleHome" value="$PROJECT_DIR$/../gradle-1.9" />
         <option name="modules">
           <set>
-            <option value="J:\Android Projects\WindFinderApp\WindForecastProject" />
-            <option value="J:\Android Projects\WindFinderApp\WindForecastProject\SlidingMenu" />
-            <option value="J:\Android Projects\WindFinderApp\WindForecastProject\SlidingMenu\library" />
-            <option value="J:\Android Projects\WindFinderApp\WindForecastProject\WindForecast" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/SlidingMenu" />
+            <option value="$PROJECT_DIR$/SlidingMenu/library" />
+            <option value="$PROJECT_DIR$/WindForecast" />
           </set>
         </option>
       </GradleProjectSettings>
