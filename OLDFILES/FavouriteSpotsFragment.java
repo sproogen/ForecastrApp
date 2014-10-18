@@ -1,17 +1,15 @@
 package com.jamesg.windforecast;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.jamesg.windforecast.cards.CustomCard;
 import com.jamesg.windforecast.data.Spot;
 
 import java.util.ArrayList;

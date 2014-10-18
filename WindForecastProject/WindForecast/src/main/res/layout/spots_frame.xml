@@ -27,7 +27,6 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|center_horizontal"
                 android:background="@drawable/top_bar_selector"
-                android:onClick="overviewTypeOnClick"
                 android:clickable="true"/>
 
             <View
@@ -48,7 +47,6 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|center_horizontal"
                 android:background="@drawable/top_bar_selector"
-                android:onClick="overviewTypeOnClick"
                 android:clickable="true"/>
 
             <View
@@ -69,7 +67,6 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|center_horizontal"
                 android:background="@drawable/top_bar_selector"
-                android:onClick="overviewTypeOnClick"
                 android:clickable="true"/>
 
         </LinearLayout>

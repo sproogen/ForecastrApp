@@ -1,10 +1,12 @@
-package com.jamesg.windforecast;
+package com.jamesg.windforecast.base;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jamesg.windforecast.DrawerFragment;
+import com.jamesg.windforecast.R;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 

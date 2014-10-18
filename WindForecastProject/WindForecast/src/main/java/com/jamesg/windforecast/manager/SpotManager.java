@@ -1,4 +1,4 @@
-package com.jamesg.windforecast.data;
+package com.jamesg.windforecast.manager;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.jamesg.windforecast.data.Spot;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -21,7 +23,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Data extends SQLiteOpenHelper {
+/**
+ * Created by James on 17/10/2014.
+ */
+public class SpotManager extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
@@ -49,7 +54,7 @@ public class Data extends SQLiteOpenHelper {
 
     Context context;
 
-    public Data(Context context) {
+    public SpotManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
@@ -96,7 +101,7 @@ public class Data extends SQLiteOpenHelper {
         }catch(NullPointerException e){
             //DO Nothing
         }
-        Log.d("WINDFINDER APP", "DATA ADD Spot - "+spot.getName());
+        Log.d("WINDFINDER APP", "DATA ADD Spot - " + spot.getName());
     }
 
     public void searchSpot(Spot spot){
@@ -123,15 +128,15 @@ public class Data extends SQLiteOpenHelper {
         Cursor cursor = null;
         try{
             cursor = db.query(TABLE_SPOTS, new String[] {
-                KEY_NAME, KEY_ID, KEY_LAT, KEY_LONG, KEY_DATA, KEY_UPDATE_TIME }, KEY_NAME + "=?",
-                new String[] { name }, null, null, null, null);
+                            KEY_NAME, KEY_ID, KEY_LAT, KEY_LONG, KEY_DATA, KEY_UPDATE_TIME }, KEY_NAME + "=?",
+                    new String[] { name }, null, null, null, null);
         }catch(NullPointerException e){
             //Do Nothing
         }
         if (cursor != null && cursor.moveToFirst()) {
 
             Spot spot = new Spot(cursor.getString(0),cursor.getInt(1),
-                cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getLong(5));
+                    cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getLong(5));
             cursor.close();
             return spot;
         }

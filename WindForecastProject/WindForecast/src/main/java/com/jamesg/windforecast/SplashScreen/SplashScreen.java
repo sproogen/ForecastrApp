@@ -1,20 +1,31 @@
-package com.jamesg.windforecast;
+package com.jamesg.windforecast.SplashScreen;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.jamesg.windforecast.MainActivity;
+import com.jamesg.windforecast.R;
+import com.jamesg.windforecast.WindFinderApplication;
+import com.jamesg.windforecast.manager.SpotManager;
+
+import javax.inject.Inject;
+
 /**
  * Created by James on 17/05/2014.
  */
 public class SplashScreen extends Activity {
+
+    @Inject
+    SpotManager spotManager;
 
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((WindFinderApplication) getApplication()).inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
@@ -29,6 +40,8 @@ public class SplashScreen extends Activity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
+                spotManager.getAllSpots(1);
+
                 Intent i = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(i);
 

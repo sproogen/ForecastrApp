@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,10 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.jamesg.windforecast.base.BaseFragment;
 import com.jamesg.windforecast.data.Spot;
-import com.jamesg.windforecast.data.TimestampData;
+import com.jamesg.windforecast.manager.SpotManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -36,12 +35,15 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class DrawerFragment extends Fragment {
+import javax.inject.Inject;
+
+public class DrawerFragment extends BaseFragment {
+
+    @Inject
+    SpotManager spotManager;
 
     private DrawMenuAdapter adapter;
     private SearchMenuAdapter searchAdapter;
@@ -53,6 +55,12 @@ public class DrawerFragment extends Fragment {
     ArrayList<Spot> all_spots;
     Boolean searching = false;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        super.onCreate(savedInstanceState);
+    }
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list, null);
 		return view;
@@ -61,7 +69,7 @@ public class DrawerFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
         final ListView listView = (ListView)getView().findViewById(R.id.list);
-		adapter = new DrawMenuAdapter(getActivity(), MainActivity.data.getAllSpots(0));
+		adapter = new DrawMenuAdapter(getActivity(), spotManager.getAllSpots(0));
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setDivider(null);
@@ -317,7 +325,7 @@ public class DrawerFragment extends Fragment {
     }
 
     public void refreshSpots(){
-        adapter.setData(MainActivity.data.getAllSpots(0));
+        adapter.setData(spotManager.getAllSpots(0));
     }
 
     public void closeSpot(){

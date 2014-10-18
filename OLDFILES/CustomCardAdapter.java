@@ -28,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jamesg.windforecast.base.CustomCardBase;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.data.TimestampData;
 import android.support.v4.app.FragmentManager;
@@ -35,7 +36,7 @@ import android.support.v4.app.FragmentManager;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
+public class CustomCardAdapter extends ArrayAdapter<CustomCardBase> {
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_WIND = 1;
@@ -79,7 +80,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
     @Override
     public int getItemViewType(int position) {
-        CustomCard item = getItem(position);
+        CustomCardBase item = getItem(position);
         if ((item).getType().equals("header")) {
             return TYPE_HEADER;
         }else if ((item).getType().equals("headerAdd")) {
@@ -98,7 +99,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
 
     public View getView(int position, View recycled, ViewGroup parent) {
         int type = getItemViewType(position);
-        CustomCard item = getItem(position);
+        CustomCardBase item = getItem(position);
         switch (type) {
             case TYPE_HEADER:
                 if ((item).getType().equals("header")) {
@@ -122,7 +123,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         return recycled;
     }
 
-    public View setupHeader(CustomCard header, View recycled, int add) {
+    public View setupHeader(CustomCardBase header, View recycled, int add) {
         HeaderViewHolder holder = null;
         if(recycled == null) {
             holder = new HeaderViewHolder();
@@ -201,7 +202,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         return recycled;
     }
 
-    public View setupWindCard(int index, View recycled, CustomCard item) {
+    public View setupWindCard(int index, View recycled, CustomCardBase item) {
         WindViewHolder holder = null;
         boolean animate = true;
         String oldtitle = "";
@@ -478,7 +479,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         return recycled;
     }
 
-    public View setupMapCard(int index, View recycled, CustomCard item) {
+    public View setupMapCard(int index, View recycled, CustomCardBase item) {
 
         View card = mInflater.inflate(R.layout.card_layout_map, null);
 
@@ -557,7 +558,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         }
     }
 
-    public View setupWeatherCard(int index, View recycled, CustomCard item) {
+    public View setupWeatherCard(int index, View recycled, CustomCardBase item) {
 
         boolean animate = true;
 
@@ -720,7 +721,7 @@ public class CustomCardAdapter extends ArrayAdapter<CustomCard> {
         return card;
     }
 
-    public View setupSwellCard(int index, View recycled, CustomCard item) {
+    public View setupSwellCard(int index, View recycled, CustomCardBase item) {
 
         boolean animate = true;
 

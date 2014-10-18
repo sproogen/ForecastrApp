@@ -13,6 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
+import com.jamesg.windforecast.SpotFragment.SpotFragment;
+
 public class MainContentFragment extends Fragment {
 
     private FavouriteSpotsFragment favouriteSpotsFragment;
@@ -194,7 +196,7 @@ public class MainContentFragment extends Fragment {
     }
 
     public void loadSpot(String name,int animate, int type){ //0 == Favourite , 1 == Search
-        FavouriteSpotsFragment spot = new FavouriteSpotsFragment(overviewDisplay, name, type);
+        SpotFragment spot = SpotFragment.newInstance(name);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
         if(animate == 0){
@@ -208,6 +210,9 @@ public class MainContentFragment extends Fragment {
         // Commit the transaction
         transaction.commit();
         getActivity().getSupportFragmentManager().executePendingTransactions();
+
+        /*FavouriteSpotsFragment spot = new FavouriteSpotsFragment(overviewDisplay, name, type);*/
+
         if(animate == 1){
             if(getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).toggle();

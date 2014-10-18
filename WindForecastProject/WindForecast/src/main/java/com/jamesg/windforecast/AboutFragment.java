@@ -15,8 +15,6 @@ import android.widget.TextView;
 
 public class AboutFragment extends Fragment {
 
-    private FavouriteSpotsFragment favouriteSpotsFragment;
-
     public AboutFragment() {
     }
 
