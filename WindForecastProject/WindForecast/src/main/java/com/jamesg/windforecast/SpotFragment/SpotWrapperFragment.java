@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.jamesg.windforecast.base.BaseFragment;
 import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.base.BaseSpotFragment;
+import com.jamesg.windforecast.data.Spot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -130,7 +131,13 @@ public class SpotWrapperFragment extends BaseFragment {
             }
         }
 
-        loadSpot("Aberavon");
+        FavouritesFragment favourites = FavouritesFragment.newInstance();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.spots_frame, favourites);
+        transaction.commit();
+
+        currentSpotFragment = favourites;
+        openSpot = null;
 
         return view;
     }
@@ -212,23 +219,38 @@ public class SpotWrapperFragment extends BaseFragment {
         }
     }
 
-    public void loadSpot(String name){
-        SpotFragment spot = SpotFragment.newInstance(name);
+    public void loadSpot(String name, boolean animate, boolean search){
+        SpotFragment spot = SpotFragment.newInstance(name, search);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-
-        //transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-        //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack
+        if(animate) {
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        }
         transaction.replace(R.id.spots_frame, spot);
-        // Commit the transaction
         transaction.commit();
 
         currentSpotFragment = spot;
         openSpot = name;
+    }
 
-        mListener.loadSpot(name,0);
+    public void closeSpot(boolean animate){
+        FavouritesFragment favourites = FavouritesFragment.newInstance();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if(animate){
+            transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
+        }
+        transaction.replace(R.id.spots_frame, favourites);
+        transaction.commit();
+
+        currentSpotFragment = favourites;
+        openSpot = null;
+    }
+
+    public void removeSpot(Spot spot){
+        try {
+            ((FavouritesFragment) currentSpotFragment).removeSpot(spot);
+        }catch(Exception e){
+            //Do Nothing
+        }
     }
 
     public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener){

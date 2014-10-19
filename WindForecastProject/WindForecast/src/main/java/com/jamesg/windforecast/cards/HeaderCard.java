@@ -1,30 +1,16 @@
 package com.jamesg.windforecast.cards;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.jamesg.windforecast.MainActivity;
 import com.jamesg.windforecast.R;
-import com.jamesg.windforecast.base.CustomCardBase;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.data.Spot;
-import com.jamesg.windforecast.data.TimestampData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,29 +18,44 @@ import java.util.Calendar;
 /**
  * Created by James on 17/10/2014.
  */
-public class HeaderCard extends CustomCardBase {
+public class HeaderCard extends CardBase {
 
     TextView title;
     TextView subtitle;
     TextView button;
 
-    Boolean add;
+    Boolean search = false;
 
-    public HeaderCard(Context context, Spot spot, int dateTab, boolean add){
+    public HeaderCard(Context context, Spot spot, int dateTab, boolean search){
         this.context = context;
         this.spot = spot;
         this.dateTab = dateTab;
-        this.add = add;
+        this.search = search;
+    }
+
+    public HeaderCard(Context context, String titleText, int dateTab){
+        this.context = context;
+        this.dateTab = dateTab;
+        this.titleText = titleText;
     }
 
     @Override
     public String getTitle() {
-        return spot.getName();
+        if(spot != null){
+            return spot.getName();
+        } else {
+            return super.getTitle();
+        }
     }
 
     @Override
     public String getTag() {
         return "header";
+    }
+
+    @Override
+    public boolean isHeader() {
+        return true;
     }
 
     public View getView(LayoutInflater inflater){
@@ -66,10 +67,9 @@ public class HeaderCard extends CustomCardBase {
         subtitle = (TextView) view.findViewById(android.R.id.content);
         button = (TextView) view.findViewById(android.R.id.button1);
 
-        title.setText(spot.getName());
-        final String titleTxt = spot.getName();
+        title.setText(getTitle());
 
-        if (add) { // && !MainActivity.data.isFavourite(titleTxt)
+        if (search) { // && !MainActivity.data.isFavourite(titleTxt)
             button.setVisibility(View.VISIBLE);
             button.setBackgroundColor(context.getResources().getColor(R.color.green));
             String buttonTxt = "Add to Favourites";
@@ -78,7 +78,7 @@ public class HeaderCard extends CustomCardBase {
                 @Override
                 public void onClick(View view) {
                     if(context instanceof MainActivity) {
-                        ((MainActivity) context).addSpot(titleTxt);
+                        ((MainActivity) context).addSpot(getTitle());
                         button.setVisibility(View.GONE);
                     }
                 }

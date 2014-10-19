@@ -4,13 +4,86 @@
     android:layout_height="fill_parent"
     android:background="@color/background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="WindFinderApp"
-        android:id="@+id/textView"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="WindFinderApp"
+            android:id="@+id/textView"
+            android:layout_below="@+id/imageView"
+            android:layout_marginTop="24dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Version : "
+            android:id="@+id/versionLabel"
+            android:textSize="16sp"
+            android:layout_alignBaseline="@+id/versionName"
+            android:layout_alignBottom="@+id/versionName"
+            android:layout_toLeftOf="@+id/frameLayout"
+            android:layout_toStartOf="@+id/frameLayout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/versionName"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/versionLabel"
+            android:layout_toEndOf="@+id/versionLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Last Updated : "
+            android:id="@+id/updatedLabel"
+            android:layout_below="@+id/versionLabel"
+            android:layout_toLeftOf="@+id/frameLayout"
+            android:layout_toStartOf="@+id/frameLayout"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/updatedText"
+            android:layout_below="@+id/versionLabel"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/updatedLabel"
+            android:layout_toEndOf="@+id/updatedLabel" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/frameLayout"></FrameLayout>
+
+    </RelativeLayout>
 </RelativeLayout>
 

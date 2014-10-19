@@ -5,8 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
+import com.google.common.collect.Lists;
 import com.jamesg.windforecast.data.Spot;
 
 import org.apache.http.HttpResponse;
@@ -20,7 +25,10 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -233,12 +241,22 @@ public class SpotManager extends SQLiteOpenHelper {
         values.put(KEY_UPDATE_TIME, spot.getUpdateTime());
 
         // updating row
+        int result = -1;
         try{
-            return db.update(TABLE_SPOTS, values, KEY_NAME + " = ?",
+            result = db.update(TABLE_SPOTS, values, KEY_NAME + " = ?",
                     new String[] { spot.getName() });
         }catch(NullPointerException e){
-            return -1;
+            //Do Nothing
         }
+        int i = 0;
+        for(Spot s : all_spots){
+            if(s.getName().equals(spot.getName())){
+                all_spots.set(i, spot);
+                break;
+            }
+            i++;
+        }
+        return result;
     }
 
     // Deleting single contact
@@ -282,14 +300,90 @@ public class SpotManager extends SQLiteOpenHelper {
         }
     }
 
-    public void get_data_for_location(Spot current){
+    public interface SpotDataTaskCallback {
+        public void spotUpdated(Spot spot);
+    }
+
+    class AllSpotsDataTaskCallback implements SpotDataTaskCallback{
+        @Override
+        public void spotUpdated(Spot spot) {
+            updateSpot(spot);
+        }
+    }
+
+    public void getDataForSpot(Spot spot, SpotDataTaskCallback callback){
+        ArrayList<Spot> spots = new ArrayList<Spot>();
+        spots.add(spot);
+        GetSpotDataTask getSpotDataTask = new GetSpotDataTask(true, callback);
+        getSpotDataTask.execute(spots);
+    }
+
+
+    public void checkForUpdates(boolean force){
+        List<Spot> spots = getAllSpots(0);
+        AllSpotsDataTaskCallback callback = new AllSpotsDataTaskCallback();
+        GetSpotDataTask getSpotDataTask = new GetSpotDataTask(force, callback);
+        getSpotDataTask.execute(spots);
+    }
+
+    private class GetSpotDataTask extends AsyncTask<List<Spot>, Spot, String> {
+
+        boolean forceUpdate;
+        SpotDataTaskCallback callback;
+
+        GetSpotDataTask(boolean forceUpdate, SpotDataTaskCallback callback){
+            this.forceUpdate = forceUpdate;
+            this.callback = callback;
+        }
+
+        protected String doInBackground(List<Spot>... spotsList) {
+            List<Spot> spots = spotsList[0];
+            for(Spot s : spots){
+
+                Log.d("WINDFINDER APP", "Checking Spot - "+s.getName());
+                if(s.getRawData() == null || (System.currentTimeMillis()-s.getUpdateTime()) > 3600000 || forceUpdate){ //3600000
+                    Spot updated = get_data_for_location(s);
+                    updated.parseRawData();
+                    publishProgress(updated);
+                }else{
+                    SimpleDateFormat formatter = new SimpleDateFormat("D");
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(s.getUpdateTime());
+                    String updatedDay = formatter.format(calendar.getTime());
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    String nowDay = formatter.format(calendar.getTime());
+                    if(!updatedDay.equals(nowDay)){
+                        Spot updated = get_data_for_location(s);
+                        updated.parseRawData();
+                        publishProgress(updated);
+                    }
+                }
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Spot... spot) {
+            if(spot[0] != null) {
+                Log.d("WINDFINDER APP", "Updated Spot - " + spot[0].getName());
+                callback.spotUpdated(spot[0]);
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            Log.d("WINDFINDER APP", "Updated Finished ");
+
+        }
+    }
+
+
+    public Spot get_data_for_location(Spot current){
 
         Log.d("WINDFINDER APP", "Start of get data");
 
         String latitude = null; String longitude = null;
 
         if(current == null){
-            return;
+            return null;
         }
 
         String request = base_url;
@@ -314,10 +408,10 @@ public class SpotManager extends SQLiteOpenHelper {
             }
         } catch (ClientProtocolException e) {
             Log.e("WINDFINDER APP", e.toString());
-            return;
+            return null;
         } catch (IOException e) {
             Log.e("WINDFINDER APP", e.toString());
-            return;
+            return null;
         }
         try{
             JSONObject rawDataJson = new JSONObject(responseString);
@@ -326,13 +420,13 @@ public class SpotManager extends SQLiteOpenHelper {
         }catch(Exception e){
             Log.e("WINDFINDER APP", "Error with initial JSON Parse");
             Log.e("WINDFINDER APP", e.toString());
-            return;
+            return null;
         }
 
         current.setRawData(responseString);
         current.setLatitude(latitude);
         current.setLongitude(longitude);
         current.setUpdateTime(System.currentTimeMillis());
-        updateSpot(current);
+        return current;
     }
 }

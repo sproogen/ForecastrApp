@@ -5,23 +5,18 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.jamesg.windforecast.MainActivity;
 import com.jamesg.windforecast.R;
-import com.jamesg.windforecast.base.CustomCardBase;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.data.TimestampData;
 
@@ -31,7 +26,7 @@ import java.util.Calendar;
 /**
  * Created by James on 17/10/2014.
  */
-public class WeatherCard extends CustomCardBase {
+public class WeatherCard extends CardBase {
 
     private TextView titleTextView;
 

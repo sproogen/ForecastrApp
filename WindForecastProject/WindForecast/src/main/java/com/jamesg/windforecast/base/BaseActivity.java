@@ -1,6 +1,8 @@
 package com.jamesg.windforecast.base;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,14 +64,6 @@ public class BaseActivity extends SlidingFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //getSupportMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    public void refreshDraw(){
-        /*FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-        drawerListFragment = new DrawerFragment();
-        t.replace(R.id.menu_frame, drawerListFragment);
-        t.commit();*/
-        drawerFragment.refreshSpots();
     }
 }
 

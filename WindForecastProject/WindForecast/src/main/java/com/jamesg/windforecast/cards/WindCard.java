@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.jamesg.windforecast.R;
-import com.jamesg.windforecast.base.CustomCardBase;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.data.TimestampData;
 
@@ -30,9 +30,11 @@ import java.util.Calendar;
 /**
  * Created by James on 17/10/2014.
  */
-public class WindCard extends CustomCardBase {
+public class WindCard extends CardBase {
 
     private TextView titleTextView;
+
+    private boolean favouritesList;
 
     public WindCard(Context context, Spot spot, int dateTab){
         this.context = context;
@@ -40,9 +42,20 @@ public class WindCard extends CustomCardBase {
         this.dateTab = dateTab;
     }
 
+    public WindCard(Context context, Spot spot, int dateTab, boolean favouritesList){
+        this.context = context;
+        this.spot = spot;
+        this.dateTab = dateTab;
+        this.favouritesList = favouritesList;
+    }
+
     @Override
     public String getTitle() {
-        return "Wind";
+        if(favouritesList){
+            return spot.getName();
+        }else {
+            return "Wind";
+        }
     }
 
     public View getView(LayoutInflater inflater){

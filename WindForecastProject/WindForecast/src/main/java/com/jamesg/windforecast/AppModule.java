@@ -3,6 +3,7 @@ package com.jamesg.windforecast;
 import android.app.Application;
 
 import com.jamesg.windforecast.SplashScreen.SplashScreen;
+import com.jamesg.windforecast.SpotFragment.FavouritesFragment;
 import com.jamesg.windforecast.SpotFragment.SpotFragment;
 import com.jamesg.windforecast.manager.SpotManager;
 
@@ -19,7 +20,9 @@ import dagger.Provides;
                 SpotFragment.class,
                 MainActivity.class,
                 DrawerFragment.class,
-                SplashScreen.class
+                SplashScreen.class,
+                FavouritesFragment.class,
+                AboutFragment.class
         }
         ,library = true
 )

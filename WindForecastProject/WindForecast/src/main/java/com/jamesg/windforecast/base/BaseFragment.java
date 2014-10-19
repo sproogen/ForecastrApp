@@ -39,5 +39,9 @@ public class BaseFragment extends Fragment {
         public int getDateTab();
         public void setDateTab(int dateTab);
         public void loadSpot(String name, int listClick);
+        public void allSpots(boolean animate);
+        public void toggle();
+        public void transitionToFragment(BaseFragment newFragment, int id, boolean animate);
+        public void loadSearchSpot(String name, int id);
     }
 }

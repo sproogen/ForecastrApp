@@ -9,31 +9,23 @@ import com.jamesg.windforecast.data.Spot;
 /**
  * Created by James on 17/12/13.
  */
-public class CustomCardBase {
+public class CardBase {
 
     public Context context;
 
     public Spot spot;
     public int dateTab;
 
-    private String type = "";
-    private String title = "";
-    private String subtitle = "";
+    public String titleText = "";
+    public String subtitleText = "";
 
-    public String getType() {
-        return type;
-    }
 
     public String getTitle() {
-        return title;
+        return titleText;
     }
 
     public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        return subtitleText;
     }
 
     public boolean isHeader() {

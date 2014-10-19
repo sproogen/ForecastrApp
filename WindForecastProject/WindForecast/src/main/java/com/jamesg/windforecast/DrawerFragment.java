@@ -81,25 +81,26 @@ public class DrawerFragment extends BaseFragment {
                 Spot item = adapter.getItem(position);
                 if (position == 0) {
                     if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).closeSpot(false);
-                        ((MainActivity) getActivity()).toggle();
+                        mListener.allSpots(true);
+                        //mListener.toggle();
                     }
                 } else if (item.getType() == 2) {
                     if (item.getLabel().equals("Check for updates")) {
                         if (getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).checkForUpdates(true);
-                            ((MainActivity) getActivity()).toggle();
+                            spotManager.checkForUpdates(true);
+                            mListener.toggle();
                         }
                     }else if(item.getLabel().equals("About")) {
                         if (getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).about();
-                            ((MainActivity) getActivity()).toggle();
+                            AboutFragment aboutFragment = new AboutFragment();
+                            mListener.transitionToFragment(aboutFragment, MainActivity.ABOUT_FRAGMENT, true);
+                            mListener.toggle();
                         }
                     }
                 } else if (item.getType() == 0) {
                     listView.setItemChecked(position, true);
                     if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).loadSpot(item.getName(), 1);
+                        mListener.loadSpot(item.getName(), 1);
                     }
                 }
             }
@@ -136,6 +137,10 @@ public class DrawerFragment extends BaseFragment {
                 clearSearch();
             }
         });
+    }
+
+    public void dataSetUpdated(){
+        adapter.notifyDataSetChanged();
     }
 
     public void performSearch(String search, int before){
@@ -281,11 +286,9 @@ public class DrawerFragment extends BaseFragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                     Spot item = searchAdapter.getItem(position);
-                    if (getActivity() instanceof MainActivity) {
-                        listView.setItemChecked(position, true);
-                        selected = -1;
-                        ((MainActivity) getActivity()).loadSearchSpot(item.getName(), item.getId());
-                    }
+                    listView.setItemChecked(position, true);
+                    selected = -1;
+                    mListener.loadSearchSpot(item.getName(), item.getId());
                 }
             });
         }else{

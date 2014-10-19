@@ -16,24 +16,27 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements BaseFragment.BaseFragmentInteractionListener {
 
+    static final int SPOTS_FRAGMENT = 0;
+    static final int ABOUT_FRAGMENT = 1;
+
     @Inject
     SpotManager spotManager;
 
-    private SpotWrapperFragment spotWrapperFragment;
-    private AboutFragment aboutFragment;
+    private Stack<BaseFragment> stack;
+    private BaseFragment current;
+    private int currentID;
 
     private int dateTab = 0;
 
     private SlidingMenu menu;
 
     private String openSpot = "";
-
-    private boolean aboutOpen = false;
 
 
     public MainActivity() {
@@ -51,15 +54,17 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
 
-        if (savedInstanceState != null) {
-            spotWrapperFragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("spotWrapperFragment");
-        }else{
-            spotWrapperFragment = SpotWrapperFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, spotWrapperFragment,"spotWrapperFragment")
-                    .commit();
-        }
+        stack = new Stack<BaseFragment>();
 
+        if (savedInstanceState != null) {
+            //current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("spotWrapperFragment");
+        }else{
+            current = SpotWrapperFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.content_frame, current,"currentFragment")
+                    .commit();
+            currentID = SPOTS_FRAGMENT;
+        }
 
         setSlidingActionBarEnabled(true);
 
@@ -81,138 +86,99 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         //deleteDatabase("spotsTable");
 
-        if(spotManager.getSpot("Aberavon") == null){
+        /*if(spotManager.getSpot("Aberavon") == null){
             spotManager.addSpot(new Spot("Aberavon",322661));
         }
-        /*if(data.getSpot("Portland Harbour") == null){
-            data.addSpot(new Spot("Portland Harbour",354618));
+        if(spotManager.getSpot("Portland Harbour") == null){
+            spotManager.addSpot(new Spot("Portland Harbour",354618));
         }
-        if(data.getSpot("Westward Ho!") == null){
-            data.addSpot(new Spot("Westward Ho!",354583));
+        if(spotManager.getSpot("Westward Ho!") == null){
+            spotManager.addSpot(new Spot("Westward Ho!",354583));
         }
-        if(data.getSpot("Westbury") == null){
-            data.addSpot(new Spot("Westbury",354152));
+        if(spotManager.getSpot("Westbury") == null){
+            spotManager.addSpot(new Spot("Westbury",354152));
         }*/
 
-        //checkForUpdates(false);
+        spotManager.checkForUpdates(false);
     }
 
     public void removeSpot(Spot spot){
         spotManager.deleteSpot(spot);
         //mainContentFragment.removeSpot(spot.getName());
-        this.refreshDraw();
+        drawerFragment.refreshSpots();
+        if(currentID == SPOTS_FRAGMENT && openSpot.equals("")){
+            ((SpotWrapperFragment)current).removeSpot(spot);
+        }
         if(spot.getName().equals(openSpot)){
-            closeSpot(false);
+            allSpots(false);
         }
     }
 
     public void addSpot(String name){
         Spot newSpot = spotManager.getSpot(name);
         spotManager.addSpot(newSpot);
-        //mainContentFragment.addSpot(name);
-        checkForUpdates(false);
+        drawerFragment.refreshSpots();
+        spotManager.checkForUpdates(false);
         Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        checkForUpdates(false);
-    }
 
-    public void checkForUpdates(boolean force){
-        final boolean forceUpdate = force;
-        Thread background = new Thread(new Runnable() {
-
-            public void run() {
-                for (Spot s : spotManager.getAllSpots(0)){
-                    Log.d("WINDFINDER APP", "Checking Spot - "+s.getName());
-                    if(s.getRawData() == null || (System.currentTimeMillis()-s.getUpdateTime()) > 3600000 || forceUpdate){ //3600000
-                        spotManager.get_data_for_location(s);
-                        threadMsg(s.getName());
-                    }else{
-                        SimpleDateFormat formatter = new SimpleDateFormat("D");
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTimeInMillis(s.getUpdateTime());
-                        String updatedDay = formatter.format(calendar.getTime());
-                        calendar.setTimeInMillis(System.currentTimeMillis());
-                        String nowDay = formatter.format(calendar.getTime());
-                        if(!updatedDay.equals(nowDay)){
-                            spotManager.get_data_for_location(s);
-                            threadMsg(s.getName());
-                        }
-                    }
-                }
-            }
-
-            private void threadMsg(String msg) {
-                if (!msg.equals(null) && !msg.equals("")) {
-                    Message msgObj = handler.obtainMessage();
-                    Bundle b = new Bundle();
-                    b.putString("message", msg);
-                    msgObj.setData(b);
-                    handler.sendMessage(msgObj);
-                }
-            }
-
-            private final Handler handler = new Handler() {
-                public void handleMessage(Message msg) {
-                    String spotName = msg.getData().getString("message");
-                    Log.d("WINDFINDER APP", "Updated Spot - "+spotName);
-                    //mainContentFragment.updateSpot(spotName);
-                }
-            };
-        });
-        background.start();
+        spotManager.checkForUpdates(false);
     }
 
     public void loadSpot(String name, int listClick){
-        closeAbout(false);
+        popBackStack(false);
         openSpot = name;
-        //mainContentFragment.loadSpot(name,listClick, 0);
+        ((SpotWrapperFragment)current).loadSpot(name, true, false);
         drawerFragment.setSpot(name);
     }
 
     public void loadSearchSpot(String name, int id){
-        closeAbout(false);
+        popBackStack(false);
         spotManager.searchSpot(new Spot(name, id));
         openSpot = name;
-        //mainContentFragment.loadSpot(name,1 , 1);
-        //drawerFragment.setSpot(name);
+        ((SpotWrapperFragment)current).loadSpot(name, true, true);
+        drawerFragment.setSpot(name);
     }
 
-    public void closeSpot(boolean animate){
-        closeAbout(false);
-        openSpot = "";
-        //mainContentFragment.closeSpot(animate);
+    public void allSpots(boolean animate){
+        popBackStack(false);
+        if(!openSpot.equals("")) {
+            openSpot = "";
+            ((SpotWrapperFragment)current).closeSpot(animate);
+        }
         drawerFragment.closeSpot();
     }
 
-    public void about(){
-        aboutOpen = true;
-        aboutFragment = new AboutFragment();
+    public void transitionToFragment(BaseFragment newFragment, int id, boolean animate){
+        stack.push(current);
+        current = newFragment;
+        currentID = id;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.exit, R.anim.no_anim_in, R.anim.pop_exit);
-
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
 
-        transaction.replace(R.id.content_frame, aboutFragment).commit();
+        transaction.replace(R.id.content_frame, current).commit();
         getSupportFragmentManager().executePendingTransactions();
 
     }
 
-    public void closeAbout(boolean animate){
-        if(aboutOpen) {
-            aboutOpen = false;
+    public void popBackStack(boolean animate){
+        if(!stack.empty()) {
+            current = stack.pop();
+            drawerFragment.closeSpot();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
             if(animate){
                 transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
-                drawerFragment.closeSpot();
             }
 
-            transaction.replace(R.id.content_frame, spotWrapperFragment, "spotWrapperFragment").commit();
+            transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
+            currentID = SPOTS_FRAGMENT;
         }
     }
 
@@ -228,12 +194,12 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     @Override
     public void onBackPressed() {
-        if(aboutOpen) {
-            closeAbout(true);
+        if(!stack.empty()) {
+            popBackStack(true);
         }else if(openSpot.equals("")) {
             super.onBackPressed();
         }else{
-            closeSpot(true);
+            allSpots(true);
         }
     }
 }

@@ -18,9 +18,8 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import com.jamesg.windforecast.MainActivity;
 import com.jamesg.windforecast.R;
-import com.jamesg.windforecast.base.CustomCardBase;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.data.TimestampData;
 
@@ -30,7 +29,7 @@ import java.util.Calendar;
 /**
  * Created by James on 17/10/2014.
  */
-public class SwellCard extends CustomCardBase {
+public class SwellCard extends CardBase {
 
     private TextView titleTextView;
 

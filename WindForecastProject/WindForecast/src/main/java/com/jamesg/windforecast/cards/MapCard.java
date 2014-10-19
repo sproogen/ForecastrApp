@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,18 +14,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.jamesg.windforecast.MainActivity;
 import com.jamesg.windforecast.R;
-import com.jamesg.windforecast.base.CustomCardBase;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.data.Spot;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * Created by James on 17/10/2014.
  */
-public class MapCard extends CustomCardBase {
+public class MapCard extends CardBase {
 
     private TextView titleTextView;
 
