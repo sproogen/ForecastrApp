@@ -2,9 +2,14 @@ package com.jamesg.windforecast.SpotFragment;
 
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +24,7 @@ import com.jamesg.windforecast.base.BaseFragment;
 import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.base.BaseSpotFragment;
 import com.jamesg.windforecast.data.Spot;
+import com.jamesg.windforecast.utils.Logger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,8 +62,34 @@ public class SpotWrapperFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null) {}
+
+        IntentFilter filter = new IntentFilter("com.jamesg.windforecast.UPDATE_DATA");
+        getActivity().registerReceiver(new Receiver(new Handler()), filter);
+    }
+
+    private class Receiver extends BroadcastReceiver {
+
+        private final Handler handler;
+
+        public Receiver(Handler handler) {
+            this.handler = handler;
         }
+
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            //String url = arg1.getExtras().getString("url");
+            Logger.d("Update data");
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if(currentSpotFragment != null) {
+                        currentSpotFragment.updateSpotData();
+                    }
+                }
+            });
+        }
+
     }
 
     @Override

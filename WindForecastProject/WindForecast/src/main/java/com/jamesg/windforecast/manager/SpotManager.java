@@ -2,6 +2,7 @@ package com.jamesg.windforecast.manager;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -308,6 +309,10 @@ public class SpotManager extends SQLiteOpenHelper {
         @Override
         public void spotUpdated(Spot spot) {
             updateSpot(spot);
+            Intent intent = new Intent();
+            intent.setAction("com.jamesg.windforecast.UPDATE_DATA");
+            //intent.putExtra("url",uri.toString());
+            context.sendBroadcast(intent);
         }
     }
 

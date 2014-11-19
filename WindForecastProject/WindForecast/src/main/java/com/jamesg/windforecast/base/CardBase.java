@@ -42,6 +42,10 @@ public class CardBase {
         this.dateTab = newDateTab;
     }
 
+    public void updateView(){
+        updateView(dateTab);
+    }
+
     public String getTag() {
         return getTitle();
     }

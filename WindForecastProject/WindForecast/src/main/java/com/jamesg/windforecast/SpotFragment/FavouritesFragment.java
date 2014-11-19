@@ -1,10 +1,16 @@
 package com.jamesg.windforecast.SpotFragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.WindFinderApplication;
@@ -14,6 +20,7 @@ import com.jamesg.windforecast.cards.HeaderCard;
 import com.jamesg.windforecast.cards.WindCard;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.manager.SpotManager;
+import com.jamesg.windforecast.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -100,6 +107,13 @@ public class FavouritesFragment extends BaseSpotFragment {
     public void updateDateTab(int newDateTab){
         for (CardBase card : cards) {
             if (card != null) card.updateView(newDateTab);
+        }
+    }
+
+    @Override
+    public void updateSpotData(){
+        for (CardBase card : cards) {
+            if (card != null) card.updateView();
         }
     }
 

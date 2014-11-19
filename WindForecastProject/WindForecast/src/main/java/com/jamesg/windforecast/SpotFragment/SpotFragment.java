@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.jamesg.windforecast.WindFinderApplication;
 import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.base.BaseSpotFragment;
+import com.jamesg.windforecast.base.CardBase;
 import com.jamesg.windforecast.cards.HeaderCard;
 import com.jamesg.windforecast.cards.LoadingCard;
 import com.jamesg.windforecast.cards.MapCard;
@@ -149,5 +150,14 @@ public class SpotFragment extends BaseSpotFragment {
         if(weatherCard != null) weatherCard.updateView(newDateTab);
         if(swellCard != null) swellCard.updateView(newDateTab);
         if(mapCard != null) mapCard.updateView(newDateTab);
+    }
+
+    @Override
+    public void updateSpotData(){
+        if(headerCard != null) headerCard.updateView();
+        if(windCard != null) windCard.updateView();
+        if(weatherCard != null) weatherCard.updateView();
+        if(swellCard != null) swellCard.updateView();
+        if(mapCard != null) mapCard.updateView();
     }
 }
