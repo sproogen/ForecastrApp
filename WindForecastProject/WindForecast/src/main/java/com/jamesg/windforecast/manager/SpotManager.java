@@ -59,7 +59,7 @@ public class SpotManager extends SQLiteOpenHelper {
     private Spot search_temp_spot = null;
 
     //String metoffice_base_url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
-    String base_url = "http://jwgmedia.co.uk/windAppAPI/getForcastData.php";
+    String base_url = "http://windforecastapi.jameswgrant.co.uk/getForcastData.php";
 
     Context context;
 
