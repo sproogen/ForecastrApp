@@ -8,3 +8,4 @@ The WindForecastProject folder is the android app and the 'WindForecastProject F
 Dependencies
 =============
 1. ActionBarSherlock (http://actionbarsherlock.com/index.html)
+2. SlidingMenu (https://github.com/jfeinstein10/SlidingMenu)
