@@ -13,6 +13,7 @@ import com.jamesg.windforecast.SpotFragment.SpotWrapperFragment;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.manager.SpotManager;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.splunk.mint.Mint;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,6 +48,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     public void onCreate(Bundle savedInstanceState) {
         ((WindFinderApplication) getApplication()).inject(this);
         super.onCreate(savedInstanceState);
+
+        Mint.initAndStartSession(MainActivity.this, "91e59a0e");
 
         setContentView(R.layout.content_frame);
 
