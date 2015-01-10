@@ -124,7 +124,11 @@ public class DrawerFragment extends BaseFragment {
                     listView.setVisibility(View.VISIBLE);
                     searchList.setVisibility(View.GONE);
                     clearButton.setVisibility(View.GONE);
-                    searchAdapter.setData(new ArrayList<Spot>());
+                    try {
+                        searchAdapter.setData(new ArrayList<Spot>());
+                    }catch(Exception e){
+                        //DO NOTHING
+                    }
                     all_spots = null;
                 }
                 if(length >= 1){
@@ -249,7 +253,7 @@ public class DrawerFragment extends BaseFragment {
 
     public void updateSearchResults(String search){
         ArrayList<Spot> spots;
-        if(search == "") {
+        if(search.equals("")) {
             spots = parseSearchSpots();
             all_spots = spots;
             EditText searchBox = (EditText)getView().findViewById(R.id.searchBox);

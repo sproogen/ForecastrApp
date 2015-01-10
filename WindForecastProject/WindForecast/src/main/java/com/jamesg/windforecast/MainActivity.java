@@ -12,6 +12,7 @@ import com.jamesg.windforecast.base.BaseFragment;
 import com.jamesg.windforecast.SpotFragment.SpotWrapperFragment;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.manager.SpotManager;
+import com.jamesg.windforecast.utils.Logger;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.splunk.mint.Mint;
 
@@ -115,14 +116,18 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         if(spot.getName().equals(openSpot)){
             allSpots(false);
         }
+        Mint.logEvent("Spot Removed - "+spot.getName());
     }
 
     public void addSpot(String name){
         Spot newSpot = spotManager.getSpot(name);
+        Logger.d("NEW SPOT DATA - "+newSpot.getRawData());
         spotManager.addSpot(newSpot);
         drawerFragment.refreshSpots();
+        spotManager.parseSpotData(newSpot.getName());
         spotManager.checkForUpdates(false);
         Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
+        Mint.logEvent("Spot Added - "+name);
     }
 
     @Override
@@ -137,6 +142,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, false);
         drawerFragment.setSpot(name);
+        Mint.logEvent("Spot Viewed - "+name);
     }
 
     public void loadSearchSpot(String name, int id){
@@ -145,10 +151,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, true);
         drawerFragment.setSpot(name);
+        Mint.logEvent("Spot Searched - "+name);
     }
 
     public void allSpots(boolean animate){
-        popBackStack(false);
+        popBackStack(animate);
         if(!openSpot.equals("")) {
             openSpot = "";
             ((SpotWrapperFragment)current).closeSpot(animate);
@@ -181,6 +188,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             }
 
             transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
+            getSupportFragmentManager().executePendingTransactions();
             currentID = SPOTS_FRAGMENT;
         }
     }

@@ -1,6 +1,10 @@
 package com.jamesg.windforecast.data;
 
 import android.util.Log;
+
+import com.jamesg.windforecast.utils.Logger;
+import com.jamesg.windforecast.utils.Utils;
+
 import java.text.DateFormat;
 
 import org.json.JSONArray;
@@ -148,7 +152,7 @@ public class Spot {
     public Long getUpdateTime(){ return updateTime; }
 
     public void parseRawData(){
-        Log.e("WINDFINDER APP", "Parsing Raw Data - "+this.name);
+        //Log.e("WINDFINDER APP", "Parsing Raw Data - "+this.name);
         today = new ArrayList<TimestampData>();
         tomorrow = new ArrayList<TimestampData>();
         sevenDay = new ArrayList<TimestampData>();
@@ -156,12 +160,31 @@ public class Spot {
         JSONArray tomorrowJsonArray = null;
         JSONArray sevenDayJsonArray = null;
         JSONObject spotJsonArray = null;
+        int daysBehind = 0;
         try{
             spotJsonArray = new JSONObject(rawData);
             JSONObject todayJson = spotJsonArray.getJSONObject("today");
-            todayJsonArray = todayJson.getJSONArray("Rep");
-            JSONObject tomorrowJson = spotJsonArray.getJSONObject("tomorrow");
-            tomorrowJsonArray = tomorrowJson.getJSONArray("Rep");
+            String dateStamp = todayJson.getString("value");
+            Calendar todayCalendar = Utils.calendarFromDateStamp(dateStamp);
+            Calendar now = Calendar.getInstance();
+            boolean sameDay = Utils.calendarsAreSameDay(todayCalendar, now);
+            if(sameDay) {
+                todayJsonArray = todayJson.getJSONArray("Rep");
+                JSONObject tomorrowJson = spotJsonArray.getJSONObject("tomorrow");
+                tomorrowJsonArray = tomorrowJson.getJSONArray("Rep");
+            }else{
+                Calendar yesterday = Calendar.getInstance();yesterday.add(Calendar.DAY_OF_MONTH, -1);
+                boolean sameYesterday = Utils.calendarsAreSameDay(todayCalendar, yesterday);
+                if(sameYesterday){
+                    JSONObject tomorrowJson = spotJsonArray.getJSONObject("tomorrow");
+                    todayJsonArray = tomorrowJson.getJSONArray("Rep");
+                }else{
+                    todayJsonArray = new JSONArray();
+                }
+                now = Utils.removeTimeFromCalendar(now);
+                daysBehind = Utils.calendarsGetDiffInDays(todayCalendar,now);
+                tomorrowJsonArray = new JSONArray();
+            }
             JSONObject sevenDayJson = spotJsonArray.getJSONObject("sevenDay");
             sevenDayJsonArray = sevenDayJson.getJSONArray("Rep");
         }catch(Exception e){
@@ -221,26 +244,28 @@ public class Spot {
         }
 
         for(int i=0;i<sevenDayJsonArray.length();i++){
-            TimestampData thisInterval = new TimestampData();
-            try{
-                JSONObject timeJson = sevenDayJsonArray.getJSONObject(i);
+            if(daysBehind <= i) {
+                TimestampData thisInterval = new TimestampData();
+                try {
+                    JSONObject timeJson = sevenDayJsonArray.getJSONObject(i);
 
-                thisInterval.windDirection = directionToDegree(timeJson.getString("D"));
-                thisInterval.windSpeed = timeJson.getInt("S");
-                thisInterval.windGust = timeJson.getInt("G");
+                    thisInterval.windDirection = directionToDegree(timeJson.getString("D"));
+                    thisInterval.windSpeed = timeJson.getInt("S");
+                    thisInterval.windGust = timeJson.getInt("G");
 
-                thisInterval.swellDirection = directionToDegree(timeJson.getString("swell-direction"));
-                thisInterval.swellHeight = timeJson.getDouble("swell-height");
-                thisInterval.swellPeriod = timeJson.getDouble("swell-period");
+                    thisInterval.swellDirection = directionToDegree(timeJson.getString("swell-direction"));
+                    thisInterval.swellHeight = timeJson.getDouble("swell-height");
+                    thisInterval.swellPeriod = timeJson.getDouble("swell-period");
 
-                thisInterval.weather = timeJson.getInt("W");
-                thisInterval.temp = timeJson.getInt("T");
-            }catch(Exception e){
-                Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
-                Log.e("WINDFINDER APP", e.toString());
-                return;
+                    thisInterval.weather = timeJson.getInt("W");
+                    thisInterval.temp = timeJson.getInt("T");
+                } catch (Exception e) {
+                    Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
+                    Log.e("WINDFINDER APP", e.toString());
+                    return;
+                }
+                sevenDay.add(thisInterval);
             }
-            sevenDay.add(thisInterval);
         }
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);

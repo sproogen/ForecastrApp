@@ -94,7 +94,7 @@ public class WindCard extends CardBase {
                 else intervalData = null;
             }
 
-            Log.d("WINDFINDER APP", "Column-" + i);
+            //Log.d("WINDFINDER APP", "Column-" + i);
             int colID = context.getResources().getIdentifier("column"+(i+1), "id", context.getPackageName());
             View column = view.findViewById(colID);
 
@@ -120,10 +120,10 @@ public class WindCard extends CardBase {
 
                 windDirection = intervalData.windDirection;
 
-                Log.d("WINDFINDER APP", "WindVal " + windVal);
+                //Log.d("WINDFINDER APP", "WindVal " + windVal);
             }else{
 
-                Log.d("WINDFINDER APP", "intervalData null");
+                //Log.d("WINDFINDER APP", "intervalData null");
             }
 
             String oldWindString;
@@ -356,7 +356,7 @@ public class WindCard extends CardBase {
                 else intervalData = null;
             }
 
-            Log.d("WINDFINDER APP", "Column-" + i);
+            //Log.d("WINDFINDER APP", "Column-" + i);
             int colID = context.getResources().getIdentifier("column"+(i+1), "id", context.getPackageName());
             View column = view.findViewById(colID);
 
@@ -382,10 +382,10 @@ public class WindCard extends CardBase {
 
                 windDirection = intervalData.windDirection;
 
-                Log.d("WINDFINDER APP", "WindVal " + windVal);
+                //Log.d("WINDFINDER APP", "WindVal " + windVal);
             }else{
 
-                Log.d("WINDFINDER APP", "intervalData null");
+                //Log.d("WINDFINDER APP", "intervalData null");
             }
 
             String oldWindString;

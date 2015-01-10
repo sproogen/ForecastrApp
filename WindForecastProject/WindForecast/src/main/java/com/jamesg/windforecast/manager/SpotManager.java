@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.google.common.collect.Lists;
 import com.jamesg.windforecast.data.Spot;
+import com.jamesg.windforecast.utils.Logger;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -110,11 +111,11 @@ public class SpotManager extends SQLiteOpenHelper {
         }catch(NullPointerException e){
             //DO Nothing
         }
-        Log.d("WINDFINDER APP", "DATA ADD Spot - " + spot.getName());
+        //Log.d("WINDFINDER APP", "DATA ADD Spot - " + spot.getName());
     }
 
     public void searchSpot(Spot spot){
-        Log.d("WINDFINDER APP", "DATA Search Spot - "+spot.getName());
+        //Log.d("WINDFINDER APP", "DATA Search Spot - "+spot.getName());
         search_temp_spot = spot;
     }
 
@@ -166,7 +167,7 @@ public class SpotManager extends SQLiteOpenHelper {
     public Boolean loadedSpot(String name) {
         for(int i=0; i<all_spots.size();i++){
             Spot s = all_spots.get(i);
-            Log.d("WINDFINDER APP", i+" - "+name+" "+s.getName()+ " "+all_spots.size());
+            //Log.d("WINDFINDER APP", i+" - "+name+" "+s.getName()+ " "+all_spots.size());
             try{
                 if(s.getName().equals(name))return true;
             }catch(Exception e){
@@ -181,7 +182,7 @@ public class SpotManager extends SQLiteOpenHelper {
         for(int i=0; i<all_spots.size();i++){
             Spot s = all_spots.get(i);
             s.parseRawData();
-            Log.d("WINDFINDER APP", "Parse Spot - "+s.getName());
+            Logger.d("Parse Spot - " + s.getName());
             all_spots.set(i, s);
         }
     }
@@ -192,7 +193,7 @@ public class SpotManager extends SQLiteOpenHelper {
             Spot s = all_spots.get(i);
             if(s.getName().equals(name)){
                 s.parseRawData();
-                Log.d("WINDFINDER APP", "Parse Spot - "+s.getName());
+                Logger.d("Parse Spot - "+s.getName());
                 all_spots.set(i, s);
             }
         }
@@ -218,7 +219,7 @@ public class SpotManager extends SQLiteOpenHelper {
                 // Adding contact to list
                 if(!loadedSpot(spot.getName())){
                     all_spots.add(spot);
-                    Log.d("WINDFINDER APP", "ADD Spot - "+spot.getName());
+                    //Log.d("WINDFINDER APP", "ADD Spot - "+spot.getName());
                 }
             } while (cursor.moveToNext());
         }
@@ -375,7 +376,7 @@ public class SpotManager extends SQLiteOpenHelper {
         }
 
         protected void onPostExecute(String result) {
-            Log.d("WINDFINDER APP", "Updated Finished ");
+            //Log.d("WINDFINDER APP", "Updated Finished ");
 
         }
     }
@@ -383,7 +384,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
     public Spot get_data_for_location(Spot current){
 
-        Log.d("WINDFINDER APP", "Start of get data");
+        //Log.d("WINDFINDER APP", "Start of get data");
 
         String latitude = null; String longitude = null;
 
@@ -393,7 +394,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         String request = base_url;
         request += "?id=" + current.getId();
-        Log.d("WINDFINDER APP", request);
+        //Log.d("WINDFINDER APP", request);
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse response;
@@ -412,10 +413,10 @@ public class SpotManager extends SQLiteOpenHelper {
                 throw new IOException(statusLine.getReasonPhrase());
             }
         } catch (ClientProtocolException e) {
-            Log.e("WINDFINDER APP", e.toString());
+            //Log.e("WINDFINDER APP", e.toString());
             return null;
         } catch (IOException e) {
-            Log.e("WINDFINDER APP", e.toString());
+            //Log.e("WINDFINDER APP", e.toString());
             return null;
         }
         try{
@@ -423,8 +424,8 @@ public class SpotManager extends SQLiteOpenHelper {
             latitude = rawDataJson.getString("lat");
             longitude = rawDataJson.getString("lon");
         }catch(Exception e){
-            Log.e("WINDFINDER APP", "Error with initial JSON Parse");
-            Log.e("WINDFINDER APP", e.toString());
+            //Log.e("WINDFINDER APP", "Error with initial JSON Parse");
+            //Log.e("WINDFINDER APP", e.toString());
             return null;
         }
 

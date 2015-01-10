@@ -25,6 +25,7 @@ import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.base.BaseSpotFragment;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.utils.Logger;
+import com.splunk.mint.Mint;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,7 +85,11 @@ public class SpotWrapperFragment extends BaseFragment {
                 @Override
                 public void run() {
                     if(currentSpotFragment != null) {
-                        currentSpotFragment.updateSpotData();
+                        try {
+                            currentSpotFragment.updateSpotData();
+                        }catch(Exception e){
+                            Mint.logException(e);
+                        }
                     }
                 }
             });
