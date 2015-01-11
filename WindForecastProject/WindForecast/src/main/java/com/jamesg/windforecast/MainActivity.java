@@ -1,23 +1,25 @@
 package com.jamesg.windforecast;
 
-import android.os.Message;
-import android.os.Handler;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jamesg.windforecast.base.BaseActivity;
 import com.jamesg.windforecast.base.BaseFragment;
 import com.jamesg.windforecast.SpotFragment.SpotWrapperFragment;
 import com.jamesg.windforecast.data.Spot;
+import com.jamesg.windforecast.manager.AppManager;
 import com.jamesg.windforecast.manager.SpotManager;
 import com.jamesg.windforecast.utils.Logger;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.splunk.mint.Mint;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -29,6 +31,12 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     @Inject
     SpotManager spotManager;
+
+    @Inject
+    AppManager appManager;
+
+    @Inject
+    Bus bus;
 
     private Stack<BaseFragment> stack;
     private BaseFragment current;
@@ -104,6 +112,44 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         }*/
 
         spotManager.checkForUpdates(false);
+        appManager.checkForUpdates();
+    }
+    @Subscribe
+    public void getMessage(String s) {
+        if(s.equals("NewAppAvailable")){
+            try {
+                new AlertDialog.Builder(this)
+                        .setTitle("New Version of the app is available.")
+                        .setMessage("Version " + appManager.getVersionName() + " is available now. Would you like to update to this version now.")
+                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String url = getString(R.string.base_url)+"releases/latest/WindForecastApp.apk";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                            }
+                        })
+                        .setNegativeButton("Later", null)
+                        .show();
+            }catch(Exception e){
+                //DO NOTHING
+            }
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bus.register(this);
+        spotManager.checkForUpdates(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        bus.unregister(this);
     }
 
     public void removeSpot(Spot spot){
@@ -128,13 +174,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         spotManager.checkForUpdates(false);
         Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
         Mint.logEvent("Spot Added - "+name);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        spotManager.checkForUpdates(false);
     }
 
     public void loadSpot(String name, int listClick){

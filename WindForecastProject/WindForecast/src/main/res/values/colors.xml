@@ -17,8 +17,16 @@
     <color name="drawer_search">#303135</color>
     <color name="drawer_selected">#212227</color>
 
+    <color name="drawer_update">#d9534f</color>
+    <color name="drawer_update_highlight">#d43f3a</color>d43f3a
+
     <color name="light_grey">#DDDDDD</color>
     <color name="green">#4ca435</color>
 
     <drawable name="semitransparent_blue">#504ca435</drawable>
+
+    <color name="refresh_1">#ff4db036</color>
+    <color name="refresh_2">#ff478e35</color>
+    <color name="refresh_3">#ff4db036</color>
+    <color name="refresh_4">#ff478e35</color>
 </resources>

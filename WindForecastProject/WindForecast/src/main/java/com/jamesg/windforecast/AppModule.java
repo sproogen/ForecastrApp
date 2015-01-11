@@ -1,11 +1,12 @@
 package com.jamesg.windforecast;
 
-import android.app.Application;
-
 import com.jamesg.windforecast.SplashScreen.SplashScreen;
 import com.jamesg.windforecast.SpotFragment.FavouritesFragment;
 import com.jamesg.windforecast.SpotFragment.SpotFragment;
+import com.jamesg.windforecast.base.BaseSpotFragment;
+import com.jamesg.windforecast.manager.AppManager;
 import com.jamesg.windforecast.manager.SpotManager;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -22,7 +23,10 @@ import dagger.Provides;
                 DrawerFragment.class,
                 SplashScreen.class,
                 FavouritesFragment.class,
-                AboutFragment.class
+                AboutFragment.class,
+                SpotManager.class,
+                BaseSpotFragment.class,
+                AppManager.class
         }
         ,library = true
 )
@@ -38,6 +42,18 @@ public class AppModule {
     @Singleton
     public SpotManager provideSpotManager() {
         return new SpotManager(app);
+    }
+
+    @Provides
+    @Singleton
+    public AppManager provideAppManager() {
+        return new AppManager(app);
+    }
+
+    @Provides
+    @Singleton
+    public Bus provideBus() {
+        return new Bus();
     }
 
 }

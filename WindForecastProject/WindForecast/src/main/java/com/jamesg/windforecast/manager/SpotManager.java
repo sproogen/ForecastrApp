@@ -11,10 +11,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.collect.Lists;
+import com.jamesg.windforecast.R;
+import com.jamesg.windforecast.WindFinderApplication;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.utils.Logger;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -33,10 +38,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by James on 17/10/2014.
  */
 public class SpotManager extends SQLiteOpenHelper {
+
+    @Inject
+    Bus bus;
 
     // All Static variables
     // Database Version
@@ -60,13 +70,14 @@ public class SpotManager extends SQLiteOpenHelper {
     private Spot search_temp_spot = null;
 
     //String metoffice_base_url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
-    String base_url = "http://windforecastapi.jameswgrant.co.uk/getForcastData.php";
+    String function_url = "getForcastData.php";
 
     Context context;
 
     public SpotManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        ((WindFinderApplication) context).inject(this);
     }
 
     // Creating Tables
@@ -212,7 +223,7 @@ public class SpotManager extends SQLiteOpenHelper {
             //Do Nothing
         }
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 Spot spot = new Spot(cursor.getString(0),cursor.getInt(1),
                         cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getLong(5));
@@ -296,7 +307,7 @@ public class SpotManager extends SQLiteOpenHelper {
         }
         // return count
         try{
-            return cursor.getCount();
+            return cursor != null ? cursor.getCount() : 0;
         }catch(NullPointerException e){
             return 0;
         }
@@ -304,6 +315,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
     public interface SpotDataTaskCallback {
         public void spotUpdated(Spot spot);
+        public void updateFinished();
     }
 
     class AllSpotsDataTaskCallback implements SpotDataTaskCallback{
@@ -314,6 +326,11 @@ public class SpotManager extends SQLiteOpenHelper {
             intent.setAction("com.jamesg.windforecast.UPDATE_DATA");
             //intent.putExtra("url",uri.toString());
             context.sendBroadcast(intent);
+        }
+
+        @Override
+        public void updateFinished() {
+            bus.post("Update Finished");
         }
     }
 
@@ -326,6 +343,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
 
     public void checkForUpdates(boolean force){
+        bus.post("Update Started");
         List<Spot> spots = getAllSpots(0);
         AllSpotsDataTaskCallback callback = new AllSpotsDataTaskCallback();
         GetSpotDataTask getSpotDataTask = new GetSpotDataTask(force, callback);
@@ -349,8 +367,10 @@ public class SpotManager extends SQLiteOpenHelper {
                 Log.d("WINDFINDER APP", "Checking Spot - "+s.getName());
                 if(s.getRawData() == null || (System.currentTimeMillis()-s.getUpdateTime()) > 3600000 || forceUpdate){ //3600000
                     Spot updated = get_data_for_location(s);
-                    updated.parseRawData();
-                    publishProgress(updated);
+                    if(updated != null) {
+                        updated.parseRawData();
+                        publishProgress(updated);
+                    }
                 }else{
                     SimpleDateFormat formatter = new SimpleDateFormat("D");
                     Calendar calendar = Calendar.getInstance();
@@ -377,7 +397,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         protected void onPostExecute(String result) {
             //Log.d("WINDFINDER APP", "Updated Finished ");
-
+            callback.updateFinished();
         }
     }
 
@@ -392,7 +412,7 @@ public class SpotManager extends SQLiteOpenHelper {
             return null;
         }
 
-        String request = base_url;
+        String request = context.getString(R.string.base_url)+function_url;
         request += "?id=" + current.getId();
         //Log.d("WINDFINDER APP", request);
 

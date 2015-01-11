@@ -1,6 +1,7 @@
 package com.jamesg.windforecast.SpotFragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.jamesg.windforecast.cards.WeatherCard;
 import com.jamesg.windforecast.cards.WindCard;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.manager.SpotManager;
+import com.jamesg.windforecast.utils.Logger;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
@@ -93,11 +96,29 @@ public class SpotFragment extends BaseSpotFragment {
             }
         }
     }
+
+    @Subscribe
+    public void getMessage(String s) {
+        //Logger.d("BUS MESSAGE baseSpotFragment - " + s);
+        if(s.equals("Update Finished")){
+            try {
+                updateFinished();
+            }catch(Exception e){
+                //DO NOTHING
+            }
+        }
+    }
+
     class SearchSpotsDataTaskCallback implements SpotManager.SpotDataTaskCallback {
         @Override
         public void spotUpdated(Spot spot) {
             spotManager.searchSpot(spot);
             updateCards(spot);
+        }
+
+        @Override
+        public void updateFinished() {
+
         }
     }
 
@@ -127,10 +148,8 @@ public class SpotFragment extends BaseSpotFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_spot, container, false);
+    public void onCreateSpotsView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState, View view) {
         LinearLayout content_body = (LinearLayout) view.findViewById(R.id.content_body);
 
         if(headerCard != null) content_body.addView(headerCard.getView(inflater));
@@ -139,8 +158,6 @@ public class SpotFragment extends BaseSpotFragment {
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
         if(mapCard != null) content_body.addView(mapCard.getView(inflater));
-
-        return view;
     }
 
     @Override

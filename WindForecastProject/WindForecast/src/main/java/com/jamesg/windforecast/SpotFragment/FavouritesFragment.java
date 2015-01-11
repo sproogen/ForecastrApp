@@ -1,16 +1,10 @@
 package com.jamesg.windforecast.SpotFragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.jamesg.windforecast.R;
 import com.jamesg.windforecast.WindFinderApplication;
@@ -21,6 +15,7 @@ import com.jamesg.windforecast.cards.WindCard;
 import com.jamesg.windforecast.data.Spot;
 import com.jamesg.windforecast.manager.SpotManager;
 import com.jamesg.windforecast.utils.Logger;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -78,11 +73,22 @@ public class FavouritesFragment extends BaseSpotFragment {
         }
     }
 
+    @Subscribe
+    public void getMessage(String s) {
+        //Logger.d("BUS MESSAGE baseSpotFragment - " + s);
+        if(s.equals("Update Finished")){
+            try {
+                updateFinished();
+            }catch(Exception e){
+                //DO NOTHING
+            }
+        }
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreateSpotsView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState, View view) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_spot, container, false);
         LinearLayout content_body = (LinearLayout) view.findViewById(R.id.content_body);
 
         for (final CardBase card : cards) {
@@ -99,8 +105,6 @@ public class FavouritesFragment extends BaseSpotFragment {
                 content_body.addView(cardView);
             }
         }
-
-        return view;
     }
 
     @Override

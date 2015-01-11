@@ -42,6 +42,9 @@ public class SpotWrapperFragment extends BaseFragment {
     private TextView sevenDay;
     private View underline;
 
+    private Receiver updateDateReciever;
+    private Boolean updateDateRecieverStarted = false;
+
     private BaseSpotFragment currentSpotFragment;
 
     /**
@@ -64,9 +67,26 @@ public class SpotWrapperFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {}
+    }
 
-        IntentFilter filter = new IntentFilter("com.jamesg.windforecast.UPDATE_DATA");
-        getActivity().registerReceiver(new Receiver(new Handler()), filter);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!updateDateRecieverStarted){
+            IntentFilter filter = new IntentFilter("com.jamesg.windforecast.UPDATE_DATA");
+            updateDateReciever = new Receiver(new Handler());
+            getActivity().registerReceiver(updateDateReciever, filter);
+            updateDateRecieverStarted = true;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(updateDateRecieverStarted) {
+            getActivity().unregisterReceiver(updateDateReciever);
+            updateDateRecieverStarted = false;
+        }
     }
 
     private class Receiver extends BroadcastReceiver {
