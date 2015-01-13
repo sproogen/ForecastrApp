@@ -3,12 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ProgressBar
+    <!--<ProgressBar
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp" />-->
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@color/green"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"/>
 </RelativeLayout>

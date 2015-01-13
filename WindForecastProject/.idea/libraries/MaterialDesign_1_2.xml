@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="MaterialDesign-1.2">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/WindForecast/build/intermediates/exploded-aar/com.github.navasmdc/MaterialDesign/1.2/res" />
+      <root url="jar://$PROJECT_DIR$/WindForecast/build/intermediates/exploded-aar/com.github.navasmdc/MaterialDesign/1.2/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

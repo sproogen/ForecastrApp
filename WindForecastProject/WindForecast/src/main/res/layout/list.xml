@@ -24,11 +24,20 @@
         android:dividerHeight="0dip"
         android:visibility="gone"/>
 
-    <ProgressBar
+    <!--<ProgressBar
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searchProgress"
+        android:layout_below="@+id/search"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>-->
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/searchProgress"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@color/green"
         android:layout_below="@+id/search"
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.manager.AppManager;
@@ -61,7 +62,7 @@ public class DrawerFragment extends BaseFragment {
     private int selected = 0;
 
     private ListView listView;
-    private ProgressBar searchProgress;
+    ProgressBarCircularIndeterminate searchProgress;
     private ListView searchList;
     private ImageView clearButton;
     private EditText searchBox;
@@ -95,7 +96,7 @@ public class DrawerFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.list, null);
         listView = (ListView)view.findViewById(R.id.list);
-        searchProgress = (ProgressBar) view.findViewById(R.id.searchProgress);
+        searchProgress = (ProgressBarCircularIndeterminate) view.findViewById(R.id.searchProgress);
         searchList = (ListView)view.findViewById(R.id.searchList);
         clearButton = (ImageView)view.findViewById(R.id.clearButton);
 
@@ -184,7 +185,7 @@ public class DrawerFragment extends BaseFragment {
         int updatingPos = adapter.getUpdatePotision();
         if(updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()){
             View v = listView.getChildAt(updatingPos);
-            ProgressBar updatingStatus = (ProgressBar) v.findViewById(R.id.updatingStatus);
+            ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
             updatingStatus.setVisibility(View.VISIBLE);
         }
     }
@@ -194,7 +195,7 @@ public class DrawerFragment extends BaseFragment {
         int updatingPos = adapter.getUpdatePotision();
         if(updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()){
             View v = listView.getChildAt(updatingPos);
-            ProgressBar updatingStatus = (ProgressBar) v.findViewById(R.id.updatingStatus);
+            ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
             updatingStatus.setVisibility(View.GONE);
         }
     }
@@ -489,7 +490,7 @@ public class DrawerFragment extends BaseFragment {
                 TextView title = (TextView) convertView.findViewById(R.id.row_title);
                 title.setText(getItem(position).getLabel());
                 if(getItem(position).getLabel().equals("Check for updates") && updating) {
-                    ProgressBar updatingStatus = (ProgressBar) convertView.findViewById(R.id.updatingStatus);
+                    ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) convertView.findViewById(R.id.updatingStatus);
                     updatingStatus.setVisibility(View.VISIBLE);
                 }
                 if(getItem(position).getLabel().equals("App Update Available")){
