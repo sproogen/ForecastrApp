@@ -140,6 +140,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     @Override
     public void onResume() {
         super.onResume();
+        Mint.startSession(MainActivity.this);
         bus.register(this);
         spotManager.checkForUpdates(false);
     }
@@ -147,6 +148,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     @Override
     public void onPause() {
         super.onPause();
+        Mint.flush();
+        Mint.closeSession(MainActivity.this);
         bus.unregister(this);
     }
 
@@ -168,6 +171,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         Logger.d("NEW SPOT DATA - "+newSpot.getRawData());
         spotManager.addSpot(newSpot);
         drawerFragment.refreshSpots();
+        drawerFragment.setSpot(name);
         spotManager.parseSpotData(newSpot.getName());
         spotManager.checkForUpdates(false);
         Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
@@ -184,9 +188,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     public void loadSearchSpot(String name, int id){
         popBackStack(false);
-        spotManager.searchSpot(new Spot(name, id));
+        boolean search = false;
+        if(spotManager.getSpot(name) == null) {
+            spotManager.searchSpot(new Spot(name, id));
+            search = true;
+        }
         openSpot = name;
-        ((SpotWrapperFragment)current).loadSpot(name, true, true);
+        ((SpotWrapperFragment)current).loadSpot(name, true, search);
         drawerFragment.setSpot(name);
         Mint.logEvent("Spot Searched - "+name);
     }

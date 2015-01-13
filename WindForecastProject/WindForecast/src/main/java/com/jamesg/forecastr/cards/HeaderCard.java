@@ -26,17 +26,20 @@ public class HeaderCard extends CardBase {
 
     Boolean search = false;
 
-    public HeaderCard(Context context, Spot spot, int dateTab, boolean search){
+    public HeaderCard(Context context, Spot spot, int dateTab){
         this.context = context;
         this.spot = spot;
         this.dateTab = dateTab;
-        this.search = search;
     }
 
     public HeaderCard(Context context, String titleText, int dateTab){
         this.context = context;
         this.dateTab = dateTab;
         this.titleText = titleText;
+    }
+
+    public void setSearch(boolean search){
+        this.search = search;
     }
 
     @Override

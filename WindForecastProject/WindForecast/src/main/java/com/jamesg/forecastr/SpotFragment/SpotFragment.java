@@ -80,7 +80,7 @@ public class SpotFragment extends BaseSpotFragment {
         if (spot != null) {
             getActivity().setTitle(spot.getName());
 
-            headerCard = new HeaderCard(getActivity(), spot, dateTab, search);
+            headerCard = new HeaderCard(getActivity(), spot, dateTab);
             if (!search) {
                 windCard = new WindCard(getActivity(), spot, dateTab);
                 weatherCard = new WeatherCard(getActivity(), spot, dateTab);
@@ -126,6 +126,7 @@ public class SpotFragment extends BaseSpotFragment {
 
     public void spotUpdated(Spot spot) {
         spotManager.searchSpot(spot);
+        headerCard.setSearch(true);
         updateCards(spot);
     }
 
