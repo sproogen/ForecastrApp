@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         stack = new Stack<BaseFragment>();
 
         if (savedInstanceState != null) {
-            //current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("spotWrapperFragment");
+            current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
         }else{
             current = SpotWrapperFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
@@ -198,6 +198,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             ((SpotWrapperFragment)current).closeSpot(animate);
         }
         drawerFragment.closeSpot();
+    }
+
+    @Override
+    public String openSpot() {
+        return openSpot;
     }
 
     public void transitionToFragment(BaseFragment newFragment, int id, boolean animate){

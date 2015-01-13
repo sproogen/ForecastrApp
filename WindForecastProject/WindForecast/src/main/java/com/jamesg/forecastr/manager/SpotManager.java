@@ -223,6 +223,9 @@ public class SpotManager extends SQLiteOpenHelper {
                 // Adding contact to list
                 if(!loadedSpot(spot.getName())){
                     all_spots.add(spot);
+                    if(parse == 0){
+                        parseSpotData(spot.getName());
+                    }
                     //Log.d("WINDFINDER APP", "ADD Spot - "+spot.getName());
                 }
             } while (cursor.moveToNext());
@@ -407,7 +410,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         String request = context.getString(R.string.base_url)+function_url;
         request += "?id=" + current.getId();
-        //Log.d("WINDFINDER APP", request);
+        Log.d("WINDFINDER APP", request);
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse response;
