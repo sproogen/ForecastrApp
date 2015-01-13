@@ -22,14 +22,12 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 3
-        versionName "0.2.4"
+        versionCode 4
+        versionName "0.2.5"
     }
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), \
-            'proguard-rules.txt'
         }
     }
 }
