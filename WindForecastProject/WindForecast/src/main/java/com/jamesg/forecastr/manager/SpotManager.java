@@ -164,6 +164,32 @@ public class SpotManager extends SQLiteOpenHelper {
         return null;
     }
 
+    public boolean spotExists(String name) {
+        for(Spot s : all_spots){
+            if(s.getName().equals(name))return true;
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        try{
+            cursor = db.query(TABLE_SPOTS, new String[] {
+                            KEY_NAME, KEY_ID, KEY_LAT, KEY_LONG, KEY_DATA, KEY_UPDATE_TIME }, KEY_NAME + "=?",
+                    new String[] { name }, null, null, null, null);
+        }catch(NullPointerException e){
+            //Do Nothing
+        }
+        if (cursor != null && cursor.moveToFirst()) {
+
+            cursor.close();
+            return true;
+        }
+        try{
+            cursor.close();
+        }catch(NullPointerException e){
+            //Do Nothing
+        }
+        return false;
+    }
+
     // Getting single contact
     public Spot getSpot(int i) {
         return all_spots.get(i);

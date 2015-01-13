@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         menu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
-                drawerFragment.clearSearch();
+                //drawerFragment.clearSearch();
                 //getActionBar().setDisplayHomeAsUpEnabled(false);
             }
         });
@@ -189,7 +189,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     public void loadSearchSpot(String name, int id){
         popBackStack(false);
         boolean search = false;
-        if(spotManager.getSpot(name) == null) {
+        if(!spotManager.spotExists(name)) {
             spotManager.searchSpot(new Spot(name, id));
             search = true;
         }

@@ -153,6 +153,7 @@ public class DrawerFragment extends BaseFragment {
                 if(before == 0 && length >= 1){
                     listView.setVisibility(View.GONE);
                     searchList.setVisibility(View.VISIBLE);
+                    searchList.clearChoices();
                     clearButton.setVisibility(View.VISIBLE);
 
                 }else if(before >= 1 && length == 0){
@@ -360,13 +361,13 @@ public class DrawerFragment extends BaseFragment {
         if(searchAdapter == null) {
             searchAdapter = new SearchMenuAdapter(getActivity(), spots);
             searchList.setAdapter(searchAdapter);
-            searchList.setChoiceMode(ListView.CHOICE_MODE_NONE);
+            searchList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             searchList.setDivider(null);
             searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                     Spot item = searchAdapter.getItem(position);
-                    listView.setItemChecked(position, true);
+                    searchList.setItemChecked(position, true);
                     selected = -1;
                     mListener.loadSearchSpot(item.getName(), item.getId());
                 }
@@ -380,6 +381,7 @@ public class DrawerFragment extends BaseFragment {
         if(searchBox.getText().length() >= 1){
             listView.setVisibility(View.VISIBLE);
             searchAdapter.setData(new ArrayList<Spot>());
+            spotManager.searchSpot(null);
             all_spots = null;
             searchList.setVisibility(View.GONE);
             clearButton.setVisibility(View.GONE);
