@@ -13,7 +13,9 @@ import com.jamesg.forecastr.base.CardBase;
 import com.jamesg.forecastr.cards.HeaderCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
+import com.jamesg.forecastr.data.SpotUpdatedEvent;
 import com.jamesg.forecastr.manager.SpotManager;
+import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -74,7 +76,7 @@ public class FavouritesFragment extends BaseSpotFragment {
 
     @Subscribe
     public void getMessage(String s) {
-        //Logger.d("BUS MESSAGE baseSpotFragment - " + s);
+        Logger.d("BUS MESSAGE baseSpotFragment - " + s);
         if(s.equals("Update Finished")){
             try {
                 updateFinished();
@@ -82,6 +84,12 @@ public class FavouritesFragment extends BaseSpotFragment {
                 //DO NOTHING
             }
         }
+    }
+
+    @Subscribe
+    public void onSpotUpdated(SpotUpdatedEvent s) {
+        Logger.d("BUS SPOT UPDATED baseSpotFragment - " + s.getName());
+        updateSpotData(s.getName());
     }
 
     @Override
@@ -117,6 +125,12 @@ public class FavouritesFragment extends BaseSpotFragment {
     public void updateSpotData(){
         for (CardBase card : cards) {
             if (card != null) card.updateView();
+        }
+    }
+
+    public void updateSpotData(String spot){
+        for (CardBase card : cards) {
+            if (card != null && card.getTitle().equals(spot)) card.updateView();
         }
     }
 

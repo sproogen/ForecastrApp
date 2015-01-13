@@ -65,18 +65,6 @@ public class AppManager {
         if (latestVersion > currentVersion) {
             updateAvailable = true;
             bus.post("NewAppAvailable");
-            /*new AlertDialog.Builder(context)
-                    .setIcon(R.drawable.ic_action_cancel)
-                    .setTitle("New Version of the app is available.")
-                    .setMessage("Version " + versionName + " is available now. Would you like to update to this version now.")
-                    .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setNegativeButton("Later", null)
-                    .show();*/
         }
     }
 

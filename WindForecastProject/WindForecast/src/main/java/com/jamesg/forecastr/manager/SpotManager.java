@@ -12,6 +12,8 @@ import android.util.Log;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.WindFinderApplication;
 import com.jamesg.forecastr.data.Spot;
+import com.jamesg.forecastr.data.SpotSearchedEvent;
+import com.jamesg.forecastr.data.SpotUpdatedEvent;
 import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Bus;
 
@@ -318,10 +320,8 @@ public class SpotManager extends SQLiteOpenHelper {
         @Override
         public void spotUpdated(Spot spot) {
             updateSpot(spot);
-            Intent intent = new Intent();
-            intent.setAction("com.jamesg.windforecast.UPDATE_DATA");
-            //intent.putExtra("url",uri.toString());
-            context.sendBroadcast(intent);
+            Logger.d("BUS POST SpotUpdatedEvent");
+            bus.post(new SpotUpdatedEvent(spot.getName()));
         }
 
         @Override
@@ -330,9 +330,23 @@ public class SpotManager extends SQLiteOpenHelper {
         }
     }
 
-    public void getDataForSpot(Spot spot, SpotDataTaskCallback callback){
+    class SpotSearchDataTaskCallback implements SpotDataTaskCallback{
+        @Override
+        public void spotUpdated(Spot spot) {
+            updateSpot(spot);
+            Logger.d("BUS POST SpotSearchedEvent");
+            bus.post(new SpotSearchedEvent(spot));
+        }
+
+        @Override
+        public void updateFinished() {
+        }
+    }
+
+    public void getDataForSpot(Spot spot){
         ArrayList<Spot> spots = new ArrayList<Spot>();
         spots.add(spot);
+        SpotSearchDataTaskCallback callback = new SpotSearchDataTaskCallback();
         GetSpotDataTask getSpotDataTask = new GetSpotDataTask(true, callback);
         getSpotDataTask.execute(spots);
     }
@@ -364,8 +378,12 @@ public class SpotManager extends SQLiteOpenHelper {
                 if(s.getRawData() == null || (System.currentTimeMillis()-s.getUpdateTime()) > 3600000 || forceUpdate){ //3600000
                     Spot updated = get_data_for_location(s);
                     if(updated != null) {
-                        updated.parseRawData();
-                        publishProgress(updated);
+                        try {
+                            updated.parseRawData();
+                            publishProgress(updated);
+                        }catch(Exception e){
+                            //DO NOTHING
+                        }
                     }
                 }else{
                     SimpleDateFormat formatter = new SimpleDateFormat("D");

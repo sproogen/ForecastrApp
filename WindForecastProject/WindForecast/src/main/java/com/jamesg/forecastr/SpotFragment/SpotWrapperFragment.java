@@ -42,9 +42,6 @@ public class SpotWrapperFragment extends BaseFragment {
     private TextView sevenDay;
     private View underline;
 
-    private Receiver updateDateReciever;
-    private Boolean updateDateRecieverStarted = false;
-
     private BaseSpotFragment currentSpotFragment;
 
     /**
@@ -72,49 +69,11 @@ public class SpotWrapperFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!updateDateRecieverStarted){
-            IntentFilter filter = new IntentFilter("com.jamesg.windforecast.UPDATE_DATA");
-            updateDateReciever = new Receiver(new Handler());
-            getActivity().registerReceiver(updateDateReciever, filter);
-            updateDateRecieverStarted = true;
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(updateDateRecieverStarted) {
-            getActivity().unregisterReceiver(updateDateReciever);
-            updateDateRecieverStarted = false;
-        }
-    }
-
-    private class Receiver extends BroadcastReceiver {
-
-        private final Handler handler;
-
-        public Receiver(Handler handler) {
-            this.handler = handler;
-        }
-
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            //String url = arg1.getExtras().getString("url");
-            Logger.d("Update data");
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(currentSpotFragment != null) {
-                        try {
-                            currentSpotFragment.updateSpotData();
-                        }catch(Exception e){
-                            Mint.logException(e);
-                        }
-                    }
-                }
-            });
-        }
-
     }
 
     @Override

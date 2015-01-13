@@ -16,7 +16,10 @@ import com.jamesg.forecastr.cards.SwellCard;
 import com.jamesg.forecastr.cards.WeatherCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
+import com.jamesg.forecastr.data.SpotSearchedEvent;
+import com.jamesg.forecastr.data.SpotUpdatedEvent;
 import com.jamesg.forecastr.manager.SpotManager;
+import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -56,6 +59,7 @@ public class SpotFragment extends BaseSpotFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public SpotFragment() {
         // Required empty public constructor
     }
@@ -69,54 +73,62 @@ public class SpotFragment extends BaseSpotFragment {
             search = getArguments().getBoolean(SPOT_SEARCHED);
         }
         int dateTab = 0;
-        if(this.mListener != null){
+        if (this.mListener != null) {
             dateTab = mListener.getDateTab();
         }
         Spot spot = spotManager.getSpot(spotName);
-        if(spot != null) {
+        if (spot != null) {
             getActivity().setTitle(spot.getName());
 
             headerCard = new HeaderCard(getActivity(), spot, dateTab, search);
-            if(!search) {
+            if (!search) {
                 windCard = new WindCard(getActivity(), spot, dateTab);
                 weatherCard = new WeatherCard(getActivity(), spot, dateTab);
                 if (spot.hasSwell()) {
                     swellCard = new SwellCard(getActivity(), spot, dateTab);
                 }
                 mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
-            }else{
+            } else {
                 loadingCard = new LoadingCard(getActivity());
 
-                SearchSpotsDataTaskCallback callback = new SearchSpotsDataTaskCallback();
-                spotManager.getDataForSpot(spot, callback);
+                spotManager.getDataForSpot(spot);
             }
         }
     }
 
     @Subscribe
     public void getMessage(String s) {
-        //Logger.d("BUS MESSAGE baseSpotFragment - " + s);
-        if(s.equals("Update Finished")){
+        Logger.d("BUS MESSAGE baseSpotFragment - " + s);
+        if (s.equals("Update Finished")) {
             try {
                 updateFinished();
-            }catch(Exception e){
+            } catch (Exception e) {
                 //DO NOTHING
             }
         }
     }
 
-    class SearchSpotsDataTaskCallback implements SpotManager.SpotDataTaskCallback {
-        @Override
-        public void spotUpdated(Spot spot) {
-            spotManager.searchSpot(spot);
-            updateCards(spot);
-        }
-
-        @Override
-        public void updateFinished() {
-
+    @Subscribe
+    public void onSpotSearched(SpotSearchedEvent s) {
+        Logger.d("BUS SPOT SEARCHED baseSpotFragment - " + s.getName());
+        if (s.getName().equals(spotName)) {
+            spotUpdated(s.getSpot());
         }
     }
+
+    @Subscribe
+    public void onSpotUpdated(SpotUpdatedEvent s) {
+        Logger.d("BUS SPOT UPDATED baseSpotFragment - " + s.getName());
+        if (s.getName().equals(spotName)) {
+            updateSpotData();
+        }
+    }
+
+    public void spotUpdated(Spot spot) {
+        spotManager.searchSpot(spot);
+        updateCards(spot);
+    }
+
 
     public void updateCards(Spot spot){
         int dateTab = 0;
