@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.jamesg.forecastr.WindFinderApplication;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.cards.HeaderCard;
@@ -28,6 +30,9 @@ public class SpotFragment extends BaseSpotFragment {
 
     @Inject
     SpotManager spotManager;
+
+    @Inject
+    Tracker tracker;
 
     private static final String SPOT_NAME = "Spot_Name";
     private static final String SPOT_SEARCHED = "Spot_Searched";
@@ -66,12 +71,13 @@ public class SpotFragment extends BaseSpotFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             spotName = getArguments().getString(SPOT_NAME);
             search = getArguments().getBoolean(SPOT_SEARCHED);
         }
+
         int dateTab = 0;
         if (this.mListener != null) {
             dateTab = mListener.getDateTab();

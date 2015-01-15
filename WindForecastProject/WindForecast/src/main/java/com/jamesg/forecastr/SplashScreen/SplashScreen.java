@@ -7,7 +7,7 @@ import android.os.Handler;
 
 import com.jamesg.forecastr.MainActivity;
 import com.jamesg.forecastr.R;
-import com.jamesg.forecastr.WindFinderApplication;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.manager.SpotManager;
 
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ public class SplashScreen extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getApplication()).inject(this);
+        ((ForecastrApplication) getApplication()).inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 

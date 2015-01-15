@@ -74,7 +74,7 @@ public class DrawerFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
     }
 

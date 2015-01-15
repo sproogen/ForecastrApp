@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.base.BaseActivity;
 import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.SpotFragment.SpotWrapperFragment;
@@ -36,6 +39,9 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     AppManager appManager;
 
     @Inject
+    Tracker tracker;
+
+    @Inject
     Bus bus;
 
     private Stack<BaseFragment> stack;
@@ -55,10 +61,12 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getApplication()).inject(this);
+        ((ForecastrApplication) getApplication()).inject(this);
         super.onCreate(savedInstanceState);
 
         Mint.initAndStartSession(MainActivity.this, "91e59a0e");
+        ((ForecastrApplication) getApplication())
+                .getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
 
         setTitle("Favourite Spots");
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -146,11 +154,23 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         Mint.flush();
         Mint.closeSession(MainActivity.this);
         bus.unregister(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     public void removeSpot(Spot spot){
@@ -164,6 +184,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             allSpots(false);
         }
         Mint.logEvent("Spot Removed - "+spot.getName());
+        tracker.setScreenName(null);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Favourites")
+                .setAction("Removed - "+spot.getName())
+                .build());
     }
 
     public void addSpot(String name){
@@ -176,8 +201,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             drawerFragment.setSpot(name);
             spotManager.parseSpotData(newSpot.getName());
             spotManager.checkForUpdates(false);
-            Toast.makeText(this, name + "added to favourites.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, name + " added to favourites.", Toast.LENGTH_SHORT).show();
             Mint.logEvent("Spot Added - " + name);
+            tracker.setScreenName(null);
+            tracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Spot")
+                    .setAction("Added - "+name)
+                    .build());
         }
     }
 
@@ -187,6 +217,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         ((SpotWrapperFragment)current).loadSpot(name, true, false);
         drawerFragment.setSpot(name);
         Mint.logEvent("Spot Viewed - "+name);
+        tracker.setScreenName(null);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Spot")
+                .setAction("Viewed - "+name)
+                .build());
     }
 
     public void loadSearchSpot(String name, int id){
@@ -200,6 +235,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         ((SpotWrapperFragment)current).loadSpot(name, true, search);
         drawerFragment.setSpot(name);
         Mint.logEvent("Spot Searched - "+name);
+        tracker.setScreenName(null);
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Search")
+                .setAction("Searched - "+name)
+                .build());
     }
 
     public void allSpots(boolean animate){

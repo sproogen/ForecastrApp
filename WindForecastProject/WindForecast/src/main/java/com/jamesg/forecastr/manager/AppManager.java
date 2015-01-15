@@ -5,7 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
 import com.jamesg.forecastr.R;
-import com.jamesg.forecastr.WindFinderApplication;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Bus;
 
@@ -43,7 +43,7 @@ public class AppManager {
 
     public AppManager(Context context) {
         this.context = context;
-        ((WindFinderApplication) context).inject(this);
+        ((ForecastrApplication) context).inject(this);
     }
 
     public void checkForUpdates(){

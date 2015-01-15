@@ -1,5 +1,6 @@
 package com.jamesg.forecastr;
 
+import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.SplashScreen.SplashScreen;
 import com.jamesg.forecastr.SpotFragment.FavouritesFragment;
 import com.jamesg.forecastr.SpotFragment.SpotFragment;
@@ -32,9 +33,9 @@ import dagger.Provides;
 )
 public class AppModule {
 
-    protected WindFinderApplication app;
+    protected ForecastrApplication app;
 
-    public AppModule(WindFinderApplication app) {
+    public AppModule(ForecastrApplication app) {
         this.app = app;
     }
 
@@ -48,6 +49,12 @@ public class AppModule {
     @Singleton
     public AppManager provideAppManager() {
         return new AppManager(app);
+    }
+
+    @Provides
+    @Singleton
+    public Tracker provideTracker() {
+        return app.getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
     }
 
     @Provides

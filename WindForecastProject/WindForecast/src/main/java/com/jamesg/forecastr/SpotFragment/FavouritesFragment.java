@@ -6,8 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.R;
-import com.jamesg.forecastr.WindFinderApplication;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.base.CardBase;
 import com.jamesg.forecastr.cards.HeaderCard;
@@ -27,10 +30,8 @@ public class FavouritesFragment extends BaseSpotFragment {
     @Inject
     SpotManager spotManager;
 
-    private static final String SPOT_NAME = "Spot_Name";
-
-    // TODO: Rename and change types of parameters
-    private String spotName;
+    @Inject
+    Tracker tracker;
 
     ArrayList<CardBase> cards;
 
@@ -53,11 +54,9 @@ public class FavouritesFragment extends BaseSpotFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            spotName = getArguments().getString(SPOT_NAME);
-        }
+
         int dateTab = 0;
         if(this.mListener != null){
             dateTab = mListener.getDateTab();

@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.jamesg.forecastr.R;
-import com.jamesg.forecastr.WindFinderApplication;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.data.SpotSearchedEvent;
 import com.jamesg.forecastr.data.SpotUpdatedEvent;
@@ -72,7 +72,7 @@ public class SpotManager extends SQLiteOpenHelper {
     public SpotManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
-        ((WindFinderApplication) context).inject(this);
+        ((ForecastrApplication) context).inject(this);
     }
 
     // Creating Tables

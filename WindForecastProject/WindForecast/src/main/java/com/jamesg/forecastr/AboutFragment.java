@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.manager.SpotManager;
@@ -22,13 +24,21 @@ public class AboutFragment extends BaseFragment {
     @Inject
     SpotManager spotManager;
 
+    @Inject
+    Tracker tracker;
+
     public AboutFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
+
+        // Set screen name.
+        tracker.setScreenName("About");
+        // Send a screen view.
+        tracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

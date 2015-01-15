@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jamesg.forecastr.R;
-import com.jamesg.forecastr.WindFinderApplication;
+import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.manager.SpotManager;
 import com.squareup.otto.Bus;
 
@@ -33,7 +33,7 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ((WindFinderApplication) getActivity().getApplication()).inject(this);
+        ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
     }
 
