@@ -168,14 +168,17 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     public void addSpot(String name){
         Spot newSpot = spotManager.getSpot(name);
-        Logger.d("NEW SPOT DATA - "+newSpot.getRawData());
-        spotManager.addSpot(newSpot);
-        drawerFragment.refreshSpots();
-        drawerFragment.setSpot(name);
-        spotManager.parseSpotData(newSpot.getName());
-        spotManager.checkForUpdates(false);
-        Toast.makeText(this, name + "added to favourites.",Toast.LENGTH_SHORT).show();
-        Mint.logEvent("Spot Added - "+name);
+        if(newSpot == null){
+            Toast.makeText(this, "Error : Could not add "+ name + " to favourites.", Toast.LENGTH_SHORT).show();
+        }else {
+            spotManager.addSpot(newSpot);
+            drawerFragment.refreshSpots();
+            drawerFragment.setSpot(name);
+            spotManager.parseSpotData(newSpot.getName());
+            spotManager.checkForUpdates(false);
+            Toast.makeText(this, name + "added to favourites.", Toast.LENGTH_SHORT).show();
+            Mint.logEvent("Spot Added - " + name);
+        }
     }
 
     public void loadSpot(String name, int listClick){
