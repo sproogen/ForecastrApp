@@ -64,6 +64,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         ((ForecastrApplication) getApplication()).inject(this);
         super.onCreate(savedInstanceState);
 
+        Logger.d("Main Activity Started");
+
         Mint.initAndStartSession(MainActivity.this, "91e59a0e");
         ((ForecastrApplication) getApplication())
                 .getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
@@ -299,10 +301,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     @Override
     public void onBackPressed() {
         if(!stack.empty()) {
+            //When on the About or similar fragment.
             popBackStack(true);
         }else if(openSpot.equals("")) {
+            //When on favourite fragment.
             super.onBackPressed();
         }else{
+            //When on a spot fragment.
             allSpots(true);
         }
     }

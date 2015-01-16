@@ -368,6 +368,7 @@ public class DrawerFragment extends BaseFragment {
                 public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                     Spot item = searchAdapter.getItem(position);
                     searchList.setItemChecked(position, true);
+                    listView.setItemChecked(selected, false);
                     selected = -1;
                     mListener.loadSearchSpot(item.getName(), item.getId());
                 }
@@ -414,6 +415,11 @@ public class DrawerFragment extends BaseFragment {
         selected = 0;
         adapter.closeSpot();
         listView.setItemChecked(0, true);
+        try{
+            searchList.clearChoices();
+        }catch(Exception e){
+
+        }
     }
 
 	public class DrawMenuAdapter extends ArrayAdapter<Spot> {

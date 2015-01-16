@@ -233,6 +233,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
     // Getting All Contacts
     public List<Spot> getAllSpots(int parse) {
+        Logger.d("getAllSpots");
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_SPOTS;
 

@@ -36,8 +36,8 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value=" AIzaSyDClc3M_7hn5bJNgXUZB2dDHsJ7Q6cqX2s"/>
         <!-- Google Analytics Version v4 needs this value for easy tracking -->
-        <meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
-            android:resource="@xml/global_tracker" />
+        <!--<meta-data android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/global_tracker" />-->
     </application>
 
 </manifest>
