@@ -64,6 +64,8 @@ public class SpotManager extends SQLiteOpenHelper {
     private ArrayList<Spot> all_spots = new ArrayList<Spot>();
     private Spot search_temp_spot = null;
 
+    private boolean updating = false;
+
     //String metoffice_base_url = "http://datapoint.metoffice.gov.uk/public/data/val/wxfcs/all/json/";
     String function_url = "getForcastData.php";
 
@@ -353,6 +355,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         @Override
         public void updateFinished() {
+            updating = false;
             bus.post("Update Finished");
         }
     }
@@ -381,10 +384,15 @@ public class SpotManager extends SQLiteOpenHelper {
 
     public void checkForUpdates(boolean force){
         bus.post("Update Started");
-        List<Spot> spots = getAllSpots(0);
-        AllSpotsDataTaskCallback callback = new AllSpotsDataTaskCallback();
-        GetSpotDataTask getSpotDataTask = new GetSpotDataTask(force, callback);
-        getSpotDataTask.execute(spots);
+        if(!updating) {
+            updating = true;
+            List<Spot> spots = getAllSpots(0);
+            AllSpotsDataTaskCallback callback = new AllSpotsDataTaskCallback();
+            GetSpotDataTask getSpotDataTask = new GetSpotDataTask(force, callback);
+            getSpotDataTask.execute(spots);
+        }else{
+            bus.post("Update Finished");
+        }
     }
 
     private class GetSpotDataTask extends AsyncTask<List<Spot>, Spot, String> {

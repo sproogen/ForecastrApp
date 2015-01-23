@@ -25,7 +25,8 @@ public class Spot {
 
     private String label;
     private int type = 0; // 0 = spot / 1 == header / 2 == other menu item
-    private SunriseSunsetCalculation sunriseSunsetCalculation;
+    private SunriseSunsetCalculation sunriseSunsetToday;
+    private SunriseSunsetCalculation sunriseSunsetTomorrow;
 
     private ArrayList<TimestampData> today = new ArrayList<TimestampData>();
     private ArrayList<TimestampData> tomorrow = new ArrayList<TimestampData>();
@@ -266,15 +267,29 @@ public class Spot {
                 sevenDay.add(thisInterval);
             }
         }
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+
         try{
-            sunriseSunsetCalculation = new SunriseSunsetCalculation(day, month,
-                year, Double.parseDouble(getLatitude()), Double.parseDouble(getLongitude()));
-            sunriseSunsetCalculation.calculateOfficialSunriseSunset();
-        }catch(Exception e){}
+            Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            sunriseSunsetToday = new SunriseSunsetCalculation(day, month,
+                year, Double.parseDouble(getLongitude()), Double.parseDouble(getLatitude()));
+            sunriseSunsetToday.calculateOfficialSunriseSunset();
+
+            c.add(Calendar.DATE, 1);
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH);
+            day = c.get(Calendar.DAY_OF_MONTH);
+
+            sunriseSunsetTomorrow = new SunriseSunsetCalculation(day, month,
+                    year, Double.parseDouble(getLongitude()), Double.parseDouble(getLatitude()));
+            sunriseSunsetTomorrow.calculateOfficialSunriseSunset();
+        }catch(Exception e){
+            sunriseSunsetToday = null;
+            sunriseSunsetTomorrow = null;
+        }
     }
 
     public int directionToDegree(String direction){
@@ -355,22 +370,35 @@ public class Spot {
         return sevenDay.size();
     }
 
-    public String getSunRise(){
-        final DateFormat dateFormat = new SimpleDateFormat("hh:mm a zzz");
+    public String getSunRise(int date){
+        final DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         try{
-            return dateFormat.format(sunriseSunsetCalculation.getOfficialSunrise());
+            if(date == 0) {
+                return dateFormat.format(sunriseSunsetToday.getOfficialSunrise());
+            }else{
+                return dateFormat.format(sunriseSunsetTomorrow.getOfficialSunrise());
+            }
         }catch(Exception e){
             return "";
         }
     }
 
-    public String getSunSet(){
-        final DateFormat dateFormat = new SimpleDateFormat("hh:mm a zzz");
+    public String getSunSet(int date){
+        final DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         try{
-            return dateFormat.format(sunriseSunsetCalculation.getOfficialSunset());
+            if(date == 0) {
+                return dateFormat.format(sunriseSunsetToday.getOfficialSunset());
+            }else{
+                return dateFormat.format(sunriseSunsetTomorrow.getOfficialSunset());
+            }
         }catch(Exception e){
             return "";
         }
+    }
+
+    public Boolean hasSunData(){
+        if(sunriseSunsetToday == null) return false;
+        return true;
     }
 
     public Boolean hasSwell(){

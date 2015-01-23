@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.gc.materialdesign.views.Card;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.ForecastrApplication;
@@ -14,7 +15,9 @@ import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.cards.HeaderCard;
 import com.jamesg.forecastr.cards.LoadingCard;
 import com.jamesg.forecastr.cards.MapCard;
+import com.jamesg.forecastr.cards.SunCard;
 import com.jamesg.forecastr.cards.SwellCard;
+import com.jamesg.forecastr.cards.TideCard;
 import com.jamesg.forecastr.cards.WeatherCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
@@ -45,6 +48,7 @@ public class SpotFragment extends BaseSpotFragment {
     HeaderCard headerCard;
     WeatherCard weatherCard;
     SwellCard swellCard;
+    SunCard sunCard;
     MapCard mapCard;
     LoadingCard loadingCard;
 
@@ -92,6 +96,9 @@ public class SpotFragment extends BaseSpotFragment {
                 weatherCard = new WeatherCard(getActivity(), spot, dateTab);
                 if (spot.hasSwell()) {
                     swellCard = new SwellCard(getActivity(), spot, dateTab);
+                }
+                if(spot.hasSunData()) {
+                    sunCard = new SunCard(getActivity(), spot, dateTab);
                 }
                 mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
             } else {
@@ -147,6 +154,9 @@ public class SpotFragment extends BaseSpotFragment {
         if (spot.hasSwell()) {
             swellCard = new SwellCard(getActivity(), spot, dateTab);
         }
+        if(spot.hasSunData()) {
+            sunCard = new SunCard(getActivity(), spot, dateTab);
+        }
         mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
 
         LinearLayout content_body = (LinearLayout) getActivity().findViewById(R.id.content_body);
@@ -158,6 +168,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
+        if(sunCard != null) content_body.addView(sunCard.getView(inflater));
         if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
 
@@ -172,6 +183,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
+        if(sunCard != null) content_body.addView(sunCard.getView(inflater));
         if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
 
@@ -181,6 +193,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) windCard.updateView(newDateTab);
         if(weatherCard != null) weatherCard.updateView(newDateTab);
         if(swellCard != null) swellCard.updateView(newDateTab);
+        if(sunCard != null) sunCard.updateView(newDateTab);
         if(mapCard != null) mapCard.updateView(newDateTab);
     }
 
@@ -190,6 +203,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) windCard.updateView();
         if(weatherCard != null) weatherCard.updateView();
         if(swellCard != null) swellCard.updateView();
+        if(sunCard != null) sunCard.updateView();
         if(mapCard != null) mapCard.updateView();
     }
 }

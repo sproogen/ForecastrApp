@@ -43,7 +43,11 @@ public class CardBase {
     }
 
     public void updateView(){
-        updateView(dateTab);
+        try {
+            updateView(dateTab);
+        }catch(Exception e){
+            //Error updating card, do nothing
+        }
     }
 
     public String getTag() {

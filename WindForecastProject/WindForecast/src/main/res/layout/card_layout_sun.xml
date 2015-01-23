@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+
+
+        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
+
+            <TextView android:id="@android:id/title" style="@style/card_title_large"/>
+
+            <!--suppress AndroidLintContentDescription -->
+            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor" android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/contentFrame"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/titleFrame"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerInside"
+                    android:id="@+id/sunRise"
+                    android:src="@drawable/sun_rise"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_centerHorizontal="true" />
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:text=""
+                    android:id="@+id/sunRiseText"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/sunRise"
+                    android:visibility="visible"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:id="@+id/sunSet"
+                android:src="@drawable/sun_set"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="0dp"
+                android:adjustViewBounds="false"
+                android:layout_centerHorizontal="true"/>
+            <TextSwitcher
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:textColorPrimary"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:text=""
+                android:id="@+id/sunSetText"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/sunSet"
+                android:visibility="visible"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

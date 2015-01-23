@@ -274,17 +274,23 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     public void popBackStack(boolean animate){
         if(!stack.empty()) {
-            current = stack.pop();
-            drawerFragment.closeSpot();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            try {
+                current = stack.pop();
+                if (current != null) {
+                    drawerFragment.closeSpot();
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-            if(animate){
-                transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
+                    if (animate) {
+                        transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
+                    }
+
+                    transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
+                    getSupportFragmentManager().executePendingTransactions();
+                    currentID = SPOTS_FRAGMENT;
+                }
+            }catch (Exception e){
+                //Failed to pop and replace current fragment. Do Nothing
             }
-
-            transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
-            getSupportFragmentManager().executePendingTransactions();
-            currentID = SPOTS_FRAGMENT;
         }
     }
 

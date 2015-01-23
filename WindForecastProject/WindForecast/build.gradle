@@ -45,6 +45,9 @@ dependencies {
 
     compile 'com.github.navasmdc:MaterialDesign:1.2@aar'
 
+    compile 'com.github.blackfizz:eazegraph:1.2.0@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
+
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile project(':SlidingMenu:library')
 }

@@ -82,7 +82,8 @@ public class DrawerFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         bus.register(this);
-        if(mListener.openSpot().equals("")){
+
+        if(mListener.openSpot().equals("") && selected == 0){
             closeSpot();
         }
     }

@@ -64,11 +64,13 @@ public class AboutFragment extends BaseFragment {
                 lastUpdated = s.getUpdateTime();
             }
         }
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date updatedDate = new Date(lastUpdated);
+        if(lastUpdated != 0) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date updatedDate = new Date(lastUpdated);
 
-        TextView updatedText = (TextView) rootView.findViewById(R.id.updatedText);
-        updatedText.setText(df.format(updatedDate));
+            TextView updatedText = (TextView) rootView.findViewById(R.id.updatedText);
+            updatedText.setText(df.format(updatedDate));
+        }
 
         return rootView;
     }
