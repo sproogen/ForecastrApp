@@ -46,6 +46,7 @@ public class SpotFragment extends BaseSpotFragment {
     HeaderCard headerCard;
     WeatherCard weatherCard;
     SwellCard swellCard;
+    TideCard tideCard;
     SunCard sunCard;
     MapCard mapCard;
     LoadingCard loadingCard;
@@ -99,6 +100,7 @@ public class SpotFragment extends BaseSpotFragment {
                 weatherCard = new WeatherCard(getActivity(), spot, dateTab);
                 if (spot.hasSwell()) {
                     swellCard = new SwellCard(getActivity(), spot, dateTab);
+                    tideCard = new TideCard(getActivity(), spot, dateTab);
                 }
                 if(spot.hasSunData()) {
                     sunCard = new SunCard(getActivity(), spot, dateTab);
@@ -162,6 +164,7 @@ public class SpotFragment extends BaseSpotFragment {
         weatherCard = new WeatherCard(getActivity(), spot, dateTab);
         if (spot.hasSwell()) {
             swellCard = new SwellCard(getActivity(), spot, dateTab);
+            tideCard = new TideCard(getActivity(), spot, dateTab);
         }
         if(spot.hasSunData()) {
             sunCard = new SunCard(getActivity(), spot, dateTab);
@@ -177,6 +180,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
+        if(tideCard != null) content_body.addView(tideCard.getView(inflater));
         if(sunCard != null) content_body.addView(sunCard.getView(inflater));
         if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
@@ -192,6 +196,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
+        if(tideCard != null) content_body.addView(tideCard.getView(inflater));
         if(sunCard != null) content_body.addView(sunCard.getView(inflater));
         if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
@@ -202,6 +207,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) windCard.updateView(newDateTab);
         if(weatherCard != null) weatherCard.updateView(newDateTab);
         if(swellCard != null) swellCard.updateView(newDateTab);
+        if(tideCard != null) tideCard.updateView(newDateTab);
         if(sunCard != null) sunCard.updateView(newDateTab);
         if(mapCard != null) mapCard.updateView(newDateTab);
     }
@@ -212,6 +218,7 @@ public class SpotFragment extends BaseSpotFragment {
         if(windCard != null) windCard.updateView();
         if(weatherCard != null) weatherCard.updateView();
         if(swellCard != null) swellCard.updateView();
+        if(tideCard != null) tideCard.updateView();
         if(sunCard != null) sunCard.updateView();
         if(mapCard != null) mapCard.updateView();
     }

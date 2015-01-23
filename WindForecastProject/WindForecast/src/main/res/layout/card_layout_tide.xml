@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+
+
+        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
+
+            <TextView android:id="@android:id/title" style="@style/card_title_large"/>
+
+            <!--suppress AndroidLintContentDescription -->
+            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor" android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/contentFrame"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/titleFrame"
+            android:baselineAligned="false">
+
+            <org.eazegraph.lib.charts.ValueLineChart
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/tideChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:egUseCubic="true"
+                app:egUseOverlapFill="true"
+                app:egCurveSmoothness="0.2"
+                app:egIndicatorLineColor="#FE6DA8"
+                app:egLegendHeight="40dp"
+                app:egShowStandardValue="false"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
