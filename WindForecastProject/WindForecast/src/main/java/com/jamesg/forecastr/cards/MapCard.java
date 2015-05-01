@@ -23,8 +23,6 @@ import com.jamesg.forecastr.data.Spot;
  */
 public class MapCard extends CardBase {
 
-    private TextView titleTextView;
-
     private GoogleMap googleMap;
     private int mapSpot = -1;
     private int mapType = GoogleMap.MAP_TYPE_NORMAL;
@@ -50,9 +48,6 @@ public class MapCard extends CardBase {
     public View getView(LayoutInflater inflater){
 
         View view = inflater.inflate(R.layout.card_layout_map, null);
-
-        titleTextView = (TextView) view.findViewById(android.R.id.title);
-        titleTextView.setText(getTitle());
 
         SupportMapFragment mapFragment = ((SupportMapFragment)
                 fragmentManager.findFragmentByTag("mapFragment"));

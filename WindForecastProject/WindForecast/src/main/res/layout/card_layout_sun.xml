@@ -6,21 +6,11 @@
     <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
 
 
-        <RelativeLayout android:id="@+id/titleFrame" style="@style/card_title_frame">
-
-            <TextView android:id="@android:id/title" style="@style/card_title_large"/>
-
-            <!--suppress AndroidLintContentDescription -->
-            <ImageButton android:id="@android:id/button1" style="@style/card_popup_anchor" android:visibility="gone"/>
-
-        </RelativeLayout>
-
         <LinearLayout
             android:id="@+id/contentFrame"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/titleFrame"
             android:baselineAligned="false">
 
             <RelativeLayout
@@ -33,7 +23,7 @@
                     android:scaleType="centerInside"
                     android:id="@+id/sunRise"
                     android:src="@drawable/sun_rise"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
                     android:layout_centerHorizontal="true" />
                 <TextSwitcher
@@ -61,7 +51,7 @@
                 android:scaleType="centerInside"
                 android:id="@+id/sunSet"
                 android:src="@drawable/sun_set"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:adjustViewBounds="false"
                 android:layout_centerHorizontal="true"/>

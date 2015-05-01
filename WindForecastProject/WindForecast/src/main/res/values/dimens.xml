@@ -26,6 +26,8 @@
     <dimen name="card_inner_padding_left">10dp</dimen>
     <dimen name="card_inner_padding_right">5dp</dimen>
 
+    <dimen name="padding_none">0dp</dimen>
+
     <dimen name="card_thumbnail">56dp</dimen>
     <dimen name="card_thumbnail_margin">5dp</dimen>
     <dimen name="card_title_margin_left">5dp</dimen>

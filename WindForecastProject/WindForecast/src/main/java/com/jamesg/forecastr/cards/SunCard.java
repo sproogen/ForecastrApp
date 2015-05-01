@@ -28,8 +28,6 @@ import java.util.Calendar;
  */
 public class SunCard extends CardBase {
 
-    private TextView titleTextView;
-
     public SunCard(Context context, Spot spot, int dateTab){
         this.context = context;
         this.spot = spot;
@@ -47,9 +45,6 @@ public class SunCard extends CardBase {
         view.setTag(getTag());
 
         boolean animate = true;
-
-        titleTextView = (TextView) view.findViewById(android.R.id.title);
-        titleTextView.setText(getTitle());
 
         Calendar c = null;
         SimpleDateFormat df = new SimpleDateFormat("EEE");
@@ -122,9 +117,6 @@ public class SunCard extends CardBase {
         View view = ((Activity)context).findViewById(R.id.content_body).findViewWithTag(getTitle());
 
         boolean animate = true;
-
-        titleTextView = (TextView) view.findViewById(android.R.id.title);
-        titleTextView.setText(getTitle());
 
         Calendar c = null;
         SimpleDateFormat df = new SimpleDateFormat("EEE");

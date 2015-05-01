@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.gc.materialdesign.views.Card;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.R;
@@ -17,7 +15,6 @@ import com.jamesg.forecastr.cards.LoadingCard;
 import com.jamesg.forecastr.cards.MapCard;
 import com.jamesg.forecastr.cards.SunCard;
 import com.jamesg.forecastr.cards.SwellCard;
-import com.jamesg.forecastr.cards.TideCard;
 import com.jamesg.forecastr.cards.WeatherCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
