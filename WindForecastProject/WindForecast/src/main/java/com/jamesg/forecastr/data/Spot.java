@@ -193,9 +193,10 @@ public class Spot {
             return;
         }
 
-        for(int i=0;i<todayJsonArray.length();i++){
-            TimestampData thisInterval = new TimestampData();
-            try{
+        try{
+            for(int i=0;i<todayJsonArray.length();i++){
+                TimestampData thisInterval = new TimestampData();
+
                 JSONObject timeJson = todayJsonArray.getJSONObject(i);
 
                 thisInterval.time = (timeJson.getInt("$") / 60);
@@ -210,17 +211,18 @@ public class Spot {
 
                 thisInterval.weather = timeJson.getInt("W");
                 thisInterval.temp = timeJson.getInt("T");
-            }catch(Exception e){
-                Log.e("WINDFINDER APP", "Error with getting data from today JSON");
-                Log.e("WINDFINDER APP", e.toString());
-                return;
+
+                today.add(thisInterval);
             }
-            today.add(thisInterval);
+        }catch(Exception e){
+            Log.e("WINDFINDER APP", "Error with getting data from today JSON");
+            Log.e("WINDFINDER APP", e.toString());
         }
 
-        for(int i=0;i<tomorrowJsonArray.length();i++){
-            TimestampData thisInterval = new TimestampData();
-            try{
+        try{
+            for(int i=0;i<tomorrowJsonArray.length();i++){
+                TimestampData thisInterval = new TimestampData();
+
                 JSONObject timeJson = tomorrowJsonArray.getJSONObject(i);
 
                 thisInterval.time = (timeJson.getInt("$") / 60);
@@ -235,18 +237,19 @@ public class Spot {
 
                 thisInterval.weather = timeJson.getInt("W");
                 thisInterval.temp = timeJson.getInt("T");
-            }catch(Exception e){
-                Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
-                Log.e("WINDFINDER APP", e.toString());
-                return;
+
+                tomorrow.add(thisInterval);
             }
-            tomorrow.add(thisInterval);
+        }catch(Exception e){
+            Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
+            Log.e("WINDFINDER APP", e.toString());
         }
 
-        for(int i=0;i<sevenDayJsonArray.length();i++){
-            if(daysBehind <= i) {
-                TimestampData thisInterval = new TimestampData();
-                try {
+        try {
+            for(int i=0;i<sevenDayJsonArray.length();i++){
+                if(daysBehind <= i) {
+                    TimestampData thisInterval = new TimestampData();
+
                     JSONObject timeJson = sevenDayJsonArray.getJSONObject(i);
 
                     thisInterval.windDirection = directionToDegree(timeJson.getString("D"));
@@ -259,13 +262,13 @@ public class Spot {
 
                     thisInterval.weather = timeJson.getInt("W");
                     thisInterval.temp = timeJson.getInt("T");
-                } catch (Exception e) {
-                    Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
-                    Log.e("WINDFINDER APP", e.toString());
-                    return;
+
+                    sevenDay.add(thisInterval);
                 }
-                sevenDay.add(thisInterval);
             }
+        } catch (Exception e) {
+            Log.e("WINDFINDER APP", "Error with getting data from sevenDay JSON");
+            Log.e("WINDFINDER APP", e.toString());
         }
 
         try{
