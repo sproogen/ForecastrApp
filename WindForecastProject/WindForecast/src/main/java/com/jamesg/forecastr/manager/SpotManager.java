@@ -406,7 +406,7 @@ public class SpotManager extends SQLiteOpenHelper {
         }
 
         protected String doInBackground(List<Spot>... spotsList) {
-            List<Spot> spots = spotsList[0];
+            List<Spot> spots = new ArrayList<>(spotsList[0]);
             for(Spot s : spots){
 
                 Log.d("WINDFINDER APP", "Checking Spot - "+s.getName());

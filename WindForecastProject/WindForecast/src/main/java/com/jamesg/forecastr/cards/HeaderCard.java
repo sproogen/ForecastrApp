@@ -62,6 +62,10 @@ public class HeaderCard extends CardBase {
     }
 
     public View getView(LayoutInflater inflater){
+        return getView(inflater, true);
+    }
+
+    public View getView(LayoutInflater inflater, boolean animate){
 
         View view = inflater.inflate(R.layout.card_layout_header, null);
         view.setTag(getTag());

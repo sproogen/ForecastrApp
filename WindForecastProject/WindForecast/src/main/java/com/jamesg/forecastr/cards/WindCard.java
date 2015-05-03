@@ -58,12 +58,14 @@ public class WindCard extends CardBase {
     }
 
     public View getView(LayoutInflater inflater){
+        return getView(inflater, true);
+    }
+
+    public View getView(LayoutInflater inflater, boolean animate){
 
         View view = inflater.inflate(R.layout.card_layout_overview, null);
 
         view.setTag(getTag());
-
-        boolean animate = true;
 
         titleTextView = (TextView) view.findViewById(android.R.id.title);
         titleTextView.setText(getTitle());

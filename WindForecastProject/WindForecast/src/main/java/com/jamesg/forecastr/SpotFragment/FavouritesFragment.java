@@ -1,10 +1,15 @@
 package com.jamesg.forecastr.SpotFragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -34,6 +39,8 @@ public class FavouritesFragment extends BaseSpotFragment {
     Tracker tracker;
 
     ArrayList<CardBase> cards;
+    private FavouritesAdapter favouritesAdapter;
+    private ListView content_body;
 
     /**
      * Use this factory method to create a new instance of
@@ -50,6 +57,11 @@ public class FavouritesFragment extends BaseSpotFragment {
     }
     public FavouritesFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public int getViewID(){
+        return R.layout.fragment_favourites;
     }
 
     @Override
@@ -95,56 +107,103 @@ public class FavouritesFragment extends BaseSpotFragment {
     public void onCreateSpotsView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState, View view) {
         // Inflate the layout for this fragment
-        LinearLayout content_body = (LinearLayout) view.findViewById(R.id.content_body);
+        content_body = (ListView) view.findViewById(R.id.content_body);
 
-        for (final CardBase card : cards) {
-            if (card != null) {
-                View cardView = card.getView(inflater);
-                if(!card.isHeader()) {
-                    cardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.loadSpot(card.getTitle(), 1);
-                        }
-                    });
+        Logger.d("TOTAL SPOTS - " + cards.size());
+
+        favouritesAdapter = new FavouritesAdapter(getActivity(), cards);
+        content_body.setAdapter(favouritesAdapter);
+        content_body.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                CardBase card = cards.get(position);
+                if (!card.isHeader()) {
+                    mListener.loadSpot(card.getTitle(), 1);
                 }
-                content_body.addView(cardView);
             }
-        }
+        });
     }
 
     @Override
     public void updateDateTab(int newDateTab){
         for (CardBase card : cards) {
-            if (card != null) card.updateView(newDateTab);
+            if (card != null) card.setDateTab(newDateTab);
+        }
+        int first = content_body.getFirstVisiblePosition();
+        int last = content_body.getLastVisiblePosition();
+        for(int i = first; i <= last; i++){
+            try {
+                cards.get(i).updateView();
+            }catch(Exception e){
+                //DO Nothing - The view is not visible.
+            }
         }
     }
 
     @Override
     public void updateSpotData(){
+        int i = 0;
+        int first = content_body.getFirstVisiblePosition();
+        int last = content_body.getLastVisiblePosition();
         for (CardBase card : cards) {
-            if (card != null) card.updateView();
+            if (card != null) {
+                if(i >= first && i <= last) {
+                    try {
+                        card.updateView();
+                    }catch(Exception e){
+                        //DO Nothing - The view is not visible.
+                    }
+                }
+            }
+            i++;
         }
     }
 
     public void updateSpotData(String spot){
+        int i = 0;
+        int first = content_body.getFirstVisiblePosition();
+        int last = content_body.getLastVisiblePosition();
         for (CardBase card : cards) {
-            if (card != null && card.getTitle().equals(spot)) card.updateView();
+            if (card != null && card.getTitle().equals(spot)){
+                if(i >= first && i <= last) {
+                    try {
+                        card.updateView();
+                    }catch(Exception e){
+                        //DO Nothing - The view is not visible.
+                    }
+                }
+            }
+            i++;
         }
     }
 
     public void removeSpot(Spot spot){
-        LinearLayout content_body = (LinearLayout) getActivity().findViewById(R.id.content_body);
-
         int i = 0;
-        for (final CardBase card : cards) {
+        for (CardBase card : cards) {
             if (card != null) {
                 if(card.getTitle().equals(spot.getName())){
-                    content_body.removeViewAt(i);
                     break;
                 }
                 i++;
             }
+        }
+        cards.remove(i);
+        favouritesAdapter.notifyDataSetChanged();
+    }
+
+    public class FavouritesAdapter extends ArrayAdapter<CardBase> {
+        public FavouritesAdapter(Context context, ArrayList<CardBase> cards) {
+            super(context, 0, cards);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            CardBase card = getItem(position);
+
+            View view = card.getView(LayoutInflater.from(getContext()), false);
+
+            return view;
         }
     }
 }

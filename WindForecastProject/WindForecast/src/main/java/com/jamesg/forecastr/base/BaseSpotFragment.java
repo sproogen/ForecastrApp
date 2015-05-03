@@ -27,6 +27,8 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
 
     private SwipeRefreshLayout swipeLayout;
 
+    private int viewID = R.layout.fragment_spot;
+
     public BaseSpotFragment() {
         // Required empty public constructor
     }
@@ -37,11 +39,15 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
         super.onCreate(savedInstanceState);
     }
 
+    public int getViewID(){
+        return viewID;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_spot, container, false);
+        View view = inflater.inflate(getViewID(), container, false);
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(R.color.refresh_1,

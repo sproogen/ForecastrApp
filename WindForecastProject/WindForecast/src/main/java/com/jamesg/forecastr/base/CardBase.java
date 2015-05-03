@@ -38,6 +38,12 @@ public class CardBase {
 
     public View getView(LayoutInflater inflater){ return null; }
 
+    public View getView(LayoutInflater inflater, boolean animate){ return null; }
+
+    public void setDateTab(int newDateTab){
+        this.dateTab = newDateTab;
+    }
+
     public void updateView(int newDateTab){
         this.dateTab = newDateTab;
     }

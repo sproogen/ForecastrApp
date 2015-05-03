@@ -30,7 +30,7 @@ public class SplashScreen extends Activity {
     @Inject
     Bus bus;
 
-    private static int SPLASH_TIME_OUT = 5000;
+    private static int SPLASH_TIME_OUT = 0;
 
     private Handler handler;
 
