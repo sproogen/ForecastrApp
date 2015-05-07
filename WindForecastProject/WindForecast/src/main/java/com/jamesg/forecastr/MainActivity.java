@@ -67,8 +67,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         Logger.d("Main Activity Started");
 
         Mint.initAndStartSession(MainActivity.this, "91e59a0e");
-        ((ForecastrApplication) getApplication())
-                .getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
 
         setTitle("Favourite Spots");
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -185,11 +183,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         if(spot.getName().equals(openSpot)){
             allSpots(false);
         }
-        Mint.logEvent("Spot Removed - "+spot.getName());
+        Mint.logEvent("Favourite Removed - "+spot.getName());
         tracker.setScreenName(null);
         tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Favourites")
-                .setAction("Removed - "+spot.getName())
+                .setCategory("Favourite Removed")
+                .setAction(spot.getName())
                 .build());
     }
 
@@ -204,11 +202,11 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             spotManager.parseSpotData(newSpot.getName());
             spotManager.checkForUpdates(false);
             Toast.makeText(this, name + " added to favourites.", Toast.LENGTH_SHORT).show();
-            Mint.logEvent("Spot Added - " + name);
+            Mint.logEvent("Favourite Added - " + name);
             tracker.setScreenName(null);
             tracker.send(new HitBuilders.EventBuilder()
-                    .setCategory("Spot")
-                    .setAction("Added - "+name)
+                    .setCategory("Favourite Added")
+                    .setAction(name)
                     .build());
         }
     }
@@ -218,12 +216,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, false);
         drawerFragment.setSpot(name);
-        Mint.logEvent("Spot Viewed - "+name);
-        tracker.setScreenName(null);
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Spot")
-                .setAction("Viewed - "+name)
-                .build());
     }
 
     public void loadSearchSpot(String name, int id){
@@ -240,7 +232,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         tracker.setScreenName(null);
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Search")
-                .setAction("Searched - "+name)
+                .setAction(name)
                 .build());
     }
 

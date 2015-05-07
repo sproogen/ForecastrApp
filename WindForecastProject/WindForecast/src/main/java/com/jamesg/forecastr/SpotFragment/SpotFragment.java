@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.R;
@@ -78,6 +79,11 @@ public class SpotFragment extends BaseSpotFragment {
             spotName = getArguments().getString(SPOT_NAME);
             search = getArguments().getBoolean(SPOT_SEARCHED);
         }
+
+        // Set screen name.
+        tracker.setScreenName(spotName);
+        // Send a screen view.
+        tracker.send(new HitBuilders.AppViewBuilder().build());
 
         int dateTab = 0;
         if (this.mListener != null) {

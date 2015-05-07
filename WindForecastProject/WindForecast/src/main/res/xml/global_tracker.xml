@@ -4,6 +4,8 @@
     <string name="ga_logLevel">verbose</string>
     <string name="ga_dispatchPeriod">30</string>
 
+    <bool name="ga_autoActivityTracking">false</bool>
+
     <bool name="ga_dryRun">false</bool>
 
     <string name="com.jamesg.forecastr.MainActivity">Forecastr Activity</string>

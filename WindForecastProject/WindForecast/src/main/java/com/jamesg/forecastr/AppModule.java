@@ -54,7 +54,9 @@ public class AppModule {
     @Provides
     @Singleton
     public Tracker provideTracker() {
-        return app.getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
+        Tracker tracker = app.getTracker(ForecastrApplication.TrackerName.APP_TRACKER);
+        tracker.enableAdvertisingIdCollection(true);
+        return tracker;
     }
 
     @Provides

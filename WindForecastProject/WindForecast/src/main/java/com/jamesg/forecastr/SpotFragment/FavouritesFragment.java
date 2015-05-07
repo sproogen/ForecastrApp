@@ -69,6 +69,11 @@ public class FavouritesFragment extends BaseSpotFragment {
         ((ForecastrApplication) getActivity().getApplication()).inject(this);
         super.onCreate(savedInstanceState);
 
+        // Set screen name.
+        tracker.setScreenName("Favourites");
+        // Send a screen view.
+        tracker.send(new HitBuilders.AppViewBuilder().build());
+
         int dateTab = 0;
         if(this.mListener != null){
             dateTab = mListener.getDateTab();
