@@ -1,6 +1,7 @@
 package com.jamesg.forecastr.base;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.manager.SpotManager;
+import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
@@ -76,10 +78,24 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
         swipeLayout.setRefreshing(false);
     }
 
+    public void updateStarted(){
+        swipeLayout.setRefreshing(true);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         bus.register(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(spotManager.isUpdating()) {
+                    Logger.d("Base Fragment isUpdating");
+                    updateStarted();
+                }
+            }
+        }, 1000);
     }
 
     @Override

@@ -99,6 +99,12 @@ public class FavouritesFragment extends BaseSpotFragment {
             }catch(Exception e){
                 //DO NOTHING
             }
+        }else if(s.equals("Update Started")){
+            try {
+                updateStarted();
+            }catch(Exception e) {
+                //DO NOTHING
+            }
         }
     }
 
@@ -113,8 +119,6 @@ public class FavouritesFragment extends BaseSpotFragment {
                              Bundle savedInstanceState, View view) {
         // Inflate the layout for this fragment
         content_body = (ListView) view.findViewById(R.id.content_body);
-
-        Logger.d("TOTAL SPOTS - " + cards.size());
 
         favouritesAdapter = new FavouritesAdapter(getActivity(), cards);
         content_body.setAdapter(favouritesAdapter);

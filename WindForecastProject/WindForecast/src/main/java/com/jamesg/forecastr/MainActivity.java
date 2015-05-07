@@ -74,6 +74,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         stack = new Stack<>();
 
+        spotManager.getAllSpots(1);
+
         if (savedInstanceState != null) {
             current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
         }else{
@@ -103,20 +105,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         //deleteDatabase("spotsTable");
 
-        /*if(spotManager.getSpot("Aberavon") == null){
-            spotManager.addSpot(new Spot("Aberavon",322661));
-        }
-        if(spotManager.getSpot("Portland Harbour") == null){
-            spotManager.addSpot(new Spot("Portland Harbour",354618));
-        }
-        if(spotManager.getSpot("Westward Ho!") == null){
-            spotManager.addSpot(new Spot("Westward Ho!",354583));
-        }
-        if(spotManager.getSpot("Westbury") == null){
-            spotManager.addSpot(new Spot("Westbury",354152));
-        }*/
-
-        spotManager.checkForUpdates(false);
+        spotManager.checkForUpdates(true);
         appManager.checkForUpdates();
     }
     @Subscribe
@@ -149,7 +138,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         super.onResume();
         Mint.startSession(MainActivity.this);
         bus.register(this);
-        spotManager.checkForUpdates(false);
     }
 
     @Override
@@ -198,7 +186,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             drawerFragment.refreshSpots();
             drawerFragment.setSpot(name);
             spotManager.parseSpotData(newSpot.getName());
-            spotManager.checkForUpdates(false);
             Toast.makeText(this, name + " added to favourites.", Toast.LENGTH_SHORT).show();
             tracker.setScreenName(null);
             tracker.send(new HitBuilders.EventBuilder()

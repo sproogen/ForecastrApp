@@ -87,6 +87,15 @@ public class DrawerFragment extends BaseFragment {
         if(mListener.openSpot().equals("") && selected == 0){
             closeSpot();
         }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (spotManager.isUpdating()) {
+                    updateStarted();
+                }
+            }
+        }, 1000);
     }
 
     @Override

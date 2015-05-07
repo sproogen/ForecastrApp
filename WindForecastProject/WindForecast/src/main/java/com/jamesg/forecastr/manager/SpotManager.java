@@ -349,7 +349,6 @@ public class SpotManager extends SQLiteOpenHelper {
         @Override
         public void spotUpdated(Spot spot) {
             updateSpot(spot);
-            Logger.d("BUS POST SpotUpdatedEvent");
             bus.post(new SpotUpdatedEvent(spot.getName()));
         }
 
@@ -364,7 +363,6 @@ public class SpotManager extends SQLiteOpenHelper {
         @Override
         public void spotUpdated(Spot spot) {
             updateSpot(spot);
-            Logger.d("BUS POST SpotSearchedEvent");
             bus.post(new SpotSearchedEvent(spot));
         }
 
@@ -379,6 +377,10 @@ public class SpotManager extends SQLiteOpenHelper {
         SpotSearchDataTaskCallback callback = new SpotSearchDataTaskCallback();
         GetSpotDataTask getSpotDataTask = new GetSpotDataTask(true, callback);
         getSpotDataTask.execute(spots);
+    }
+
+    public boolean isUpdating(){
+        return updating;
     }
 
 

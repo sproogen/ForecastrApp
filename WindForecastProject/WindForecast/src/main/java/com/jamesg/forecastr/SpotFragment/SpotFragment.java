@@ -121,6 +121,12 @@ public class SpotFragment extends BaseSpotFragment {
             } catch (Exception e) {
                 //DO NOTHING
             }
+        }else if(s.equals("Update Started")){
+            try {
+                updateStarted();
+            }catch(Exception e) {
+                //DO NOTHING
+            }
         }
     }
 
