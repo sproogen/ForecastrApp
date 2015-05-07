@@ -1,5 +1,6 @@
 package com.jamesg.forecastr;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -140,7 +142,7 @@ public class DrawerFragment extends BaseFragment {
                             mListener.toggle();
                         }
                         selected = position;
-                    }else if (item.getLabel().equals("App Update Available")) {
+                    } else if (item.getLabel().equals("App Update Available")) {
                         appManager.updateCheck();
                         listView.setItemChecked(selected, true);
                     }
@@ -181,6 +183,14 @@ public class DrawerFragment extends BaseFragment {
                 }
                 if(length >= 1){
                     performSearch(s.toString(), before);
+                }
+            }
+        });
+        searchBox.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(v.getId() == R.id.searchBox && !hasFocus) {
+                    hideSoftKeyboard();
                 }
             }
         });
@@ -280,14 +290,6 @@ public class DrawerFragment extends BaseFragment {
                     Logger.e(e.toString());
                     return;
                 }
-                /*try{
-                    JSONObject rawSearchJson = new JSONObject(responseString);
-                }catch(Exception e){
-                    Log.e("WINDFINDER APP", "Error with search JSON Parse");
-                    Log.e("WINDFINDER APP", e.toString());
-                    return;
-                }*/
-
                 search_data = responseString;
 
                 threadMsg("finished");
@@ -377,6 +379,7 @@ public class DrawerFragment extends BaseFragment {
             searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+                    hideSoftKeyboard();
                     Spot item = searchAdapter.getItem(position);
                     searchList.setItemChecked(position, true);
                     listView.setItemChecked(selected, false);
@@ -399,6 +402,17 @@ public class DrawerFragment extends BaseFragment {
             clearButton.setVisibility(View.GONE);
             searchProgress.setVisibility(View.GONE);
             searchBox.setText("");
+            hideSoftKeyboard();
+        }
+    }
+
+    public void hideSoftKeyboard ()
+    {
+        try {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchBox.getApplicationWindowToken(), 0);
+        }catch(Exception e){
+            //Do Nothing
         }
     }
 
