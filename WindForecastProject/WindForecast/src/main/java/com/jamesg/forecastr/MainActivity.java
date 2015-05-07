@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
 
-        stack = new Stack<BaseFragment>();
+        stack = new Stack<>();
 
         if (savedInstanceState != null) {
             current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
@@ -90,15 +90,14 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         menu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
             @Override
             public void onClosed() {
-                //drawerFragment.clearSearch();
-                //getActionBar().setDisplayHomeAsUpEnabled(false);
+                //Do Nothing!
             }
         });
 
         menu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
             @Override
             public void onOpened() {
-               // getActionBar().setDisplayHomeAsUpEnabled(true);
+                //Do Nothing!
             }
         });
 
@@ -183,7 +182,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         if(spot.getName().equals(openSpot)){
             allSpots(false);
         }
-        Mint.logEvent("Favourite Removed - "+spot.getName());
         tracker.setScreenName(null);
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Favourite Removed")
@@ -202,7 +200,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             spotManager.parseSpotData(newSpot.getName());
             spotManager.checkForUpdates(false);
             Toast.makeText(this, name + " added to favourites.", Toast.LENGTH_SHORT).show();
-            Mint.logEvent("Favourite Added - " + name);
             tracker.setScreenName(null);
             tracker.send(new HitBuilders.EventBuilder()
                     .setCategory("Favourite Added")
@@ -228,7 +225,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, search);
         drawerFragment.setSpot(name);
-        Mint.logEvent("Spot Searched - "+name);
         tracker.setScreenName(null);
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Search")
