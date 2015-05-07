@@ -116,7 +116,7 @@ public class SpotWrapperFragment extends BaseFragment {
                 vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
                     public void onGlobalLayout() {
-                        Log.d("WINDFINDER APP", underline.getWidth() + " Underline Width - Display 0");
+                        Logger.d(underline.getWidth() + " Underline Width - Display 0");
                         TranslateAnimation moveTo = new TranslateAnimation(0, underline.getWidth(), 0, 0);
                         moveTo.setDuration(0);
                         moveTo.setFillAfter(true);
@@ -125,7 +125,7 @@ public class SpotWrapperFragment extends BaseFragment {
                     }
                 });
             }catch(NullPointerException e){
-                Log.e("WINDFINDER APP",e.toString());
+                Logger.e(e.toString());
             }
         }else{
             sevenDay.setClickable(false);
@@ -134,7 +134,7 @@ public class SpotWrapperFragment extends BaseFragment {
                 vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
                     public void onGlobalLayout() {
-                        Log.d("WINDFINDER APP", underline.getWidth()+" Underline Width - Display 0");
+                        Logger.d(underline.getWidth()+" Underline Width - Display 0");
                         TranslateAnimation moveTo = new TranslateAnimation(0, underline.getWidth()*2, 0, 0);
                         moveTo.setDuration(0);
                         moveTo.setFillAfter(true);
@@ -143,7 +143,7 @@ public class SpotWrapperFragment extends BaseFragment {
                     }
                 });
             }catch(NullPointerException e){
-                Log.e("WINDFINDER APP",e.toString());
+                Logger.e(e.toString());
             }
         }
 

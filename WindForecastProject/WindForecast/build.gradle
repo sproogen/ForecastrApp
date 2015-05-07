@@ -27,7 +27,20 @@ android {
         versionName "0.2.8"
     }
     buildTypes {
+        def BOOLEAN = "boolean"
+        def TRUE = "true"
+        def FALSE = "false"
+        def LOG_ENABLED = "LOG_ENABLED"
+        def SPLUNK_ENABLED = "SPLUNK_ENABLED"
+
+        debug {
+            buildConfigField BOOLEAN, LOG_ENABLED, TRUE
+            buildConfigField BOOLEAN, SPLUNK_ENABLED, FALSE
+            debuggable true
+        }
         release {
+            buildConfigField BOOLEAN, LOG_ENABLED, FALSE
+            buildConfigField BOOLEAN, SPLUNK_ENABLED, TRUE
             minifyEnabled true
         }
     }

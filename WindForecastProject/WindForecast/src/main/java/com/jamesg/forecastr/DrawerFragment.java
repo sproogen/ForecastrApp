@@ -25,6 +25,7 @@ import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.manager.AppManager;
 import com.jamesg.forecastr.manager.SpotManager;
+import com.jamesg.forecastr.utils.Logger;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -242,10 +243,10 @@ public class DrawerFragment extends BaseFragment {
         Thread searchThread = new Thread(new Runnable() {
 
             public void run() {
-                Log.d("WINDFINDER APP", "Search - " + searchTerm);
+                Logger.d("Search - " + searchTerm);
                 String request = getString(R.string.base_url)+search_url;
                 request += "?search=" + searchTerm;
-                Log.d("WINDFINDER APP", request);
+                Logger.d(request);
 
                 HttpClient httpclient = new DefaultHttpClient();
                 HttpResponse response;
@@ -264,10 +265,10 @@ public class DrawerFragment extends BaseFragment {
                         throw new IOException(statusLine.getReasonPhrase());
                     }
                 } catch (ClientProtocolException e) {
-                    Log.e("WINDFINDER APP", e.toString());
+                    Logger.e(e.toString());
                     return;
                 } catch (IOException e) {
-                    Log.e("WINDFINDER APP", e.toString());
+                    Logger.e(e.toString());
                     return;
                 }
                 /*try{
@@ -295,7 +296,7 @@ public class DrawerFragment extends BaseFragment {
 
             private final Handler handler = new Handler() {
                 public void handleMessage(Message msg) {
-                    Log.d("WINDFINDER APP", "Search Successful");
+                    Logger.d("Search Successful");
                     updateSearchResults("");
                     searching = false;
                 }

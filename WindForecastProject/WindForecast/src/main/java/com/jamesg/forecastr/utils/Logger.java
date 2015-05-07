@@ -2,6 +2,8 @@ package com.jamesg.forecastr.utils;
 
 import android.util.Log;
 
+import com.jamesg.forecastr.BuildConfig;
+
 /**
  * Android Log wrapper class that can use {@link String#format(String, Object...)} in logging message
  */
@@ -15,7 +17,10 @@ public class Logger {
      * @return
      */
     public static int d(String msg) {
-        return Log.d(TAG, msg);
+        if (BuildConfig.LOG_ENABLED) {
+            Log.d(TAG, msg);
+        }
+        return 1;
     }
 
     /**
@@ -24,6 +29,9 @@ public class Logger {
      * @return
      */
     public static int e(String msg) {
-        return Log.e(TAG, msg);
+        if (BuildConfig.LOG_ENABLED) {
+            Log.e(TAG, msg);
+        }
+        return 1;
     }
 }

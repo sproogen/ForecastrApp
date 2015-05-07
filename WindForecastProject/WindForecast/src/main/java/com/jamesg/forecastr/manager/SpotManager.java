@@ -409,7 +409,7 @@ public class SpotManager extends SQLiteOpenHelper {
             List<Spot> spots = new ArrayList<>(spotsList[0]);
             for(Spot s : spots){
 
-                Log.d("WINDFINDER APP", "Checking Spot - "+s.getName());
+                Logger.d("Checking Spot - "+s.getName());
                 if(s.getRawData() == null || (System.currentTimeMillis()-s.getUpdateTime()) > 3600000 || forceUpdate){ //3600000
                     Spot updated = get_data_for_location(s);
                     if(updated != null) {
@@ -439,7 +439,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         protected void onProgressUpdate(Spot... spot) {
             if(spot[0] != null) {
-                Log.d("WINDFINDER APP", "Updated Spot - " + spot[0].getName());
+                Logger.d("Updated Spot - " + spot[0].getName());
                 callback.spotUpdated(spot[0]);
             }
         }
@@ -463,7 +463,7 @@ public class SpotManager extends SQLiteOpenHelper {
 
         String request = context.getString(R.string.base_url)+function_url;
         request += "?id=" + current.getId();
-        Log.d("WINDFINDER APP", request);
+        Logger.d(request);
 
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse response;

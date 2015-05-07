@@ -2,6 +2,7 @@ package com.jamesg.forecastr.data;
 
 import android.util.Log;
 
+import com.jamesg.forecastr.utils.Logger;
 import com.jamesg.forecastr.utils.Utils;
 
 import java.text.DateFormat;
@@ -188,8 +189,8 @@ public class Spot {
             JSONObject sevenDayJson = spotJsonArray.getJSONObject("sevenDay");
             sevenDayJsonArray = sevenDayJson.getJSONArray("Rep");
         }catch(Exception e){
-            Log.e("WINDFINDER APP", "Error with initial JSON Parse");
-            Log.e("WINDFINDER APP", e.toString());
+            Logger.e("Error with initial JSON Parse");
+            Logger.e(e.toString());
             return;
         }
 
@@ -215,8 +216,8 @@ public class Spot {
                 today.add(thisInterval);
             }
         }catch(Exception e){
-            Log.e("WINDFINDER APP", "Error with getting data from today JSON");
-            Log.e("WINDFINDER APP", e.toString());
+            Logger.e("Error with getting data from today JSON");
+            Logger.e(e.toString());
         }
 
         try{
@@ -241,8 +242,8 @@ public class Spot {
                 tomorrow.add(thisInterval);
             }
         }catch(Exception e){
-            Log.e("WINDFINDER APP", "Error with getting data from tomorrow JSON");
-            Log.e("WINDFINDER APP", e.toString());
+            Logger.e("Error with getting data from tomorrow JSON");
+            Logger.e(e.toString());
         }
 
         try {
@@ -267,8 +268,8 @@ public class Spot {
                 }
             }
         } catch (Exception e) {
-            Log.e("WINDFINDER APP", "Error with getting data from sevenDay JSON");
-            Log.e("WINDFINDER APP", e.toString());
+            Logger.e("Error with getting data from sevenDay JSON");
+            Logger.e(e.toString());
         }
 
         try{
