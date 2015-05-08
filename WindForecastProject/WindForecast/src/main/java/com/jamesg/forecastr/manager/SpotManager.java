@@ -158,10 +158,8 @@ public class SpotManager extends SQLiteOpenHelper {
             cursor.close();
             return spot;
         }
-        try{
+        if (cursor != null){
             cursor.close();
-        }catch(NullPointerException e){
-            //Do Nothing
         }
         return null;
     }
@@ -180,15 +178,13 @@ public class SpotManager extends SQLiteOpenHelper {
             //Do Nothing
         }
         if (cursor != null && cursor.moveToFirst()) {
-
             cursor.close();
             return true;
         }
-        try{
+        if (cursor != null){
             cursor.close();
-        }catch(NullPointerException e){
-            //Do Nothing
         }
+
         return false;
     }
 
@@ -261,6 +257,9 @@ public class SpotManager extends SQLiteOpenHelper {
                 }
             } while (cursor.moveToNext());
         }
+        if (cursor != null) {
+            cursor.close();
+        }
         if(parse == 1){
             parseSpotsData();
         }
@@ -328,16 +327,20 @@ public class SpotManager extends SQLiteOpenHelper {
         Cursor cursor = null;
         try{
             cursor = db.rawQuery(countQuery, null);
-            cursor.close();
         }catch(NullPointerException e){
             //Do Nothing
         }
         // return count
+        int count = 0;
         try{
-            return cursor != null ? cursor.getCount() : 0;
-        }catch(NullPointerException e){
-            return 0;
+            if(cursor != null) {
+                count = cursor.getCount();
+                cursor.close();
+            }
+        }catch(Exception e){
+            //Do Nothing!
         }
+        return count;
     }
 
     public interface SpotDataTaskCallback {

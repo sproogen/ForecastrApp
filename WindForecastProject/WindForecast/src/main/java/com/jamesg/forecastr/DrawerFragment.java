@@ -151,6 +151,7 @@ public class DrawerFragment extends BaseFragment {
                     selected = position;
                     if (getActivity() instanceof MainActivity) {
                         mListener.loadSpot(item.getName(), 1);
+                        //mListener.toggle();
                     }
                 }
             }

@@ -19,6 +19,7 @@ import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.base.CardBase;
 import com.jamesg.forecastr.cards.HeaderCard;
+import com.jamesg.forecastr.cards.InfoCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.data.SpotUpdatedEvent;
@@ -83,10 +84,14 @@ public class FavouritesFragment extends BaseSpotFragment {
         getActivity().setTitle("Favourite Spots");
         cards.add(new HeaderCard(getActivity(), "Favourite Spots", dateTab));
 
-        for (Spot s : spotManager.getAllSpots(0)) {
-            if(s != null) {
-                cards.add( new WindCard(getActivity(), s, dateTab, true));
+        if(spotManager.getSpotsCount() > 0) {
+            for (Spot s : spotManager.getAllSpots(0)) {
+                if (s != null) {
+                    cards.add(new WindCard(getActivity(), s, dateTab, true));
+                }
             }
+        }else{
+            cards.add(new InfoCard(getActivity(), dateTab));
         }
     }
 
@@ -197,6 +202,9 @@ public class FavouritesFragment extends BaseSpotFragment {
             }
         }
         cards.remove(i);
+        if(spotManager.getSpotsCount() == 0) {
+            cards.add(new InfoCard(getActivity(), 0));
+        }
         favouritesAdapter.notifyDataSetChanged();
     }
 
@@ -212,7 +220,13 @@ public class FavouritesFragment extends BaseSpotFragment {
 
             View view = card.getView(LayoutInflater.from(getContext()), false);
 
-            return view;
+            if(view != null) {
+                return view;
+            }
+
+            return new View(getContext());
+
+            //return convertView;
         }
     }
 }

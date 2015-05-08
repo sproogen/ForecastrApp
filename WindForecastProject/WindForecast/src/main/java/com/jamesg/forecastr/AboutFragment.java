@@ -2,6 +2,7 @@ package com.jamesg.forecastr;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,13 +65,25 @@ public class AboutFragment extends BaseFragment {
                 lastUpdated = s.getUpdateTime();
             }
         }
+        TextView updatedLabel = (TextView) rootView.findViewById(R.id.updatedLabel);
+        TextView updatedText = (TextView) rootView.findViewById(R.id.updatedText);
         if(lastUpdated != 0) {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date updatedDate = new Date(lastUpdated);
-
-            TextView updatedText = (TextView) rootView.findViewById(R.id.updatedText);
             updatedText.setText(df.format(updatedDate));
+
+            updatedLabel.setVisibility(View.VISIBLE);
+            updatedText.setVisibility(View.VISIBLE);
+        }else{
+            updatedLabel.setVisibility(View.GONE);
+            updatedText.setVisibility(View.GONE);
         }
+
+        TextView website = (TextView) rootView.findViewById(R.id.website);
+        website.setMovementMethod(LinkMovementMethod.getInstance());
+
+        TextView twitter = (TextView) rootView.findViewById(R.id.twitter);
+        twitter.setMovementMethod(LinkMovementMethod.getInstance());
 
         return rootView;
     }

@@ -51,7 +51,7 @@
                 <View
                     android:id="@+id/lineTop"
                     android:layout_width="fill_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0dp"
                     android:background="@color/light_grey"
                     android:layout_below="@id/valueText"/>
 
@@ -80,7 +80,7 @@
                 <View
                     android:id="@+id/lineMiddle"
                     android:layout_width="fill_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0dp"
                     android:background="@color/light_grey"
                     android:layout_below="@id/gustImage"/>
 
@@ -110,7 +110,7 @@
                 <View
                     android:id="@+id/lineBottom"
                     android:layout_width="fill_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0dp"
                     android:background="@color/light_grey"
                     android:layout_below="@id/windImage"/>
 

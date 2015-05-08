@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:http="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/background">
@@ -76,6 +77,56 @@
             android:textSize="16sp"
             android:layout_toRightOf="@+id/updatedLabel"
             android:layout_toEndOf="@+id/updatedLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Created By : "
+            android:id="@+id/createdLabel"
+            android:layout_below="@+id/updatedLabel"
+            android:layout_toLeftOf="@+id/frameLayout"
+            android:layout_toStartOf="@+id/frameLayout"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="James Grant"
+            android:id="@+id/createdText"
+            android:layout_below="@+id/updatedLabel"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:layout_toRightOf="@+id/updatedLabel"
+            android:layout_toEndOf="@+id/updatedLabel" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/websiteLink"
+            android:id="@+id/website"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/createdLabel"
+            android:layout_toRightOf="@+id/updatedLabel"
+            android:layout_toEndOf="@+id/updatedLabel"
+            android:textColorLink="#4ca435"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/twitterLink"
+            android:id="@+id/twitter"
+            android:textSize="16sp"
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/website"
+            android:layout_toRightOf="@+id/updatedLabel"
+            android:layout_toEndOf="@+id/updatedLabel"
+            android:textColorLink="#4ca435"/>
 
         <FrameLayout
             android:layout_width="wrap_content"

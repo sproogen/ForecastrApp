@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+
+
+        <LinearLayout
+            android:id="@+id/contentFrame"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="You don't have any favourite spots yet. Use the search box in the left hand navigation drawer to find spots and then add them to your favourites so you can quicky find them again."
+                    android:id="@+id/textView2"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="center"
+                    android:padding="@dimen/card_header_button_margin_left" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
