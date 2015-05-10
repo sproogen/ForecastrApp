@@ -314,7 +314,8 @@ public class Spot {
             tideJsonArray = spotJsonArray.getJSONArray(TIDE_ID);
             for(int i=0;i<tideJsonArray.length();i++){
                 JSONObject tideJson = tideJsonArray.getJSONObject(i);
-                Calendar todayCalendar = Calendar.getInstance(); todayCalendar.setTimeInMillis((tideJson.getLong("timestamp")*1000) - 3600000);
+                String dateStamp = tideJson.getString("date");
+                Calendar todayCalendar = Utils.calendarFromDateStampTide(dateStamp);
                 Calendar now = Calendar.getInstance();
                 boolean sameDay = Utils.calendarsAreSameDay(todayCalendar, now);
                 if(sameDay){

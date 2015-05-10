@@ -24,6 +24,15 @@ public class Utils {
         return c;
     }
 
+    public static Calendar calendarFromDateStampTide(String timestamp) {
+        Date d = stringToDate(timestamp, "dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        //I don't think we need this next line as I now think this is an error with the server not updating the time stamps correctly.
+        //c.add(Calendar.DAY_OF_MONTH, -1);
+        return c;
+    }
+
     public static boolean calendarsAreSameDay(Calendar c1, Calendar c2) {
         return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
                 c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
