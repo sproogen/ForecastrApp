@@ -40,6 +40,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -452,6 +453,7 @@ public class DrawerFragment extends BaseFragment {
 
         private String openSpot = "";
         private Boolean updating = false;
+        private Boolean editing = false;
 
 		public DrawMenuAdapter(Context context, List data) {
 			super(context, 0, data);
@@ -515,25 +517,47 @@ public class DrawerFragment extends BaseFragment {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			if (getItem(position).getType() == 1) {
+            Spot item = getItem(position);
+
+			if (item.getType() == 1) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_header, null);
                 TextView title = (TextView) convertView.findViewById(R.id.header);
-                title.setText(getItem(position).getLabel());
-            }else if(getItem(position).getType() == 2){
+                title.setText(item.getLabel());
+                if(item.getLabel().equals("Favourites")){
+                    TextView edit = (TextView) convertView.findViewById(R.id.edit);
+                    edit.setVisibility(View.VISIBLE);
+                    if(editing){
+                        edit.setText("Cancel");
+                    }else{
+                        edit.setText("Edit Favourites");
+                    }
+                    edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TextView view = (TextView) v;
+                            if(!editing){
+                                editing = true;
+                            }else{
+                                editing = false;
+                            }
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+            }else if(item.getType() == 2){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, null);
                 TextView title = (TextView) convertView.findViewById(R.id.row_title);
-                title.setText(getItem(position).getLabel());
-                if(getItem(position).getLabel().equals("Check for updates") && updating) {
+                title.setText(item.getLabel());
+                if(item.getLabel().equals("Check for updates") && updating) {
                     ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) convertView.findViewById(R.id.updatingStatus);
                     updatingStatus.setVisibility(View.VISIBLE);
-                }
-                if(getItem(position).getLabel().equals("App Update Available")){
+                }else if(item.getLabel().equals("App Update Available")){
                     convertView.setBackgroundResource(R.drawable.fragment_listselector_update);
                 }
             }else{
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_spot, null);
                 TextView title = (TextView) convertView.findViewById(R.id.row_title);
-                final Spot s = getItem(position);
+                final Spot s = item;
                 title.setText(s.getName());
                 ImageView delete = (ImageView)convertView.findViewById(R.id.deleteButton);
                 delete.setOnClickListener(new View.OnClickListener() {
@@ -554,6 +578,11 @@ public class DrawerFragment extends BaseFragment {
                                 .show();
                     }
                 });
+                if(editing){
+                    delete.setVisibility(View.VISIBLE);
+                }else{
+                    delete.setVisibility(View.GONE);
+                }
             }
 
 			return convertView;
@@ -562,12 +591,14 @@ public class DrawerFragment extends BaseFragment {
         @Override
         public boolean isEnabled(int position) {
 
-            if (getItem(position).getType() == 1) {
+            Spot item = getItem(position);
+
+            if (item.getType() == 1) {
                 return false;
             }else if(selected == position){
                 return false;
-            }else if(getItem(position).getType() == 2){
-                if(getItem(position).getLabel().equals("App Settings")){
+            }else if(item.getType() == 2){
+                if(item.getLabel().equals("App Settings")){
                     return false;
                 }
             }

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:padding="5dp"
         android:paddingLeft="20dp"
         android:layout_alignParentBottom="true"
@@ -17,6 +17,23 @@
         android:singleLine="true"
         android:textColor="#6b6e73"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="14sp"
+        android:padding="5dp"
+        android:paddingRight="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="Edit Favourites"
+        android:singleLine="true"
+        android:textColor="#6b6e73"
+        android:textStyle="bold"
+        android:visibility="gone"/>
 
     <!--  divider -->
     <View
