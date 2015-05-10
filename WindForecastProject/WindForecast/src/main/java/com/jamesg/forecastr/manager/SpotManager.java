@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,10 +52,10 @@ public class SpotManager extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "spotsTable";
 
-    // Contacts table name
+    // Spots table name
     private static final String TABLE_SPOTS = "spots";
 
-    // Contacts Table Columns names
+    // Spots Table Columns names
     private static final String KEY_NAME = "name";
     private static final String KEY_ID = "id";
     private static final String KEY_DATA = "data";
@@ -100,7 +102,6 @@ public class SpotManager extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Adding new contact
     public void addSpot(Spot spot) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -188,12 +189,10 @@ public class SpotManager extends SQLiteOpenHelper {
         return false;
     }
 
-    // Getting single contact
     public Spot getSpot(int i) {
         return all_spots.get(i);
     }
 
-    // Getting single contact
     public Boolean loadedSpot(String name) {
         for(int i=0; i<all_spots.size();i++){
             Spot s = all_spots.get(i);
@@ -207,7 +206,6 @@ public class SpotManager extends SQLiteOpenHelper {
         return false;
     }
 
-    // Getting single contact
     public void parseSpotsData() {
         for(int i=0; i<all_spots.size();i++){
             Spot s = all_spots.get(i);
@@ -217,7 +215,6 @@ public class SpotManager extends SQLiteOpenHelper {
         }
     }
 
-    // Getting single contact
     public void parseSpotData(String name) {
         for(int i=0; i<all_spots.size();i++){
             Spot s = all_spots.get(i);
@@ -229,11 +226,10 @@ public class SpotManager extends SQLiteOpenHelper {
         }
     }
 
-    // Getting All Contacts
     public List<Spot> getAllSpots(int parse) {
         Logger.d("getAllSpots");
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_SPOTS;
+        String selectQuery = "SELECT  * FROM " + TABLE_SPOTS + " ORDER BY " + KEY_NAME + " ASC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = null;
@@ -264,10 +260,20 @@ public class SpotManager extends SQLiteOpenHelper {
             parseSpotsData();
         }
         // return contact list
+        orderSpots();
         return all_spots;
     }
 
-    // Updating single contact
+    public void orderSpots(){
+        Collections.sort(all_spots, new Comparator<Spot>() {
+            @Override
+            public int compare(Spot spot1, Spot spot2) {
+
+                return spot1.getName().compareTo(spot2.getName());
+            }
+        });
+    }
+
     public int updateSpot(Spot spot) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -298,7 +304,6 @@ public class SpotManager extends SQLiteOpenHelper {
         return result;
     }
 
-    // Deleting single contact
     public void deleteSpot(Spot spot) {
         SQLiteDatabase db = this.getWritableDatabase();
         try{
@@ -319,8 +324,6 @@ public class SpotManager extends SQLiteOpenHelper {
 
     }
 
-
-    // Getting contacts Count
     public int getSpotsCount() {
         String countQuery = "SELECT  * FROM " + TABLE_SPOTS;
         SQLiteDatabase db = this.getReadableDatabase();
