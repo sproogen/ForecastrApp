@@ -361,6 +361,7 @@ public class SpotManager extends SQLiteOpenHelper {
         @Override
         public void updateFinished() {
             updating = false;
+            Logger.d("Bus Post Update Finished");
             bus.post("Update Finished");
         }
     }
@@ -453,7 +454,7 @@ public class SpotManager extends SQLiteOpenHelper {
         }
 
         protected void onPostExecute(String result) {
-            //Log.d("WINDFINDER APP", "Updated Finished ");
+            Logger.d("ASYNC Updated Finished ");
             callback.updateFinished();
         }
     }

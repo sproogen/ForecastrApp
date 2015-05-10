@@ -226,7 +226,7 @@ public class DrawerFragment extends BaseFragment {
 
     @Subscribe
     public void getMessage(String s) {
-        //Logger.d("BUS MESSAGE drawerFragment - "+s);
+        Logger.d("BUS MESSAGE drawerFragment - "+s);
         if(s.equals("Update Started")){
             try {
                 updateStarted();
@@ -534,12 +534,7 @@ public class DrawerFragment extends BaseFragment {
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            TextView view = (TextView) v;
-                            if(!editing){
-                                editing = true;
-                            }else{
-                                editing = false;
-                            }
+                            editing = !editing;
                             notifyDataSetChanged();
                         }
                     });
@@ -548,6 +543,7 @@ public class DrawerFragment extends BaseFragment {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, null);
                 TextView title = (TextView) convertView.findViewById(R.id.row_title);
                 title.setText(item.getLabel());
+                updating = spotManager.isUpdating();
                 if(item.getLabel().equals("Check for updates") && updating) {
                     ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) convertView.findViewById(R.id.updatingStatus);
                     updatingStatus.setVisibility(View.VISIBLE);
