@@ -16,6 +16,11 @@ import java.util.Calendar;
 
 public class Spot {
 
+    private static String TODAY_ID = "today";
+    private static String TOMORROW_ID = "tomorrow";
+    private static String DAYAFTER_ID = "dayAfter";
+    private static String SEVEN_DAY_ID = "sevenDay";
+
     private String rawData;
     private String name;
     private int id;
@@ -164,29 +169,31 @@ public class Spot {
         int daysBehind = 0;
         try{
             spotJsonArray = new JSONObject(rawData);
-            JSONObject todayJson = spotJsonArray.getJSONObject("today");
+            JSONObject todayJson = spotJsonArray.getJSONObject(TODAY_ID);
             String dateStamp = todayJson.getString("value");
             Calendar todayCalendar = Utils.calendarFromDateStamp(dateStamp);
             Calendar now = Calendar.getInstance();
             boolean sameDay = Utils.calendarsAreSameDay(todayCalendar, now);
             if(sameDay) {
                 todayJsonArray = todayJson.getJSONArray("Rep");
-                JSONObject tomorrowJson = spotJsonArray.getJSONObject("tomorrow");
+                JSONObject tomorrowJson = spotJsonArray.getJSONObject(TOMORROW_ID);
                 tomorrowJsonArray = tomorrowJson.getJSONArray("Rep");
             }else{
                 Calendar yesterday = Calendar.getInstance();yesterday.add(Calendar.DAY_OF_MONTH, -1);
                 boolean sameYesterday = Utils.calendarsAreSameDay(todayCalendar, yesterday);
                 if(sameYesterday){
-                    JSONObject tomorrowJson = spotJsonArray.getJSONObject("tomorrow");
+                    JSONObject tomorrowJson = spotJsonArray.getJSONObject(TOMORROW_ID);
                     todayJsonArray = tomorrowJson.getJSONArray("Rep");
+                    JSONObject dayAfterJson = spotJsonArray.getJSONObject(DAYAFTER_ID);
+                    tomorrowJsonArray = dayAfterJson.getJSONArray("Rep");
                 }else{
                     todayJsonArray = new JSONArray();
+                    tomorrowJsonArray = new JSONArray();
                 }
                 now = Utils.removeTimeFromCalendar(now);
                 daysBehind = Utils.calendarsGetDiffInDays(todayCalendar,now);
-                tomorrowJsonArray = new JSONArray();
             }
-            JSONObject sevenDayJson = spotJsonArray.getJSONObject("sevenDay");
+            JSONObject sevenDayJson = spotJsonArray.getJSONObject(SEVEN_DAY_ID);
             sevenDayJsonArray = sevenDayJson.getJSONArray("Rep");
         }catch(Exception e){
             Logger.e("Error with initial JSON Parse");
