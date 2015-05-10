@@ -17,24 +17,157 @@
 
         <LinearLayout
             android:id="@+id/contentFrame"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@id/titleFrame"
             android:baselineAligned="false">
 
-            <org.eazegraph.lib.charts.ValueLineChart
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/tideChart"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:egUseCubic="true"
-                app:egUseOverlapFill="true"
-                app:egCurveSmoothness="0.2"
-                app:egIndicatorLineColor="#FE6DA8"
-                app:egLegendHeight="40dp"
-                app:egShowStandardValue="false"/>
+            <LinearLayout
+                android:id="@+id/row1"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/row1_image"
+                    android:src="@drawable/tide_high" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row1_time"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row1_height"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row2"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/row2_image"
+                    android:src="@drawable/tide_high" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row2_time"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row2_height"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/row3"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/row3_image"
+                    android:src="@drawable/tide_high" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row3_time"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row3_height"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/row4"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/row4_image"
+                    android:src="@drawable/tide_high" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row4_time"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+
+                <TextSwitcher
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:textColorPrimary"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:id="@+id/row4_height"
+                    android:visibility="visible"
+                    android:paddingLeft="20dp" />
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

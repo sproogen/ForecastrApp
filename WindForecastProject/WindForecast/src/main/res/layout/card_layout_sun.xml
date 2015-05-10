@@ -17,15 +17,44 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerInside"
+                        android:id="@+id/sunRise"
+                        android:src="@drawable/sun_rise"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_centerHorizontal="true" />
+                    <TextSwitcher
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="?android:textColorPrimary"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-light"
+                        android:text=""
+                        android:id="@+id/sunRiseText"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/sunRise"
+                        android:visibility="visible"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerInside"
-                    android:id="@+id/sunRise"
-                    android:src="@drawable/sun_rise"
+                    android:id="@+id/sunSet"
+                    android:src="@drawable/sun_set"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
-                    android:layout_centerHorizontal="true" />
+                    android:adjustViewBounds="false"
+                    android:layout_centerHorizontal="true"/>
                 <TextSwitcher
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -34,39 +63,10 @@
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-light"
                     android:text=""
-                    android:id="@+id/sunRiseText"
+                    android:id="@+id/sunSetText"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/sunRise"
+                    android:layout_below="@id/sunSet"
                     android:visibility="visible"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerInside"
-                android:id="@+id/sunSet"
-                android:src="@drawable/sun_set"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
-                android:adjustViewBounds="false"
-                android:layout_centerHorizontal="true"/>
-            <TextSwitcher
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:textColorPrimary"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-light"
-                android:text=""
-                android:id="@+id/sunSetText"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/sunSet"
-                android:visibility="visible"/>
             </RelativeLayout>
 
         </LinearLayout>

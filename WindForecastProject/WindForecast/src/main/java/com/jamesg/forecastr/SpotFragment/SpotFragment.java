@@ -16,6 +16,7 @@ import com.jamesg.forecastr.cards.LoadingCard;
 import com.jamesg.forecastr.cards.MapCard;
 import com.jamesg.forecastr.cards.SunCard;
 import com.jamesg.forecastr.cards.SwellCard;
+import com.jamesg.forecastr.cards.TideCard;
 import com.jamesg.forecastr.cards.WeatherCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;

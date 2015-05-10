@@ -97,10 +97,6 @@ public class SunCard extends CardBase {
                 }
             });
         }
-
-        sunRiseText.setInAnimation(AnimationUtils.loadAnimation(context,
-                R.anim.fade_in));
-        sunRiseText.setOutAnimation(context, R.anim.fade_out);
         sunSetText.setInAnimation(AnimationUtils.loadAnimation(context,
                 R.anim.fade_in));
         sunSetText.setOutAnimation(context, R.anim.fade_out);
@@ -171,10 +167,6 @@ public class SunCard extends CardBase {
                 }
             });
         }
-
-        sunRiseText.setInAnimation(AnimationUtils.loadAnimation(context,
-                R.anim.fade_in));
-        sunRiseText.setOutAnimation(context, R.anim.fade_out);
         sunSetText.setInAnimation(AnimationUtils.loadAnimation(context,
                 R.anim.fade_in));
         sunSetText.setOutAnimation(context, R.anim.fade_out);

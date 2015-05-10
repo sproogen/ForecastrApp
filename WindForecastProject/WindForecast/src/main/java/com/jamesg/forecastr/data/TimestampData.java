@@ -16,5 +16,9 @@ public class TimestampData {
     public int weather;
     public int temp;
 
+    public String tideHL;
+    public String tideTime;
+    public String tideValue;
+
     public TimestampData(){}
 }

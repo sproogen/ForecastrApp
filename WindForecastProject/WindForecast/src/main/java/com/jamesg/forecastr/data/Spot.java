@@ -20,6 +20,7 @@ public class Spot {
     private static String TOMORROW_ID = "tomorrow";
     private static String DAYAFTER_ID = "dayAfter";
     private static String SEVEN_DAY_ID = "sevenDay";
+    private static String TIDE_ID = "tide";
 
     private String rawData;
     private String name;
@@ -37,6 +38,9 @@ public class Spot {
     private ArrayList<TimestampData> today = new ArrayList<TimestampData>();
     private ArrayList<TimestampData> tomorrow = new ArrayList<TimestampData>();
     private ArrayList<TimestampData> sevenDay = new ArrayList<TimestampData>();
+
+    private ArrayList<TimestampData> tideToday = new ArrayList<TimestampData>();
+    private ArrayList<TimestampData> tideTomorrow = new ArrayList<TimestampData>();
 
     public Spot(String header, String type){
         this.label = header;
@@ -301,6 +305,48 @@ public class Spot {
             sunriseSunsetToday = null;
             sunriseSunsetTomorrow = null;
         }
+
+        tideToday = new ArrayList<TimestampData>();
+        tideTomorrow = new ArrayList<TimestampData>();
+
+        JSONArray tideJsonArray = null;
+        try{
+            tideJsonArray = spotJsonArray.getJSONArray(TIDE_ID);
+            for(int i=0;i<tideJsonArray.length();i++){
+                JSONObject tideJson = tideJsonArray.getJSONObject(i);
+                Calendar todayCalendar = Calendar.getInstance(); todayCalendar.setTimeInMillis((tideJson.getLong("timestamp")*1000) - 3600000);
+                Calendar now = Calendar.getInstance();
+                boolean sameDay = Utils.calendarsAreSameDay(todayCalendar, now);
+                if(sameDay){
+                    TimestampData thisInterval = new TimestampData();
+
+                    thisInterval.time = tideJson.getInt("timestamp");
+
+                    thisInterval.tideHL = tideJson.getString("HL");
+                    thisInterval.tideTime = tideJson.getString("time");
+                    thisInterval.tideValue = tideJson.getString("value");
+
+                    tideToday.add(thisInterval);
+                }else{
+                    Calendar tomorrow = Calendar.getInstance();tomorrow.add(Calendar.DAY_OF_MONTH, +1);
+                    boolean sameTomorrow = Utils.calendarsAreSameDay(todayCalendar, tomorrow);
+                    if(sameTomorrow) {
+                        TimestampData thisInterval = new TimestampData();
+
+                        thisInterval.time = tideJson.getInt("timestamp");
+
+                        thisInterval.tideHL = tideJson.getString("HL");
+                        thisInterval.tideTime = tideJson.getString("time");
+                        thisInterval.tideValue = tideJson.getString("value");
+
+                        tideTomorrow.add(thisInterval);
+                    }
+                }
+            }
+        }catch(Exception e){
+            Logger.e("Error with getting tide data from JSON");
+            Logger.e(e.toString());
+        }
     }
 
     public int directionToDegree(String direction){
@@ -421,5 +467,21 @@ public class Spot {
         }
         if(t.swellPeriod == -1) return false;
         return true;
+    }
+
+    public int getTideTimestampCount(int date){
+        if(date == 0) {
+            return tideToday.size();
+        }else{
+            return tideTomorrow.size();
+        }
+    }
+
+    public ArrayList<TimestampData> getTide(int date){
+        if(date == 0) {
+            return tideToday;
+        }else{
+            return tideTomorrow;
+        }
     }
 }
