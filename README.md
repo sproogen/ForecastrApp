@@ -18,7 +18,7 @@ Dependencies
 Copyright
 -------------
 ```
-Copyright (c) 2005-2015, James Grant
+Copyright (c) 2015 James Grant
 ```
 
 License
