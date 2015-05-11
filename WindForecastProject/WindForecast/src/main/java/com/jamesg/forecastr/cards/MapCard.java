@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.CardBase;
@@ -84,11 +85,10 @@ public class MapCard extends CardBase {
                         try {
                             spotLatLng = new LatLng(Double.parseDouble(spot.getLatitude()), Double.parseDouble(spot.getLongitude()));
                             googleMap.clear();
-                            googleMap.addMarker(new MarkerOptions()
+                            Marker pin = googleMap.addMarker(new MarkerOptions()
                                     .position(spotLatLng)
-                                    .title(spot.getName())
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                            cameraZoom = 9;
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin)));
+                            cameraZoom = 11;
                         }catch(Exception e){
                             //DO NOTHING
                         }
@@ -97,6 +97,7 @@ public class MapCard extends CardBase {
                         googleMap.getUiSettings().setZoomControlsEnabled(true);
                         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
                         googleMap.getUiSettings().setAllGesturesEnabled(false);
+                        googleMap.getUiSettings().setMapToolbarEnabled(true);
 
                         googleMap.setMapType(mapType);
                         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(spotLatLng, cameraZoom));
