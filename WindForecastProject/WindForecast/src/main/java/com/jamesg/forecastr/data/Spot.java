@@ -374,9 +374,10 @@ public class Spot {
 
     public TimestampData getTodayTimestamp(int interval){
         if(today.size() == 0) return null;
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if(interval <= (hour-3)) return null;
         TimestampData first =  today.get(0);
         int id = (interval - first.time)/3;
-        //if(id >= 0) return today.get((interval - first.time)/3);
         if(id >= 0) {
             TimestampData t = null;
             try {
