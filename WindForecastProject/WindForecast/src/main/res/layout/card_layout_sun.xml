@@ -16,7 +16,8 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -24,8 +25,7 @@
                         android:id="@+id/sunRise"
                         android:src="@drawable/sun_rise"
                         android:layout_marginTop="0dp"
-                        android:layout_marginBottom="0dp"
-                        android:layout_centerHorizontal="true" />
+                        android:layout_marginBottom="0dp" />
                     <TextSwitcher
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -35,15 +35,17 @@
                         android:fontFamily="sans-serif-light"
                         android:text=""
                         android:id="@+id/sunRiseText"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/sunRise"
-                        android:visibility="visible"/>
+                        android:layout_toRightOf="@id/sunRise"
+                        android:paddingLeft="10dp"
+                        android:visibility="visible"
+                        android:layout_centerVertical="true" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -53,8 +55,7 @@
                     android:src="@drawable/sun_set"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="0dp"
-                    android:adjustViewBounds="false"
-                    android:layout_centerHorizontal="true"/>
+                    android:adjustViewBounds="false" />
                 <TextSwitcher
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,9 +65,10 @@
                     android:fontFamily="sans-serif-light"
                     android:text=""
                     android:id="@+id/sunSetText"
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@id/sunSet"
-                    android:visibility="visible"/>
+                    android:layout_toRightOf="@id/sunSet"
+                    android:paddingLeft="10dp"
+                    android:visibility="visible"
+                    android:layout_centerVertical="true" />
             </RelativeLayout>
 
         </LinearLayout>

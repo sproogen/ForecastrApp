@@ -126,7 +126,7 @@ public class SwellCard extends CardBase {
                                 Gravity.CENTER);
                         myText.setLayoutParams(params);
 
-                        myText.setTextSize(14);
+                        myText.setTextSize(18);
                         myText.setTextColor(Color.BLACK);
                         return myText;
                     }
@@ -388,7 +388,7 @@ public class SwellCard extends CardBase {
                                 Gravity.CENTER);
                         myText.setLayoutParams(params);
 
-                        myText.setTextSize(14);
+                        myText.setTextSize(18);
                         myText.setTextColor(Color.BLACK);
                         return myText;
                     }

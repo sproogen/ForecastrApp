@@ -54,17 +54,6 @@
         android:background="@color/light_grey"
         android:layout_below="@id/weatherImage"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerInside"
-        android:id="@+id/windImage"
-        android:layout_below="@id/lineMiddle"
-        android:src="@drawable/wind_icon_null"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"
-        android:adjustViewBounds="true" />
-
     <TextSwitcher
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,10 +61,11 @@
         android:textColor="?android:textColorPrimary"
         android:textStyle="bold"
         android:fontFamily="sans-serif-light"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:id="@+id/temp"
+        android:layout_below="@id/lineMiddle"
         android:gravity="center_vertical|center_horizontal"
-        android:layout_alignTop="@id/windImage"
-        android:layout_alignBottom="@id/windImage"
         android:adjustViewBounds="true" />
 
     <View

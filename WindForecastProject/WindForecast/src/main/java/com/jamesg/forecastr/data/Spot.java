@@ -5,6 +5,7 @@ import android.util.Log;
 import com.jamesg.forecastr.utils.Logger;
 import com.jamesg.forecastr.utils.Utils;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 
 import org.json.JSONArray;
