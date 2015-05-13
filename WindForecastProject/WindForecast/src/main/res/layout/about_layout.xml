@@ -99,8 +99,8 @@
             android:layout_below="@+id/updatedLabel"
             android:layout_marginTop="12dp"
             android:textSize="16sp"
-            android:layout_toRightOf="@+id/updatedLabel"
-            android:layout_toEndOf="@+id/updatedLabel" />
+            android:layout_toRightOf="@+id/createdLabel"
+            android:layout_toEndOf="@+id/createdLabel" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -111,8 +111,8 @@
             android:textSize="16sp"
             android:layout_marginTop="6dp"
             android:layout_below="@+id/createdLabel"
-            android:layout_toRightOf="@+id/updatedLabel"
-            android:layout_toEndOf="@+id/updatedLabel"
+            android:layout_toRightOf="@+id/createdLabel"
+            android:layout_toEndOf="@+id/createdLabel"
             android:textColorLink="#4ca435"/>
 
         <TextView
@@ -124,8 +124,8 @@
             android:textSize="16sp"
             android:layout_marginTop="6dp"
             android:layout_below="@+id/website"
-            android:layout_toRightOf="@+id/updatedLabel"
-            android:layout_toEndOf="@+id/updatedLabel"
+            android:layout_toRightOf="@+id/createdLabel"
+            android:layout_toEndOf="@+id/createdLabel"
             android:textColorLink="#4ca435"/>
 
         <FrameLayout
