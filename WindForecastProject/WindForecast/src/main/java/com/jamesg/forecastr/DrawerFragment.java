@@ -126,21 +126,21 @@ public class DrawerFragment extends BaseFragment {
                 if (position == 0) {
                     if (getActivity() instanceof MainActivity) {
                         mListener.allSpots(true);
-                        //mListener.toggle();
+                        mListener.toggle(false);
                     }
                     selected = position;
                 } else if (item.getType() == 2) {
                     if (item.getLabel().equals("Check for updates")) {
                         if (getActivity() instanceof MainActivity) {
                             spotManager.checkForUpdates(true);
-                            mListener.toggle();
+                            mListener.toggle(false);
                         }
                         listView.setItemChecked(selected, true);
                     } else if (item.getLabel().equals("About")) {
                         if (getActivity() instanceof MainActivity) {
                             AboutFragment aboutFragment = new AboutFragment();
                             mListener.transitionToFragment(aboutFragment, MainActivity.ABOUT_FRAGMENT, true);
-                            mListener.toggle();
+                            mListener.toggle(false);
                         }
                         selected = position;
                     } else if (item.getLabel().equals("App Update Available")) {
@@ -152,7 +152,7 @@ public class DrawerFragment extends BaseFragment {
                     selected = position;
                     if (getActivity() instanceof MainActivity) {
                         mListener.loadSpot(item.getName(), 1);
-                        //mListener.toggle();
+                        mListener.toggle(false);
                     }
                 }
             }
@@ -387,6 +387,7 @@ public class DrawerFragment extends BaseFragment {
                     listView.setItemChecked(selected, false);
                     selected = -1;
                     mListener.loadSearchSpot(item.getName(), item.getId());
+                    mListener.toggle(false);
                 }
             });
         }else{

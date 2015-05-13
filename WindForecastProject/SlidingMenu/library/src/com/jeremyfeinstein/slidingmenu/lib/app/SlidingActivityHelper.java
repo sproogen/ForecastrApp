@@ -178,6 +178,9 @@ public class SlidingActivityHelper {
 	public void toggle() {
 		mSlidingMenu.toggle();
 	}
+	public void toggle(boolean animate) {
+		mSlidingMenu.toggle(animate);
+	}
 
 	/**
 	 * Close the SlidingMenu and show the content view.

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.jamesg.forecastr.DrawerFragment;
 import com.jamesg.forecastr.R;
@@ -23,6 +24,7 @@ public class BaseActivity extends SlidingFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(mTitleRes);
 
         setContentView(R.layout.content_frame);
 
@@ -30,10 +32,21 @@ public class BaseActivity extends SlidingFragmentActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        setTitle(mTitleRes);
+        // check if the content frame contains the menu frame
+        if (findViewById(R.id.menu_frame) == null) {
+            setBehindContentView(R.layout.menu_frame);
+            getSlidingMenu().setSlidingEnabled(true);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+            // show home as up so we can toggle
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            // add a dummy view
+            View v = new View(this);
+            setBehindContentView(v);
+            getSlidingMenu().setSlidingEnabled(false);
+            getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+        }
 
-        // set the Behind View
-        setBehindContentView(R.layout.menu_frame);
         if (savedInstanceState == null) {
             FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
             drawerFragment = new DrawerFragment();
@@ -50,9 +63,7 @@ public class BaseActivity extends SlidingFragmentActivity {
         sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
         sm.setFadeEnabled(false);
         sm.setBehindScrollScale((float) 0);
-        sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-
-        //getActionBar().setDisplayHomeAsUpEnabled(false);
+        //sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
     }
 
     @Override
@@ -70,5 +81,13 @@ public class BaseActivity extends SlidingFragmentActivity {
         //getSupportMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    public void toggle() {
+        if(getSlidingMenu().isSlidingEnabled()) super.toggle();
+    }
+    public void toggle(boolean animate) {
+        if(getSlidingMenu().isSlidingEnabled()) super.toggle(animate);
+    }
+
 }
 
