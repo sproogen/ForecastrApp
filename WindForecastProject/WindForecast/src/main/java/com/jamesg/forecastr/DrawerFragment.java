@@ -96,6 +96,8 @@ public class DrawerFragment extends BaseFragment {
             public void run() {
                 if (spotManager.isUpdating()) {
                     updateStarted();
+                } else {
+                    updateFinished();
                 }
             }
         }, 1000);
@@ -216,17 +218,21 @@ public class DrawerFragment extends BaseFragment {
 
     public void updateFinished(){
         adapter.setUpdating(false);
-        int updatingPos = adapter.getUpdatePotision();
-        if(updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()){
-            View v = listView.getChildAt(updatingPos);
-            ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
-            updatingStatus.setVisibility(View.GONE);
+        try {
+            int updatingPos = adapter.getUpdatePotision();
+            if (updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()) {
+                View v = listView.getChildAt(updatingPos);
+                ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
+                updatingStatus.setVisibility(View.GONE);
+            }
+        }catch(Exception e){
+            //Do Nothing - View is not visible.
         }
     }
 
     @Subscribe
     public void getMessage(String s) {
-        Logger.d("BUS MESSAGE drawerFragment - "+s);
+        Logger.d("BUS MESSAGE drawerFragment - " + s);
         if(s.equals("Update Started")){
             try {
                 updateStarted();

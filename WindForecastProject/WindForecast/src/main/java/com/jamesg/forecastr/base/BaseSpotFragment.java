@@ -93,6 +93,9 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
                 if(spotManager.isUpdating()) {
                     Logger.d("Base Fragment isUpdating");
                     updateStarted();
+                }else{
+                    Logger.d("Base Fragment !isUpdating");
+                    updateFinished();
                 }
             }
         }, 1000);
