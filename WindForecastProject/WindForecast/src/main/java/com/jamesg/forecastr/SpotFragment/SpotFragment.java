@@ -82,10 +82,12 @@ public class SpotFragment extends BaseSpotFragment {
             search = getArguments().getBoolean(SPOT_SEARCHED);
         }
 
-        // Set screen name.
-        tracker.setScreenName(spotName);
         // Send a screen view.
-        tracker.send(new HitBuilders.AppViewBuilder().build());
+        tracker.setScreenName("Spot");
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Viewed")
+                .setAction(spotName)
+                .build());
 
         int dateTab = 0;
         if (this.mListener != null) {
