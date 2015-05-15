@@ -18,7 +18,7 @@ import dagger.ObjectGraph;
 public class ForecastrApplication extends Application implements Injectable {
 
     // The following line should be changed to include the correct property id.
-    private static final String PROPERTY_ID = "UA-41673510-2";
+    private static final String PROPERTY_ID = "UA-41673510-3";
 
     public static int GENERAL_TRACKER = 0;
 
