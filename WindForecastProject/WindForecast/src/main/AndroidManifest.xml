@@ -10,7 +10,7 @@
     <application
         android:name="com.jamesg.forecastr.ForecastrApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         <!--<activity

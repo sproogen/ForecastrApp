@@ -38,7 +38,7 @@ public class BaseActivity extends SlidingFragmentActivity {
             getSlidingMenu().setSlidingEnabled(true);
             getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
             // show home as up so we can toggle
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            //getActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             // add a dummy view
             View v = new View(this);

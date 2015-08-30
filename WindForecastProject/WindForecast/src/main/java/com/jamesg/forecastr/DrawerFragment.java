@@ -22,7 +22,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.manager.AppManager;
@@ -66,7 +65,7 @@ public class DrawerFragment extends BaseFragment {
     private int selected = 0;
 
     private ListView listView;
-    ProgressBarCircularIndeterminate searchProgress;
+    //ProgressBarCircularIndeterminate searchProgress;
     private ListView searchList;
     private ImageView clearButton;
     private EditText searchBox;
@@ -112,7 +111,7 @@ public class DrawerFragment extends BaseFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.list, null);
         listView = (ListView)view.findViewById(R.id.list);
-        searchProgress = (ProgressBarCircularIndeterminate) view.findViewById(R.id.searchProgress);
+        //searchProgress = (ProgressBarCircularIndeterminate) view.findViewById(R.id.searchProgress);
         searchList = (ListView)view.findViewById(R.id.searchList);
         clearButton = (ImageView)view.findViewById(R.id.clearButton);
 
@@ -177,7 +176,7 @@ public class DrawerFragment extends BaseFragment {
                     listView.setVisibility(View.VISIBLE);
                     searchList.setVisibility(View.GONE);
                     clearButton.setVisibility(View.GONE);
-                    searchProgress.setVisibility(View.GONE);
+                    //searchProgress.setVisibility(View.GONE);
                     try {
                         searchAdapter.setData(new ArrayList<Spot>());
                     }catch(Exception e){
@@ -211,8 +210,8 @@ public class DrawerFragment extends BaseFragment {
         int updatingPos = adapter.getUpdatePotision();
         if(updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()){
             View v = listView.getChildAt(updatingPos);
-            ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
-            updatingStatus.setVisibility(View.VISIBLE);
+            //ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
+            //updatingStatus.setVisibility(View.VISIBLE);
         }
     }
 
@@ -222,8 +221,8 @@ public class DrawerFragment extends BaseFragment {
             int updatingPos = adapter.getUpdatePotision();
             if (updatingPos >= listView.getFirstVisiblePosition() && updatingPos <= listView.getLastVisiblePosition()) {
                 View v = listView.getChildAt(updatingPos);
-                ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
-                updatingStatus.setVisibility(View.GONE);
+                //ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) v.findViewById(R.id.updatingStatus);
+                //updatingStatus.setVisibility(View.GONE);
             }
         }catch(Exception e){
             //Do Nothing - View is not visible.
@@ -256,7 +255,7 @@ public class DrawerFragment extends BaseFragment {
 
     public void performSearch(String search, int before){
         if(search.length() == 1 && before == 0){
-            searchProgress.setVisibility(View.VISIBLE);
+            //searchProgress.setVisibility(View.VISIBLE);
             getSpotsFromWeb(search);
         }else{
             if(!searching) {
@@ -378,7 +377,7 @@ public class DrawerFragment extends BaseFragment {
                 }
             }
         }
-        searchProgress.setVisibility(View.GONE);
+        //searchProgress.setVisibility(View.GONE);
         if(searchAdapter == null) {
             searchAdapter = new SearchMenuAdapter(getActivity(), spots);
             searchList.setAdapter(searchAdapter);
@@ -409,7 +408,7 @@ public class DrawerFragment extends BaseFragment {
             all_spots = null;
             searchList.setVisibility(View.GONE);
             clearButton.setVisibility(View.GONE);
-            searchProgress.setVisibility(View.GONE);
+            //searchProgress.setVisibility(View.GONE);
             searchBox.setText("");
             hideSoftKeyboard();
         }
@@ -552,8 +551,8 @@ public class DrawerFragment extends BaseFragment {
                 title.setText(item.getLabel());
                 updating = spotManager.isUpdating();
                 if(item.getLabel().equals("Check for updates") && updating) {
-                    ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) convertView.findViewById(R.id.updatingStatus);
-                    updatingStatus.setVisibility(View.VISIBLE);
+                    //ProgressBarCircularIndeterminate updatingStatus = (ProgressBarCircularIndeterminate) convertView.findViewById(R.id.updatingStatus);
+                    //updatingStatus.setVisibility(View.VISIBLE);
                 }else if(item.getLabel().equals("App Update Available")){
                     convertView.setBackgroundResource(R.drawable.fragment_listselector_update);
                 }

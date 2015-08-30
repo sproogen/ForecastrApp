@@ -1,20 +1,12 @@
 <resources>
-
-    <style name="WeatherTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
-    </style>
-
-    <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#4ca435</item>
-        <item name="background">#4ca435</item>
-
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
-    </style>
-
-    <style name="MyActionBarTitleText"
-        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
-
+<!-- inherit from the material theme -->
+<style name="Theme.Windfinder" parent="Theme.AppCompat">
+    <!-- Main theme colors -->
+    <!--   your app branding color for the app bar -->
+    <item name="colorPrimary">@color/green</item>
+    <!--   darker variant for the status bar and contextual app bars -->
+    <item name="colorPrimaryDark">@color/green</item>
+    <!--   theme UI controls like checkboxes and text fields -->
+    <item name="colorAccent">@color/green</item>
+</style>
 </resources>

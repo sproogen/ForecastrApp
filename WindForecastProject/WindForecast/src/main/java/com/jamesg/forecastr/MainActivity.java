@@ -69,7 +69,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         Mint.initAndStartSession(MainActivity.this, "91e59a0e");
 
         setTitle("Favourite Spots");
-        getActionBar().setDisplayShowHomeEnabled(false);
+        //getActionBar().setDisplayShowHomeEnabled(false);
 
         stack = new Stack<>();
 

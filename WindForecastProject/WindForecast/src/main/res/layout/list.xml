@@ -33,13 +33,13 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"/>-->
 
-    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+    <!--<com.gc.materialdesign.views.ProgressBarCircularIndeterminate
         android:id="@+id/searchProgress"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:background="@color/green"
         android:layout_below="@+id/search"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="gone"/>-->
 
 </RelativeLayout>

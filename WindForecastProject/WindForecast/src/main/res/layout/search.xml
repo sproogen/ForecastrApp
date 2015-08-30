@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/clearButton"
-        android:src="@drawable/abs__ic_clear_normal"
+        android:src="@drawable/ic_action_cancel"
         android:layout_alignBottom="@+id/searchBox"
         android:layout_alignRight="@+id/searchBox"
         android:layout_alignEnd="@+id/searchBox"
