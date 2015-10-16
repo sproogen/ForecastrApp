@@ -1,11 +1,11 @@
-WindFinderApp
+Forecastr Android App
 =============
 
-Welcome to the WindFinderApp Repo.
+Welcome to the Forecastr Repo.
 
 Project tracking can be found here - https://waffle.io/sproogen/forecastrapp
 
-The WindForecastProject folder is the android app and the 'WindForecastProject Files' contains resource files, for images ect., for reference.
+The WindForecastProject folder is the android app and the 'ForecastrAssets' folder contains resource files, for images/designs ect.
 
 Dependencies
 -------------
