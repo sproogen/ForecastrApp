@@ -9,7 +9,7 @@ import com.jamesg.forecastr.BuildConfig;
  */
 public class Logger {
 
-    private static final String TAG = "WINDFINDER APP";
+    private static final String TAG = "FORECASTR APP";
     private static final String EMPTY = "";
     /**
      * Send a DEBUG log message.
