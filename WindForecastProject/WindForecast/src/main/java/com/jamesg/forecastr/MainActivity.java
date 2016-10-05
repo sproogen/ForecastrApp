@@ -18,7 +18,6 @@ import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.manager.AppManager;
 import com.jamesg.forecastr.manager.SpotManager;
 import com.jamesg.forecastr.utils.Logger;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.splunk.mint.Mint;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -50,8 +49,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     private int dateTab = 0;
 
-    private SlidingMenu menu;
-
     private String openSpot = "";
 
 
@@ -73,39 +70,22 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         stack = new Stack<>();
 
-        spotManager.getAllSpots(1);
+        //spotManager.getAllSpots(1);
 
-        if (savedInstanceState != null) {
-            current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
-        }else{
-            current = SpotWrapperFragment.newInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, current,"currentFragment")
-                    .commit();
-            currentID = SPOTS_FRAGMENT;
-        }
-
-        setSlidingActionBarEnabled(true);
-
-        SlidingMenu menu = getSlidingMenu();
-        menu.setOnClosedListener(new SlidingMenu.OnClosedListener() {
-            @Override
-            public void onClosed() {
-                //Do Nothing!
-            }
-        });
-
-        menu.setOnOpenedListener(new SlidingMenu.OnOpenedListener() {
-            @Override
-            public void onOpened() {
-                //Do Nothing!
-            }
-        });
+//        if (savedInstanceState != null) {
+//            current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
+//        }else{
+//            current = SpotWrapperFragment.newInstance();
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.content_frame, current,"currentFragment")
+//                    .commit();
+//            currentID = SPOTS_FRAGMENT;
+//        }
 
         //deleteDatabase("spotsTable");
 
-        spotManager.checkForUpdates(true);
-        appManager.checkForUpdates();
+        //spotManager.checkForUpdates(true);
+        //appManager.checkForUpdates();
     }
     @Subscribe
     public void getMessage(String s) {
@@ -232,6 +212,16 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         return openSpot;
     }
 
+    @Override
+    public void toggle() {
+
+    }
+
+    @Override
+    public void toggle(boolean animate) {
+
+    }
+
     public void transitionToFragment(BaseFragment newFragment, int id, boolean animate){
         stack.push(current);
         current = newFragment;
@@ -241,7 +231,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.exit, R.anim.no_anim_in, R.anim.pop_exit);
         //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
 
-        transaction.replace(R.id.content_frame, current).commit();
+        //transaction.replace(R.id.content_frame, current).commit();
         getSupportFragmentManager().executePendingTransactions();
 
     }
@@ -258,7 +248,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
                         transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
                     }
 
-                    transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
+                    //transaction.replace(R.id.content_frame, current, "spotWrapperFragment").commit();
                     getSupportFragmentManager().executePendingTransactions();
                     currentID = SPOTS_FRAGMENT;
                 }
