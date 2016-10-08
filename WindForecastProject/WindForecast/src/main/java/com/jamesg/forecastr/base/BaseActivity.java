@@ -1,23 +1,21 @@
 package com.jamesg.forecastr.base;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jamesg.forecastr.DrawerFragment;
 import com.jamesg.forecastr.R;
 
@@ -30,17 +28,14 @@ public class BaseActivity extends AppCompatActivity  {
     private int mTitleRes;
     protected DrawerFragment drawerFragment;
 
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
-    private View navHeader;
-    private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
+    public NavigationView navigationView;
+    public DrawerLayout drawer;
     private Toolbar toolbar;
     private FloatingActionButton fab;
+    private ActionBar actionBar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    private Handler mHandler;
-
-    private String[] activityTitles;
+    public Handler mHandler;
 
     public BaseActivity(int titleRes) {
         mTitleRes = titleRes;
@@ -54,7 +49,8 @@ public class BaseActivity extends AppCompatActivity  {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //setTitle(mTitleRes);
+        actionBar = getSupportActionBar();
+        actionBar.setElevation(0);
 
         //if(getResources().getBoolean(R.bool.portrait_only)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -64,18 +60,10 @@ public class BaseActivity extends AppCompatActivity  {
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        setUpNavigationView();
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(R.id.name);
-        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-
-        // load toolbar titles from string resources
-        //activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,9 +71,6 @@ public class BaseActivity extends AppCompatActivity  {
                         .setAction("Action", null).show();
             }
         });
-
-        // load nav menu header data
-        loadNavHeader();
 
         // initializing navigation menu
         //setUpNavigationView();
@@ -100,19 +85,74 @@ public class BaseActivity extends AppCompatActivity  {
 //        }
     }
 
-    private void loadNavHeader() {
-        // name, website
-        txtName.setText("Forecastr");
-        txtWebsite.setText("www.androidhive.info");
+    public void navItemSelected(MenuItem menuItem){}
 
-        // loading header background image
-        Glide.with(this).load("http://api.androidhive.info/images/nav-menu-header-bg.jpg")
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imgNavHeaderBg);
+    private void setUpNavigationView() {
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-        // showing dot next to notifications label
-        //navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                navItemSelected(menuItem);
+
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if (menuItem.isChecked()) {
+                    menuItem.setChecked(false);
+                } else {
+                    menuItem.setChecked(true);
+                }
+                menuItem.setChecked(true);
+
+                return true;
+            }
+        });
+
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawer.addDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessary or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawers();
+            return;
+        }
+        super.onBackPressed();
     }
 }
 

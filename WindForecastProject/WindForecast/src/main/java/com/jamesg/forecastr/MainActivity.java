@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -28,8 +30,8 @@ import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity implements BaseFragment.BaseFragmentInteractionListener {
 
-    static final int SPOTS_FRAGMENT = 0;
-    static final int ABOUT_FRAGMENT = 1;
+    static final String SPOTS_FRAGMENT = "spots";
+    static final String ABOUT_FRAGMENT = "about";
 
     @Inject
     SpotManager spotManager;
@@ -45,12 +47,13 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     private Stack<BaseFragment> stack;
     private BaseFragment current;
-    private int currentID;
+    private String currentID;
 
     private int dateTab = 0;
 
     private String openSpot = "";
 
+    private SpotWrapperFragment spotFragment;
 
     public MainActivity() {
         super(R.string.app_name);
@@ -66,7 +69,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         Mint.initAndStartSession(MainActivity.this, "91e59a0e");
 
         setTitle("Favourite Spots");
-        //getActionBar().setDisplayShowHomeEnabled(false);
 
         stack = new Stack<>();
 
@@ -82,11 +84,42 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 //            currentID = SPOTS_FRAGMENT;
 //        }
 
+        transitionToFragment(SpotWrapperFragment.newInstance(), SPOTS_FRAGMENT, true);
+        navigationView.setCheckedItem(R.id.nav_home);
+
         //deleteDatabase("spotsTable");
 
         //spotManager.checkForUpdates(true);
         //appManager.checkForUpdates();
     }
+
+    @Override
+    public void navItemSelected(MenuItem menuItem){
+        drawer.closeDrawers();
+
+        BaseFragment fragment;
+        String itemId;
+
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                if (spotFragment == null) {
+                    spotFragment = SpotWrapperFragment.newInstance();
+                }
+                fragment = spotFragment;
+                itemId = SPOTS_FRAGMENT;
+                break;
+            case R.id.about:
+                fragment = new AboutFragment();
+                itemId = ABOUT_FRAGMENT;
+                break;
+            default:
+                fragment = new AboutFragment();
+                itemId = ABOUT_FRAGMENT;
+        }
+
+        transitionToFragment(fragment, itemId, true);
+    }
+
     @Subscribe
     public void getMessage(String s) {
         if(s.equals("NewAppAvailable")){
@@ -110,7 +143,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             }
         }
     }
-
 
     @Override
     public void onResume() {
@@ -222,18 +254,26 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     }
 
-    public void transitionToFragment(BaseFragment newFragment, int id, boolean animate){
+    public void transitionToFragment(final BaseFragment newFragment, final String id, boolean animate){
         stack.push(current);
         current = newFragment;
         currentID = id;
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.exit, R.anim.no_anim_in, R.anim.pop_exit);
-        //transaction.setCustomAnimations(R.anim.no_anim_in, R.anim.no_anim_out, R.anim.no_anim_in, R.anim.no_anim_out);
+        Runnable mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // update the main content by replacing fragments
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+                fragmentTransaction.replace(R.id.frame, newFragment, id);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        };
 
-        //transaction.replace(R.id.content_frame, current).commit();
-        getSupportFragmentManager().executePendingTransactions();
-
+        if (mPendingRunnable != null) {
+            mHandler.post(mPendingRunnable);
+        }
     }
 
     public void popBackStack(boolean animate){
@@ -270,6 +310,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if(!stack.empty()) {
             //When on the About or similar fragment.
             popBackStack(true);

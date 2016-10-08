@@ -43,7 +43,7 @@ public class BaseFragment extends Fragment {
         public String openSpot();
         public void toggle();
         public void toggle(boolean animate);
-        public void transitionToFragment(BaseFragment newFragment, int id, boolean animate);
+        public void transitionToFragment(BaseFragment newFragment, String id, boolean animate);
         public void loadSearchSpot(String name, int id);
     }
 }

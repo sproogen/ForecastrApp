@@ -1,8 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="md__transparent">#00000000</color>
 
     <color name="md__defaultBackground">#FF555555</color>
+
+    <color name="dark_green">#2E7D32</color>
+    <color name="bright_green">#7BC815</color>
+    <color name="light_green">#66BB6A</color>
+    <color name="light_grey">#F2F7FA</color>
+    <color name="dark_grey">#2D3538</color>
+    <color name="green_grey">#C8E6C9</color>
 
     <color name="background">#fff3f3f3</color>
 
@@ -20,7 +27,6 @@
     <color name="drawer_update">#d9534f</color>
     <color name="drawer_update_highlight">#d43f3a</color>d43f3a
 
-    <color name="light_grey">#DDDDDD</color>
     <color name="green">#4ca435</color>
 
     <drawable name="semitransparent_blue">#504ca435</drawable>
