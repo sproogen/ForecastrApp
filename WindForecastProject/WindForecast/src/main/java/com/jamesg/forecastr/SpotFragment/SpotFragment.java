@@ -44,7 +44,6 @@ public class SpotFragment extends BaseSpotFragment {
     private boolean search;
 
     WindCard windCard;
-    HeaderCard headerCard;
     WeatherCard weatherCard;
     SwellCard swellCard;
     TideCard tideCard;
@@ -97,7 +96,6 @@ public class SpotFragment extends BaseSpotFragment {
         if (spot != null) {
             getActivity().setTitle(spot.getName());
 
-            headerCard = new HeaderCard(getActivity(), spot, dateTab);
             if (!search) {
                 windCard = new WindCard(getActivity(), spot, dateTab);
                 weatherCard = new WeatherCard(getActivity(), spot, dateTab);
@@ -108,7 +106,7 @@ public class SpotFragment extends BaseSpotFragment {
                 if(spot.hasSunData()) {
                     sunCard = new SunCard(getActivity(), spot, dateTab);
                 }
-                mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
+                //mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
             } else {
                 loadingCard = new LoadingCard(getActivity());
 
@@ -153,7 +151,7 @@ public class SpotFragment extends BaseSpotFragment {
 
     public void spotUpdated(Spot spot) {
         spotManager.searchSpot(spot);
-        headerCard.setSearch(true);
+        //headerCard.setSearch(true);
         updateCards(spot);
     }
 
@@ -172,20 +170,19 @@ public class SpotFragment extends BaseSpotFragment {
         if(spot.hasSunData()) {
             sunCard = new SunCard(getActivity(), spot, dateTab);
         }
-        mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
+        //mapCard = new MapCard(getActivity(), spot, dateTab, getActivity().getSupportFragmentManager());
 
         LinearLayout content_body = (LinearLayout) getActivity().findViewById(R.id.content_body);
         content_body.removeAllViews();
 
         LayoutInflater inflater = LayoutInflater.from(getActivity());
 
-        if(headerCard != null) content_body.addView(headerCard.getView(inflater));
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
         if(tideCard != null) content_body.addView(tideCard.getView(inflater));
         if(sunCard != null) content_body.addView(sunCard.getView(inflater));
-        if(mapCard != null) content_body.addView(mapCard.getView(inflater));
+        //if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
 
 
@@ -194,35 +191,32 @@ public class SpotFragment extends BaseSpotFragment {
                              Bundle savedInstanceState, View view) {
         LinearLayout content_body = (LinearLayout) view.findViewById(R.id.content_body);
 
-        if(headerCard != null) content_body.addView(headerCard.getView(inflater));
         if(loadingCard != null) content_body.addView(loadingCard.getView(inflater));
         if(windCard != null) content_body.addView(windCard.getView(inflater));
         if(weatherCard != null) content_body.addView(weatherCard.getView(inflater));
         if(swellCard != null) content_body.addView(swellCard.getView(inflater));
         if(tideCard != null) content_body.addView(tideCard.getView(inflater));
         if(sunCard != null) content_body.addView(sunCard.getView(inflater));
-        if(mapCard != null) content_body.addView(mapCard.getView(inflater));
+        //if(mapCard != null) content_body.addView(mapCard.getView(inflater));
     }
 
     @Override
     public void updateDateTab(int newDateTab){
-        if(headerCard != null) headerCard.updateView(newDateTab);
         if(windCard != null) windCard.updateView(newDateTab);
         if(weatherCard != null) weatherCard.updateView(newDateTab);
         if(swellCard != null) swellCard.updateView(newDateTab);
         if(tideCard != null) tideCard.updateView(newDateTab);
         if(sunCard != null) sunCard.updateView(newDateTab);
-        if(mapCard != null) mapCard.updateView(newDateTab);
+        //if(mapCard != null) mapCard.updateView(newDateTab);
     }
 
     @Override
     public void updateSpotData(){
-        if(headerCard != null) headerCard.updateView();
         if(windCard != null) windCard.updateView();
         if(weatherCard != null) weatherCard.updateView();
         if(swellCard != null) swellCard.updateView();
         if(tideCard != null) tideCard.updateView();
         if(sunCard != null) sunCard.updateView();
-        if(mapCard != null) mapCard.updateView();
+        //if(mapCard != null) mapCard.updateView();
     }
 }

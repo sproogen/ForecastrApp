@@ -3,11 +3,14 @@ package com.jamesg.forecastr;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -53,8 +56,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     private String openSpot = "";
 
-    private SpotWrapperFragment spotFragment;
-
     public MainActivity() {
         super(R.string.app_name);
     }
@@ -72,25 +73,15 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         stack = new Stack<>();
 
-        //spotManager.getAllSpots(1);
-
-//        if (savedInstanceState != null) {
-//            current = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag("currentFragment");
-//        }else{
-//            current = SpotWrapperFragment.newInstance();
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.content_frame, current,"currentFragment")
-//                    .commit();
-//            currentID = SPOTS_FRAGMENT;
-//        }
+        spotManager.getAllSpots(1);
 
         transitionToFragment(SpotWrapperFragment.newInstance(), SPOTS_FRAGMENT, true);
         navigationView.setCheckedItem(R.id.nav_home);
 
         //deleteDatabase("spotsTable");
 
-        //spotManager.checkForUpdates(true);
-        //appManager.checkForUpdates();
+        spotManager.checkForUpdates(true);
+        appManager.checkForUpdates();
     }
 
     @Override
@@ -102,22 +93,40 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                if (spotFragment == null) {
-                    spotFragment = SpotWrapperFragment.newInstance();
+                fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+                if (fragment == null) {
+                    fragment = SpotWrapperFragment.newInstance();
                 }
-                fragment = spotFragment;
                 itemId = SPOTS_FRAGMENT;
+                tabLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.about:
-                fragment = new AboutFragment();
+                fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(ABOUT_FRAGMENT);
+                if (fragment == null) {
+                    fragment = new AboutFragment();
+                }
                 itemId = ABOUT_FRAGMENT;
+                tabLayout.setVisibility(View.GONE);
                 break;
             default:
-                fragment = new AboutFragment();
-                itemId = ABOUT_FRAGMENT;
+                fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+                if (fragment == null) {
+                    fragment = SpotWrapperFragment.newInstance();
+                }
+                itemId = SPOTS_FRAGMENT;
+                tabLayout.setVisibility(View.VISIBLE);
         }
 
         transitionToFragment(fragment, itemId, true);
+    }
+
+    @Override
+    public void tabSelected(TabLayout.Tab tab) {
+        this.dateTab = Integer.parseInt(String.valueOf(tab.getTag()));
+        SpotWrapperFragment spotFragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+        if (spotFragment != null) {
+            spotFragment.updateDateTab(this.dateTab);
+        }
     }
 
     @Subscribe
@@ -174,7 +183,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     public void removeSpot(Spot spot){
         spotManager.deleteSpot(spot);
         //mainContentFragment.removeSpot(spot.getName());
-        drawerFragment.refreshSpots();
+        //drawerFragment.refreshSpots();
         if(currentID == SPOTS_FRAGMENT && openSpot.equals("")){
             ((SpotWrapperFragment)current).removeSpot(spot);
         }
@@ -194,8 +203,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             Toast.makeText(this, "Error : Could not add "+ name + " to favourites.", Toast.LENGTH_SHORT).show();
         }else {
             spotManager.addSpot(newSpot);
-            drawerFragment.refreshSpots();
-            drawerFragment.setSpot(name);
+            //drawerFragment.refreshSpots();
+            //drawerFragment.setSpot(name);
             spotManager.parseSpotData(newSpot.getName());
             Toast.makeText(this, name + " added to favourites.", Toast.LENGTH_SHORT).show();
             tracker.setScreenName(null);
@@ -207,10 +216,10 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     }
 
     public void loadSpot(String name, int listClick){
-        popBackStack(false);
+        //popBackStack(false);
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, false);
-        drawerFragment.setSpot(name);
+        //drawerFragment.setSpot(name);
     }
 
     public void loadSearchSpot(String name, int id){
@@ -222,7 +231,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         }
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, search);
-        drawerFragment.setSpot(name);
+        //drawerFragment.setSpot(name);
         tracker.setScreenName(null);
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("Search")
@@ -236,7 +245,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             openSpot = "";
             ((SpotWrapperFragment)current).closeSpot(animate);
         }
-        drawerFragment.closeSpot();
+        //drawerFragment.closeSpot();
     }
 
     @Override
@@ -255,19 +264,27 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     }
 
     public void transitionToFragment(final BaseFragment newFragment, final String id, boolean animate){
-        stack.push(current);
+        if (current != null) {
+            stack.push(current);
+        }
         current = newFragment;
         currentID = id;
 
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                // update the main content by replacing fragments
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.frame, newFragment, id);
-                fragmentTransaction.commitAllowingStateLoss();
+                try {
+                    if (!newFragment.isAdded()) {
+                        // update the main content by replacing fragments
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
+                        fragmentTransaction.replace(R.id.frame, newFragment, id).commit();
+                        getSupportFragmentManager().executePendingTransactions();
+                    }
+                } catch (Exception e) {
+                    //MEH
+                }
             }
         };
 
@@ -281,7 +298,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
             try {
                 current = stack.pop();
                 if (current != null) {
-                    drawerFragment.closeSpot();
+                    //drawerFragment.closeSpot();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
                     if (animate) {
@@ -304,11 +321,6 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     }
 
     @Override
-    public void setDateTab(int dateTab) {
-        this.dateTab = dateTab;
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         if(!stack.empty()) {
@@ -320,6 +332,23 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         }else{
             //When on a spot fragment.
             allSpots(true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    SpotWrapperFragment fragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+                    fragment.centreMap();
+                }
+                return;
+            }
         }
     }
 }

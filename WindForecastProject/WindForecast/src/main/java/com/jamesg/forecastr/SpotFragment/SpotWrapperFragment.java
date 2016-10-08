@@ -2,30 +2,35 @@ package com.jamesg.forecastr.SpotFragment;
 
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.jamesg.forecastr.base.BaseFragment;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.data.Spot;
-import com.jamesg.forecastr.utils.Logger;
-import com.splunk.mint.Mint;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,14 +40,9 @@ import com.splunk.mint.Mint;
  */
 public class SpotWrapperFragment extends BaseFragment {
 
-    private String openSpot = "";
-
-    private TextView today;
-    private TextView tomorrow;
-    private TextView sevenDay;
-    private View underline;
-
     private BaseSpotFragment currentSpotFragment;
+
+    private GoogleMap googleMap;
 
     /**
      * Use this factory method to create a new instance of
@@ -81,155 +81,130 @@ public class SpotWrapperFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.spots_frame, container, false);
 
-        underline = view.findViewById(R.id.lineUnderline);
-        today = (TextView) view.findViewById(R.id.todaySelector);
-        tomorrow = (TextView) view.findViewById(R.id.tomorrowSelector);
-        sevenDay = (TextView) view.findViewById(R.id.sevenDaySelector);
-
-        today.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateDateTab(0);
-            }
-        });
-        tomorrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateDateTab(1);
-            }
-        });
-        sevenDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateDateTab(2);
-            }
-        });
-
-        int dateTab = mListener.getDateTab();
-
-        if(dateTab == 0){
-            today.setClickable(false);
-        }else if(dateTab == 1){
-            tomorrow.setClickable(false);
-            final ViewTreeObserver vto = underline.getViewTreeObserver();
-            try{
-                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                    public void onGlobalLayout() {
-                        Logger.d(underline.getWidth() + " Underline Width - Display 0");
-                        TranslateAnimation moveTo = new TranslateAnimation(0, underline.getWidth(), 0, 0);
-                        moveTo.setDuration(0);
-                        moveTo.setFillAfter(true);
-                        underline.startAnimation(moveTo);
-                        removeOnGlobalLayoutListener(underline,this);
-                    }
-                });
-            }catch(NullPointerException e){
-                Logger.e(e.toString());
-            }
-        }else{
-            sevenDay.setClickable(false);
-            final ViewTreeObserver vto = underline.getViewTreeObserver();
-            try{
-                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                    public void onGlobalLayout() {
-                        Logger.d(underline.getWidth()+" Underline Width - Display 0");
-                        TranslateAnimation moveTo = new TranslateAnimation(0, underline.getWidth()*2, 0, 0);
-                        moveTo.setDuration(0);
-                        moveTo.setFillAfter(true);
-                        underline.startAnimation(moveTo);
-                        removeOnGlobalLayoutListener(underline,this);
-                    }
-                });
-            }catch(NullPointerException e){
-                Logger.e(e.toString());
-            }
-        }
-
         FavouritesFragment favourites = FavouritesFragment.newInstance();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.spots_frame, favourites);
         transaction.commit();
 
+        addMap();
+
         currentSpotFragment = favourites;
-        openSpot = null;
 
         return view;
     }
 
-    public void updateDateTab(int newDateTab){
-        today.setClickable(false);
-        tomorrow.setClickable(false);
-        sevenDay.setClickable(false);
+    public void addMap() {
 
-        int oldDateTab = mListener.getDateTab();
+        final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
-        if(newDateTab == 0){
-            TranslateAnimation moveToLeft;
-            if(oldDateTab == 1) moveToLeft = new TranslateAnimation(underline.getWidth(), 0, 0, 0);
-            else moveToLeft = new TranslateAnimation(underline.getWidth()*2, 0, 0, 0);
-            moveToLeft.setDuration(400);
-            moveToLeft.setFillAfter(true);
-            moveToLeft.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
+        SupportMapFragment mapFragment = ((SupportMapFragment)
+                fragmentManager.findFragmentByTag("mapFragment"));
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    tomorrow.setClickable(true);
-                    sevenDay.setClickable(true);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            underline.startAnimation(moveToLeft);
-
-        }else if(newDateTab == 1){
-            TranslateAnimation moveToMiddle;
-            if(oldDateTab == 0) moveToMiddle = new TranslateAnimation(0, underline.getWidth(), 0, 0);
-            else moveToMiddle = new TranslateAnimation(underline.getWidth()*2, underline.getWidth(), 0, 0);
-            moveToMiddle.setDuration(400);
-            moveToMiddle.setFillAfter(true);
-            moveToMiddle.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    today.setClickable(true);
-                    sevenDay.setClickable(true);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            underline.startAnimation(moveToMiddle);
-        }else if(newDateTab == 2){
-            TranslateAnimation moveToRight;
-            if(oldDateTab == 0) moveToRight = new TranslateAnimation(0, underline.getWidth()*2, 0, 0);
-            else moveToRight = new TranslateAnimation(underline.getWidth(), underline.getWidth()*2, 0, 0);
-            moveToRight.setDuration(400);
-            moveToRight.setFillAfter(true);
-            moveToRight.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {}
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    today.setClickable(true);
-                    tomorrow.setClickable(true);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            underline.startAnimation(moveToRight);
+        if(mapFragment==null){
+            mapFragment = SupportMapFragment.newInstance();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }else{
+            //removeMap();
+            fragmentManager.beginTransaction()
+                    .add(R.id.map, mapFragment, "mapFragment")
+                    .addToBackStack(null)
+                    .commit();
         }
-        mListener.setDateTab(newDateTab);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
+
+            @Override
+            public void run() {
+                googleMap = ((SupportMapFragment)
+                        fragmentManager.findFragmentByTag("mapFragment")).getMap();
+                if (googleMap != null) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+                    float cameraZoom = 2;
+                    LatLng spotLatLng = new LatLng(51.4487547, -2.5740142);
+
+//                        try {
+//                            spotLatLng = new LatLng(Double.parseDouble(spot.getLatitude()), Double.parseDouble(spot.getLongitude()));
+//                            googleMap.clear();
+//                            Marker pin = googleMap.addMarker(new MarkerOptions()
+//                                    .position(spotLatLng)
+//                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin)));
+//                            cameraZoom = 11;
+//                        }catch(Exception e){
+//                            //DO NOTHING
+//                        }
+
+                    googleMap.getUiSettings().setCompassEnabled(false);
+                    googleMap.getUiSettings().setZoomControlsEnabled(false);
+                    googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                    googleMap.getUiSettings().setAllGesturesEnabled(false);
+                    googleMap.getUiSettings().setMapToolbarEnabled(false);
+
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(spotLatLng, cameraZoom));
+
+                    centreMap();
+                }
+            }
+        },200);
+    }
+
+    public void centreMap(){
+        // Acquire a reference to the system Location Manager
+        final LocationManager locationManager = (LocationManager)  getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        Log.d("LOCATIONSHIT", String.valueOf(Build.VERSION.SDK_INT));
+        Log.d("LOCATIONSHIT", String.valueOf(ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED));
+
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  }, 1);
+        }
+        try {
+
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+                // Do something with the recent location fix
+                //  otherwise wait for the update below
+                googleMap = ((SupportMapFragment)
+                        getActivity().getSupportFragmentManager().findFragmentByTag("mapFragment")).getMap();
+                if (googleMap != null){
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+                }
+            }
+            else {
+                // Define a listener that responds to location updates
+                LocationListener locationListener = new LocationListener() {
+                    public void onLocationChanged(Location location) {
+                        Log.d("LOCATIONSHIT", "YEAH");
+                        // Called when a new location is found by the network location provider.
+                        googleMap = ((SupportMapFragment)
+                                getActivity().getSupportFragmentManager().findFragmentByTag("mapFragment")).getMap();
+                        if (googleMap != null){
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+                        }
+                        locationManager.removeUpdates(this);
+                    }
+
+                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                    public void onProviderEnabled(String provider) {}
+
+                    public void onProviderDisabled(String provider) {}
+                };
+
+                // Register the listener with the Location Manager to receive location updates
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        } catch (Exception ex)  {
+            //Error getting location
+        }
+    }
+
+    public void updateDateTab(int newDateTab){
         if(currentSpotFragment != null){
             currentSpotFragment.updateDateTab(newDateTab);
         }
@@ -245,7 +220,6 @@ public class SpotWrapperFragment extends BaseFragment {
         transaction.commit();
 
         currentSpotFragment = spot;
-        openSpot = name;
     }
 
     public void closeSpot(boolean animate){
@@ -258,7 +232,6 @@ public class SpotWrapperFragment extends BaseFragment {
         transaction.commit();
 
         currentSpotFragment = favourites;
-        openSpot = null;
     }
 
     public void removeSpot(Spot spot){

@@ -49,7 +49,6 @@ public class FavouritesFragment extends BaseSpotFragment {
      *
      * @return A new instance of fragment SpotFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static FavouritesFragment newInstance() {
         FavouritesFragment fragment = new FavouritesFragment();
         Bundle args = new Bundle();
@@ -82,7 +81,6 @@ public class FavouritesFragment extends BaseSpotFragment {
         cards = new ArrayList<CardBase>();
 
         getActivity().setTitle("Favourite Spots");
-        cards.add(new HeaderCard(getActivity(), "Favourite Spots", dateTab));
 
         if(spotManager.getSpotsCount() > 0) {
             for (Spot s : spotManager.getAllSpots(0)) {

@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 
-import com.jamesg.forecastr.DrawerFragment;
 import com.jamesg.forecastr.R;
 
 /**
@@ -26,11 +26,11 @@ import com.jamesg.forecastr.R;
 public class BaseActivity extends AppCompatActivity  {
 
     private int mTitleRes;
-    protected DrawerFragment drawerFragment;
 
     public NavigationView navigationView;
     public DrawerLayout drawer;
     private Toolbar toolbar;
+    public TabLayout tabLayout;
     private FloatingActionButton fab;
     private ActionBar actionBar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -52,6 +52,8 @@ public class BaseActivity extends AppCompatActivity  {
         actionBar = getSupportActionBar();
         actionBar.setElevation(0);
 
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+
         //if(getResources().getBoolean(R.bool.portrait_only)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //}
@@ -62,27 +64,16 @@ public class BaseActivity extends AppCompatActivity  {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         setUpNavigationView();
+        setUpTabs();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        // initializing navigation menu
-        //setUpNavigationView();
-
-//        if (savedInstanceState == null) {
-//            FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
-//            drawerFragment = new DrawerFragment();
-//            t.replace(R.id.menu_frame, drawerFragment);
-//            t.commit();
-//        } else {
-//            drawerFragment = (DrawerFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
-//        }
+//        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
     public void navItemSelected(MenuItem menuItem){}
@@ -130,6 +121,31 @@ public class BaseActivity extends AppCompatActivity  {
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
+    }
+
+    public void tabSelected(TabLayout.Tab tab){}
+
+    private void setUpTabs(){
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.today).setTag(0));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tomorrow).setTag(1));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.five_day).setTag(2));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabSelected(tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //Nothing to do
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //Nothing to do
+            }
+        });
     }
 
     @Override
