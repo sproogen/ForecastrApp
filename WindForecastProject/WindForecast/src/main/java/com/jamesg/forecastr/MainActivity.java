@@ -8,8 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.splunk.mint.Mint;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -67,13 +71,17 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         Logger.d("Main Activity Started");
 
-        Mint.initAndStartSession(MainActivity.this, "91e59a0e");
+        if (BuildConfig.SPLUNK_ENABLED) {
+            Mint.initAndStartSession(MainActivity.this, "91e59a0e");
+        }
 
         setTitle("Favourite Spots");
 
         stack = new Stack<>();
 
         spotManager.getAllSpots(1);
+
+        addSpotsToNavigation();
 
         transitionToFragment(SpotWrapperFragment.newInstance(), SPOTS_FRAGMENT, true);
         navigationView.setCheckedItem(R.id.nav_home);
@@ -84,16 +92,33 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         appManager.checkForUpdates();
     }
 
+    public void addSpotsToNavigation() {
+        List<Spot> spots = spotManager.getAllSpots(0);
+
+        Menu navigationMenu = navigationView.getMenu();
+        SubMenu favouritesMenu = navigationMenu.findItem(R.id.favourites).getSubMenu();
+
+        int order = 0;
+        for (Spot spot : spots) {
+            favouritesMenu.add(R.id.favouritesGroup, spot.getId(), order, spot.getName());
+            order++;
+        }
+
+        favouritesMenu.setGroupCheckable(R.id.favouritesGroup, true, true);
+    }
+
     @Override
     public void navItemSelected(MenuItem menuItem){
         drawer.closeDrawers();
 
-        BaseFragment fragment;
-        String itemId;
+        BaseFragment fragment = null;
+        String itemId = null;
+
+        navigationView.setCheckedItem(menuItem.getItemId());
 
         switch (menuItem.getItemId()) {
             case R.id.nav_home:
-                fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+                fragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
                 if (fragment == null) {
                     fragment = SpotWrapperFragment.newInstance();
                 }
@@ -108,8 +133,10 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
                 itemId = ABOUT_FRAGMENT;
                 tabLayout.setVisibility(View.GONE);
                 break;
+            case R.id.check_updates:
+                break;
             default:
-                fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
+                fragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);
                 if (fragment == null) {
                     fragment = SpotWrapperFragment.newInstance();
                 }
@@ -117,7 +144,21 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
                 tabLayout.setVisibility(View.VISIBLE);
         }
 
-        transitionToFragment(fragment, itemId, true);
+        if (fragment != null) {
+            transitionToFragment(fragment, itemId, true);
+        }
+
+        switch (menuItem.getItemId()) {
+            case R.id.nav_home:
+                allSpots(true);
+                break;
+            case R.id.about:
+                break;
+            case R.id.check_updates:
+                break;
+            default:
+                loadSpot(String.valueOf(menuItem.getTitle()), 1);
+        }
     }
 
     @Override
@@ -156,7 +197,9 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     @Override
     public void onResume() {
         super.onResume();
-        Mint.startSession(MainActivity.this);
+        if (BuildConfig.SPLUNK_ENABLED) {
+            Mint.startSession(MainActivity.this);
+        }
         bus.register(this);
     }
 
@@ -169,8 +212,10 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     @Override
     public void onPause() {
         super.onPause();
-        Mint.flush();
-        Mint.closeSession(MainActivity.this);
+        if (BuildConfig.SPLUNK_ENABLED) {
+            Mint.flush();
+            Mint.closeSession(MainActivity.this);
+        }
         bus.unregister(this);
     }
 
@@ -216,10 +261,8 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
     }
 
     public void loadSpot(String name, int listClick){
-        //popBackStack(false);
         openSpot = name;
         ((SpotWrapperFragment)current).loadSpot(name, true, false);
-        //drawerFragment.setSpot(name);
     }
 
     public void loadSearchSpot(String name, int id){
@@ -322,17 +365,21 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawers();
+            return;
+        }
+        Log.d("BACKSTACK", openSpot);
         if(!stack.empty()) {
             //When on the About or similar fragment.
             popBackStack(true);
-        }else if(openSpot.equals("")) {
-            //When on favourite fragment.
-            super.onBackPressed();
-        }else{
+            return;
+        }else if(!openSpot.equals("")){
             //When on a spot fragment.
             allSpots(true);
+            return;
         }
+        super.onBackPressed();
     }
 
     @Override

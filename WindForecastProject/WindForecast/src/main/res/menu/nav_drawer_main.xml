@@ -2,12 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/spots"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:title="@string/all_spots" />
+            android:title="@string/all_favourites" />
     </group>
+
+    <item
+        android:id="@+id/favourites"
+        android:title="@string/favourites">
+        <menu>
+            <group
+                android:id="@+id/favouritesGroup"
+                android:checkableBehavior="single">
+            </group>
+        </menu>
+    </item>
 
     <item android:title="@string/settings">
         <menu>

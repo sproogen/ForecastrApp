@@ -82,7 +82,7 @@ public class SpotWrapperFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.spots_frame, container, false);
 
         FavouritesFragment favourites = FavouritesFragment.newInstance();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.spots_frame, favourites);
         transaction.commit();
 
@@ -95,7 +95,7 @@ public class SpotWrapperFragment extends BaseFragment {
 
     public void addMap() {
 
-        final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        final FragmentManager fragmentManager = getChildFragmentManager();
 
         SupportMapFragment mapFragment = ((SupportMapFragment)
                 fragmentManager.findFragmentByTag("mapFragment"));
@@ -181,10 +181,12 @@ public class SpotWrapperFragment extends BaseFragment {
                     public void onLocationChanged(Location location) {
                         Log.d("LOCATIONSHIT", "YEAH");
                         // Called when a new location is found by the network location provider.
-                        googleMap = ((SupportMapFragment)
-                                getActivity().getSupportFragmentManager().findFragmentByTag("mapFragment")).getMap();
-                        if (googleMap != null){
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+                        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentByTag("mapFragment");
+                        if (mapFragment != null) {
+                            googleMap = mapFragment.getMap();
+                            if (googleMap != null) {
+                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 10));
+                            }
                         }
                         locationManager.removeUpdates(this);
                     }
@@ -212,7 +214,7 @@ public class SpotWrapperFragment extends BaseFragment {
 
     public void loadSpot(String name, boolean animate, boolean search){
         SpotFragment spot = SpotFragment.newInstance(name, search);
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if(animate) {
             transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
         }
@@ -224,7 +226,7 @@ public class SpotWrapperFragment extends BaseFragment {
 
     public void closeSpot(boolean animate){
         FavouritesFragment favourites = FavouritesFragment.newInstance();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if(animate){
             transaction.setCustomAnimations(R.anim.close_enter, R.anim.close_exit);
         }

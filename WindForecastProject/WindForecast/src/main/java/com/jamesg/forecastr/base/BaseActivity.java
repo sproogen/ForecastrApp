@@ -78,7 +78,7 @@ public class BaseActivity extends AppCompatActivity  {
 
     public void navItemSelected(MenuItem menuItem){}
 
-    private void setUpNavigationView() {
+    public void setUpNavigationView() {
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 

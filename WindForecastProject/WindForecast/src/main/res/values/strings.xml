@@ -22,7 +22,8 @@
     <string name="twitterLink"><a href="https://twitter.com/sproogen">\@sproogen</a></string>
     <string name="websiteLink"><a href="http://jwgmedia.co.uk">jwgmedia.co.uk</a></string>
 
-    <string name="all_spots">All Spots</string>
+    <string name="all_favourites">All Favourites</string>
+    <string name="favourites">Favourites</string>
     <string name="settings">Settings</string>
     <string name="check_updates">Check for updates</string>
     <string name="about">About</string>

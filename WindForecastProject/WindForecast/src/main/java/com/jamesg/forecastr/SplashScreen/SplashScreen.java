@@ -13,7 +13,6 @@ import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.manager.SpotManager;
 import com.jamesg.forecastr.utils.Logger;
-import com.splunk.mint.Mint;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
