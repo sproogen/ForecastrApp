@@ -7,19 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.ForecastrApplication;
 import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.base.CardBase;
-import com.jamesg.forecastr.cards.HeaderCard;
 import com.jamesg.forecastr.cards.InfoCard;
+import com.jamesg.forecastr.cards.SearchCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.data.SpotUpdatedEvent;
@@ -60,7 +57,7 @@ public class FavouritesFragment extends BaseSpotFragment {
     }
 
     @Override
-    public int getViewID(){
+    public int getViewID() {
         return R.layout.fragment_favourites;
     }
 
@@ -75,20 +72,22 @@ public class FavouritesFragment extends BaseSpotFragment {
         tracker.send(new HitBuilders.AppViewBuilder().build());
 
         int dateTab = 0;
-        if(this.mListener != null){
+        if (this.mListener != null) {
             dateTab = mListener.getDateTab();
         }
         cards = new ArrayList<CardBase>();
 
         getActivity().setTitle("Favourite Spots");
 
-        if(spotManager.getSpotsCount() > 0) {
+        cards.add(new SearchCard(getActivity(), dateTab));
+
+        if (spotManager.getSpotsCount() > 0) {
             for (Spot s : spotManager.getAllSpots(0)) {
                 if (s != null) {
                     cards.add(new WindCard(getActivity(), s, dateTab, true));
                 }
             }
-        }else{
+        } else {
             cards.add(new InfoCard(getActivity(), dateTab));
         }
     }
@@ -96,16 +95,16 @@ public class FavouritesFragment extends BaseSpotFragment {
     @Subscribe
     public void getMessage(String s) {
         Logger.d("BUS MESSAGE baseSpotFragment - " + s);
-        if(s.equals("Update Finished")){
+        if (s.equals("Update Finished")) {
             try {
                 updateFinished();
-            }catch(Exception e){
+            } catch(Exception e) {
                 //DO NOTHING
             }
-        }else if(s.equals("Update Started")){
+        } else if(s.equals("Update Started")) {
             try {
                 updateStarted();
-            }catch(Exception e) {
+            } catch(Exception e) {
                 //DO NOTHING
             }
         }
@@ -137,32 +136,32 @@ public class FavouritesFragment extends BaseSpotFragment {
     }
 
     @Override
-    public void updateDateTab(int newDateTab){
+    public void updateDateTab(int newDateTab) {
         for (CardBase card : cards) {
             if (card != null) card.setDateTab(newDateTab);
         }
         int first = content_body.getFirstVisiblePosition();
         int last = content_body.getLastVisiblePosition();
-        for(int i = first; i <= last; i++){
+        for (int i = first; i <= last; i++) {
             try {
                 cards.get(i).updateView();
-            }catch(Exception e){
+            } catch(Exception e) {
                 //DO Nothing - The view is not visible.
             }
         }
     }
 
     @Override
-    public void updateSpotData(){
+    public void updateSpotData() {
         int i = 0;
         int first = content_body.getFirstVisiblePosition();
         int last = content_body.getLastVisiblePosition();
         for (CardBase card : cards) {
             if (card != null) {
-                if(i >= first && i <= last) {
+                if (i >= first && i <= last) {
                     try {
                         card.updateView();
-                    }catch(Exception e){
+                    } catch(Exception e) {
                         //DO Nothing - The view is not visible.
                     }
                 }
@@ -177,10 +176,10 @@ public class FavouritesFragment extends BaseSpotFragment {
         int last = content_body.getLastVisiblePosition();
         for (CardBase card : cards) {
             if (card != null && card.getTitle().equals(spot)){
-                if(i >= first && i <= last) {
+                if (i >= first && i <= last) {
                     try {
                         card.updateView();
-                    }catch(Exception e){
+                    } catch(Exception e) {
                         //DO Nothing - The view is not visible.
                     }
                 }
@@ -193,14 +192,14 @@ public class FavouritesFragment extends BaseSpotFragment {
         int i = 0;
         for (CardBase card : cards) {
             if (card != null) {
-                if(card.getTitle().equals(spot.getName())){
+                if (card.getTitle().equals(spot.getName())) {
                     break;
                 }
                 i++;
             }
         }
         cards.remove(i);
-        if(spotManager.getSpotsCount() == 0) {
+        if (spotManager.getSpotsCount() == 0) {
             cards.add(new InfoCard(getActivity(), 0));
         }
         favouritesAdapter.notifyDataSetChanged();

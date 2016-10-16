@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidLintUselessParent -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/card_outer">
+
+    <RelativeLayout android:id="@+id/inner_frame" style="@style/card_inner">
+
+
+        <LinearLayout
+            android:id="@+id/contentFrame"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:ems="10"
+                    android:padding="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:maxLines="1"
+                    android:id="@+id/editText"
+                    android:inputType="number"
+                    android:hint="Search spots"
+                    style="@style/Widget.AppCompat.EditText" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--suppress AndroidLintContentDescription -->
+
+    <ImageView style="@style/card_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
