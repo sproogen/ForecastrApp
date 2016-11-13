@@ -14,5 +14,6 @@
         android:cacheColorHint="@android:color/transparent"
         android:dividerHeight="0dp"
         android:id="@+id/content_body"
-        android:descendantFocusability="beforeDescendants"/>
+        android:descendantFocusability="afterDescendants"
+        android:focusable="false"/>
 </android.support.v4.widget.SwipeRefreshLayout>

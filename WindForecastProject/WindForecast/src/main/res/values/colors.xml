@@ -7,11 +7,11 @@
     <color name="dark_green">#2E7D32</color>
     <color name="bright_green">#7BC815</color>
     <color name="light_green">#66BB6A</color>
-    <color name="light_grey">#F2F7FA</color>
+    <color name="light_grey">#f2f7fa</color>
     <color name="dark_grey">#2D3538</color>
     <color name="green_grey">#C8E6C9</color>
 
-    <color name="background">#fff3f3f3</color>
+    <color name="background">#f3f3f3</color>
     <color name="semitransparent_background">#97a6a6a6</color>
 
     <color name="card_pressed">#ebebeb</color>

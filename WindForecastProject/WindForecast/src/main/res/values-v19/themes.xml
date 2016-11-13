@@ -9,7 +9,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
     </style>
 
     <style name="Theme.Windfinder.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

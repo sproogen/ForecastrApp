@@ -2,11 +2,13 @@ package com.jamesg.forecastr.SpotFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -78,8 +80,6 @@ public class FavouritesFragment extends BaseSpotFragment {
         cards = new ArrayList<CardBase>();
 
         getActivity().setTitle("Favourite Spots");
-
-        cards.add(new SearchCard(getActivity(), dateTab));
 
         if (spotManager.getSpotsCount() > 0) {
             for (Spot s : spotManager.getAllSpots(0)) {
