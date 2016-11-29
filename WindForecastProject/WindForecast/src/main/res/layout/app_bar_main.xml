@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -40,8 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/activity_vertical_margin"
-        app:backgroundTint="@color/green"
-        android:visibility="gone"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:backgroundTint="@color/dark_green"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_search_white_48dp" />
 
 </android.support.design.widget.CoordinatorLayout>

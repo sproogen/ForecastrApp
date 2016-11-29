@@ -4,10 +4,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.Menu;
@@ -90,6 +94,35 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
 
         spotManager.checkForUpdates(true);
         appManager.checkForUpdates();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
+
+        // FOR NAVIGATION VIEW ITEM TEXT COLOR
+        int[][] state = new int[][] {
+                new int[] {-android.R.attr.state_enabled}, // disabled
+                new int[] {android.R.attr.state_enabled}, // enabled
+                new int[] {-android.R.attr.state_checked}, // unchecked
+                new int[] { android.R.attr.state_pressed}  // pressed
+
+        };
+
+        int[] color = new int[] {
+                ContextCompat.getColor(this, R.color.dark_grey),
+                ContextCompat.getColor(this, R.color.dark_grey),
+                ContextCompat.getColor(this, R.color.dark_grey),
+                ContextCompat.getColor(this, R.color.dark_grey)
+        };
+
+        ColorStateList csl = new ColorStateList(state, color);
+
+        navigationView.setItemTextColor(csl);
+
     }
 
     public void addSpotsToNavigation() {
@@ -134,6 +167,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
                 tabLayout.setVisibility(View.GONE);
                 break;
             case R.id.check_updates:
+                Snackbar.make(coordinatorLayout, "Checking for updates", Snackbar.LENGTH_SHORT).show();
                 break;
             default:
                 fragment = (SpotWrapperFragment) getSupportFragmentManager().findFragmentByTag(SPOTS_FRAGMENT);

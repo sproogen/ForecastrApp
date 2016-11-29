@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -31,7 +32,8 @@ public class BaseActivity extends AppCompatActivity  {
     public DrawerLayout drawer;
     private Toolbar toolbar;
     public TabLayout tabLayout;
-    private FloatingActionButton fab;
+    public FloatingActionButton fab;
+    public CoordinatorLayout coordinatorLayout;
     private ActionBar actionBar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -66,14 +68,8 @@ public class BaseActivity extends AppCompatActivity  {
         setUpNavigationView();
         setUpTabs();
 
-//        fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
     }
 
     public void navItemSelected(MenuItem menuItem){}

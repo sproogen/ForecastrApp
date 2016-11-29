@@ -23,6 +23,7 @@
         <menu>
             <item
                 android:id="@+id/check_updates"
+                android:checkable="false"
                 android:title="@string/check_updates" />
             <group
                 android:id="@+id/settings"
