@@ -98,8 +98,7 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                loadSearch();
             }
         });
 
@@ -292,6 +291,10 @@ public class MainActivity extends BaseActivity implements BaseFragment.BaseFragm
                     .setAction(name)
                     .build());
         }
+    }
+
+    public void loadSearch(){
+        ((SpotWrapperFragment)current).loadSearch(true);
     }
 
     public void loadSpot(String name, int listClick){

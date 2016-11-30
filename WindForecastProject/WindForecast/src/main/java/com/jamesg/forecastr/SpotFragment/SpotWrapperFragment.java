@@ -97,6 +97,18 @@ public class SpotWrapperFragment extends BaseFragment {
         }
     }
 
+    public void loadSearch(boolean animate){
+        SearchFragment search = SearchFragment.newInstance();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        if(animate) {
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        }
+        transaction.replace(R.id.spots_frame, search);
+        transaction.commit();
+
+        currentSpotFragment = search;
+    }
+
     public void loadSpot(String name, boolean animate, boolean search){
         SpotFragment spot = SpotFragment.newInstance(name, search);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();

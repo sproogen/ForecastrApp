@@ -2,14 +2,11 @@ package com.jamesg.forecastr.SpotFragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -19,7 +16,6 @@ import com.jamesg.forecastr.R;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.base.CardBase;
 import com.jamesg.forecastr.cards.InfoCard;
-import com.jamesg.forecastr.cards.SearchCard;
 import com.jamesg.forecastr.cards.WindCard;
 import com.jamesg.forecastr.data.Spot;
 import com.jamesg.forecastr.data.SpotUpdatedEvent;
@@ -31,7 +27,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class FavouritesFragment extends BaseSpotFragment {
+public class SearchFragment extends BaseSpotFragment {
 
     @Inject
     SpotManager spotManager;
@@ -49,19 +45,19 @@ public class FavouritesFragment extends BaseSpotFragment {
      *
      * @return A new instance of fragment SpotFragment.
      */
-    public static FavouritesFragment newInstance() {
-        FavouritesFragment fragment = new FavouritesFragment();
+    public static SearchFragment newInstance() {
+        SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
-    public FavouritesFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
     @Override
     public int getViewID() {
-        return R.layout.fragment_favourites;
+        return R.layout.fragment_search;
     }
 
     @Override
@@ -70,7 +66,7 @@ public class FavouritesFragment extends BaseSpotFragment {
         super.onCreate(savedInstanceState);
 
         // Set screen name.
-        tracker.setScreenName("Favourites");
+        tracker.setScreenName("Search");
         // Send a screen view.
         tracker.send(new HitBuilders.AppViewBuilder().build());
 
@@ -80,17 +76,17 @@ public class FavouritesFragment extends BaseSpotFragment {
         }
         cards = new ArrayList<CardBase>();
 
-        getActivity().setTitle("Favourite Spots");
+        getActivity().setTitle("Search");
 
-        if (spotManager.getSpotsCount() > 0) {
-            for (Spot s : spotManager.getAllSpots(0)) {
-                if (s != null) {
-                    cards.add(new WindCard(getActivity(), s, dateTab, true));
-                }
-            }
-        } else {
-            cards.add(new InfoCard(getActivity(), dateTab));
-        }
+//        if (spotManager.getSpotsCount() > 0) {
+//            for (Spot s : spotManager.getAllSpots(0)) {
+//                if (s != null) {
+//                    cards.add(new WindCard(getActivity(), s, dateTab, true));
+//                }
+//            }
+//        } else {
+//            cards.add(new InfoCard(getActivity(), dateTab));
+//        }
     }
 
     @Subscribe
@@ -111,23 +107,9 @@ public class FavouritesFragment extends BaseSpotFragment {
         }
     }
 
-    @Subscribe
-    public void onSpotUpdated(SpotUpdatedEvent s) {
-        Logger.d("BUS SPOT UPDATED baseSpotFragment - " + s.getName());
-        updateSpotData(s.getName());
-    }
-
     @Override
     public void onCreateSpotsView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState, View view) {
-
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(R.color.refresh_1,
-                R.color.refresh_2,
-                R.color.refresh_3,
-                R.color.refresh_4);
-
         // Inflate the layout for this fragment
         content_body = (ListView) view.findViewById(R.id.content_body);
 
@@ -142,76 +124,6 @@ public class FavouritesFragment extends BaseSpotFragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void updateDateTab(int newDateTab) {
-        for (CardBase card : cards) {
-            if (card != null) card.setDateTab(newDateTab);
-        }
-        int first = content_body.getFirstVisiblePosition();
-        int last = content_body.getLastVisiblePosition();
-        for (int i = first; i <= last; i++) {
-            try {
-                cards.get(i).updateView();
-            } catch(Exception e) {
-                //DO Nothing - The view is not visible.
-            }
-        }
-    }
-
-    @Override
-    public void updateSpotData() {
-        int i = 0;
-        int first = content_body.getFirstVisiblePosition();
-        int last = content_body.getLastVisiblePosition();
-        for (CardBase card : cards) {
-            if (card != null) {
-                if (i >= first && i <= last) {
-                    try {
-                        card.updateView();
-                    } catch(Exception e) {
-                        //DO Nothing - The view is not visible.
-                    }
-                }
-            }
-            i++;
-        }
-    }
-
-    public void updateSpotData(String spot){
-        int i = 0;
-        int first = content_body.getFirstVisiblePosition();
-        int last = content_body.getLastVisiblePosition();
-        for (CardBase card : cards) {
-            if (card != null && card.getTitle().equals(spot)){
-                if (i >= first && i <= last) {
-                    try {
-                        card.updateView();
-                    } catch(Exception e) {
-                        //DO Nothing - The view is not visible.
-                    }
-                }
-            }
-            i++;
-        }
-    }
-
-    public void removeSpot(Spot spot){
-        int i = 0;
-        for (CardBase card : cards) {
-            if (card != null) {
-                if (card.getTitle().equals(spot.getName())) {
-                    break;
-                }
-                i++;
-            }
-        }
-        cards.remove(i);
-        if (spotManager.getSpotsCount() == 0) {
-            cards.add(new InfoCard(getActivity(), 0));
-        }
-        favouritesAdapter.notifyDataSetChanged();
     }
 
     public class FavouritesAdapter extends ArrayAdapter<CardBase> {
@@ -231,8 +143,6 @@ public class FavouritesFragment extends BaseSpotFragment {
             }
 
             return new View(getContext());
-
-            //return convertView;
         }
     }
 }

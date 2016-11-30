@@ -3,6 +3,7 @@ package com.jamesg.forecastr;
 import com.google.android.gms.analytics.Tracker;
 import com.jamesg.forecastr.SplashScreen.SplashScreen;
 import com.jamesg.forecastr.SpotFragment.FavouritesFragment;
+import com.jamesg.forecastr.SpotFragment.SearchFragment;
 import com.jamesg.forecastr.SpotFragment.SpotFragment;
 import com.jamesg.forecastr.base.BaseSpotFragment;
 import com.jamesg.forecastr.manager.AppManager;
@@ -24,6 +25,7 @@ import dagger.Provides;
                 DrawerFragment.class,
                 SplashScreen.class,
                 FavouritesFragment.class,
+                SearchFragment.class,
                 AboutFragment.class,
                 SpotManager.class,
                 BaseSpotFragment.class,

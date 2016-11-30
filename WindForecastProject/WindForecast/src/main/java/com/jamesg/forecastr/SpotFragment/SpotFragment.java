@@ -1,6 +1,7 @@
 package com.jamesg.forecastr.SpotFragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,6 +190,13 @@ public class SpotFragment extends BaseSpotFragment {
     @Override
     public void onCreateSpotsView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState, View view) {
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(R.color.refresh_1,
+                R.color.refresh_2,
+                R.color.refresh_3,
+                R.color.refresh_4);
+
         LinearLayout content_body = (LinearLayout) view.findViewById(R.id.content_body);
 
         if(loadingCard != null) content_body.addView(loadingCard.getView(inflater));

@@ -27,7 +27,7 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
     @Inject
     SpotManager spotManager;
 
-    private SwipeRefreshLayout swipeLayout;
+    public SwipeRefreshLayout swipeLayout;
 
     private int viewID = R.layout.fragment_spot;
 
@@ -50,12 +50,6 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(getViewID(), container, false);
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(R.color.refresh_1,
-                R.color.refresh_2,
-                R.color.refresh_3,
-                R.color.refresh_4);
 
         onCreateSpotsView(inflater, container, savedInstanceState, view);
         return view;
@@ -75,11 +69,15 @@ public class BaseSpotFragment extends BaseFragment implements SwipeRefreshLayout
     }
 
     public void updateFinished(){
-        swipeLayout.setRefreshing(false);
+        if (swipeLayout != null) {
+            swipeLayout.setRefreshing(false);
+        }
     }
 
     public void updateStarted(){
-        swipeLayout.setRefreshing(true);
+        if (swipeLayout != null) {
+            swipeLayout.setRefreshing(true);
+        }
     }
 
     @Override
